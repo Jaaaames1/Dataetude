@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Excel at Scales</title>
+  <title>Excel at Scales – User Guide</title>
   <style>
     *{margin:0;padding:0;box-sizing:border-box;}
     body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;
@@ -15,112 +15,323 @@
     nav a{font-size:0.82rem;color:#a78bfa;text-decoration:none;}
     nav a:hover{text-decoration:underline;}
     header{background:linear-gradient(135deg,#1a1a2e 0%,#16213e 100%);
-      padding:60px 24px 80px;text-align:center;
-      border-bottom:1px solid rgba(255,255,255,0.06);}
-    header h1{font-size:2.8rem;font-weight:800;letter-spacing:-0.02em;
+      padding:40px 24px;border-bottom:1px solid rgba(255,255,255,0.06);}
+    header h1{font-size:1.8rem;font-weight:800;margin-top:4px;
       background:linear-gradient(135deg,#a78bfa,#60a5fa);
       -webkit-background-clip:text;-webkit-text-fill-color:transparent;
-      background-clip:text;margin-bottom:12px;}
-    header p{font-size:1.1rem;color:rgba(255,255,255,0.6);
-      max-width:480px;margin:0 auto 32px;line-height:1.6;}
-    .badge{display:inline-block;background:rgba(255,255,255,0.06);
-      border:1px solid rgba(255,255,255,0.12);border-radius:50px;
-      padding:14px 28px;font-size:0.95rem;color:rgba(255,255,255,0.4);
-      letter-spacing:0.04em;}
-    section{max-width:720px;margin:0 auto;padding:60px 24px;}
-    h2{font-size:1.3rem;font-weight:700;margin-bottom:20px;
-      color:rgba(255,255,255,0.9);letter-spacing:-0.01em;}
-    .screenshots{display:flex;gap:16px;overflow-x:auto;
-      padding-bottom:16px;margin-bottom:60px;scrollbar-width:none;}
-    .screenshots::-webkit-scrollbar{display:none;}
-    .screenshots img{height:420px;width:auto;border-radius:16px;
-      border:1px solid rgba(255,255,255,0.1);
-      box-shadow:0 8px 32px rgba(0,0,0,0.4);flex-shrink:0;}
-    .features{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));
-      gap:16px;margin-bottom:60px;}
-    .feature{background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.07);
-      border-radius:14px;padding:20px;}
-    .feature span{font-size:1.6rem;display:block;margin-bottom:10px;}
-    .feature h3{font-size:0.9rem;font-weight:600;margin-bottom:6px;
-      color:rgba(255,255,255,0.9);}
-    .feature p{font-size:0.8rem;color:rgba(255,255,255,0.45);line-height:1.5;}
-    .contact{background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.07);
-      border-radius:14px;padding:28px;text-align:center;}
-    .contact p{color:rgba(255,255,255,0.5);font-size:0.9rem;margin-bottom:12px;}
-    .contact a{color:#a78bfa;text-decoration:none;font-weight:600;}
-    .contact a:hover{text-decoration:underline;}
+      background-clip:text;}
+    header p{color:rgba(255,255,255,0.4);font-size:0.9rem;margin-top:8px;}
+    main{max-width:720px;margin:0 auto;padding:48px 24px 80px;}
+    .toc{background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.07);
+      border-radius:14px;padding:24px;margin-bottom:48px;}
+    .toc h2{font-size:0.8rem;letter-spacing:0.1em;color:rgba(255,255,255,0.3);
+      margin-bottom:14px;}
+    .toc a{display:block;color:#a78bfa;text-decoration:none;font-size:0.9rem;
+      padding:5px 0;border-bottom:1px solid rgba(255,255,255,0.05);}
+    .toc a:last-child{border-bottom:none;}
+    .toc a:hover{color:#c4b5fd;}
+    .section{margin-bottom:56px;}
+    .section-header{display:flex;align-items:center;gap:12px;margin-bottom:20px;
+      padding-bottom:16px;border-bottom:1px solid rgba(255,255,255,0.07);}
+    .section-header span{font-size:2rem;}
+    .section-header h2{font-size:1.4rem;font-weight:700;}
+    p{font-size:0.92rem;color:rgba(255,255,255,0.55);line-height:1.7;margin-bottom:14px;}
+    h3{font-size:1rem;font-weight:600;color:rgba(255,255,255,0.85);margin:24px 0 10px;}
+    .feature-list{list-style:none;margin-bottom:16px;}
+    .feature-list li{font-size:0.88rem;color:rgba(255,255,255,0.5);
+      padding:7px 0 7px 20px;border-bottom:1px solid rgba(255,255,255,0.04);
+      position:relative;line-height:1.5;}
+    .feature-list li:before{content:'→';position:absolute;left:0;color:#a78bfa;}
+    .tip{background:rgba(167,139,250,0.08);border:1px solid rgba(167,139,250,0.2);
+      border-radius:10px;padding:14px 16px;margin:16px 0;}
+    .tip p{color:rgba(255,255,255,0.6);margin:0;font-size:0.85rem;}
+    .tip p:before{content:'💡 ';}
     footer{text-align:center;padding:32px 24px;
       border-top:1px solid rgba(255,255,255,0.06);
       color:rgba(255,255,255,0.2);font-size:0.8rem;}
     footer a{color:rgba(255,255,255,0.3);text-decoration:none;}
-    footer a:hover{color:rgba(255,255,255,0.6);}
   </style>
 </head>
 <body>
 
 <nav>
   <span class="logo">Excel at Scales</span>
-  <a href="/guide">📖 User Guide</a>
+  <a href="/">← Home</a>
 </nav>
 
 <header>
-  <h1>Excel at Scales</h1>
-  <p>The piano practice app that makes scales, chords and fingering second nature.</p>
-  <div class="badge">🎵 Coming soon on Google Play</div>
+  <h1>User Guide</h1>
+  <p>Everything you need to know about using Excel at Scales</p>
 </header>
 
-<section>
-  <h2>See it in action</h2>
-  <div class="screenshots">
-    <img src="Scales.jpg" alt="Scales page">
-    <img src="Chords.jpg" alt="Chords page">
-    <img src="Pads.jpg" alt="Pads page">
-    <img src="Metro.jpg" alt="Metronome page">
+<main>
+
+  <div class="toc">
+    <h2>CONTENTS</h2>
+    <a href="#scales">🎹 Scales</a>
+    <a href="#chords">🎵 Chords</a>
+    <a href="#pads">🎸 Pads</a>
+    <a href="#fingering">✏️ Fingering Editor</a>
+    <a href="#metro">🥁 Metronome</a>
+    <a href="#synth">🎛️ Synth</a>
+    <a href="#settings">⚙️ Settings</a>
   </div>
 
-  <h2>Everything you need to practise piano</h2>
-  <div class="features">
-    <div class="feature">
+  <!-- SCALES -->
+  <div class="section" id="scales">
+    <div class="section-header">
       <span>🎹</span>
-      <h3>Scales & Arpeggios</h3>
-      <p>All 12 keys. Major, minor, harmonic, melodic and more. RH, LH or both hands.</p>
+      <h2>Scales</h2>
     </div>
-    <div class="feature">
-      <span>🎵</span>
-      <h3>Chord Progressions</h3>
-      <p>Loop chord patterns in any key. Switch between major and minor instantly.</p>
-    </div>
-    <div class="feature">
-      <span>🎸</span>
-      <h3>Melody & Chord Pads</h3>
-      <p>Play along with drum loops and chord patterns using touch pads.</p>
-    </div>
-    <div class="feature">
-      <span>✏️</span>
-      <h3>Fingering Editor</h3>
-      <p>View and customise fingering for every scale and arpeggio.</p>
-    </div>
-    <div class="feature">
-      <span>🥁</span>
-      <h3>Built-in Metronome</h3>
-      <p>Full-featured metronome with custom time signatures and multiple sounds.</p>
-    </div>
-    <div class="feature">
-      <span>🎨</span>
-      <h3>Themes & Palettes</h3>
-      <p>Dark, light, midnight and cream themes. Six colour palettes for key highlights.</p>
-    </div>
+    <p>The Scales page shows you fingering for every scale and arpeggio in all 12 keys, with interactive piano keyboards for both hands.</p>
+
+    <h3>Choosing a Scale</h3>
+    <p>Tap any scale type at the top — Major, Nat Min, Harm, Melodic, Maj Arp or Min Arp. Then tap a key from the grid to select your root note.</p>
+
+    <h3>Scale Types</h3>
+    <ul class="feature-list">
+      <li><strong>Major</strong> — standard major scale</li>
+      <li><strong>Nat Min</strong> — natural minor scale</li>
+      <li><strong>Harm</strong> — harmonic minor, raised 7th</li>
+      <li><strong>Melodic</strong> — melodic minor, separate ascending and descending views</li>
+      <li><strong>Maj Arp</strong> — major arpeggio over 2 octaves</li>
+      <li><strong>Min Arp</strong> — minor arpeggio over 2 octaves</li>
+    </ul>
+
+    <h3>Relative & Parallel</h3>
+    <p>Below the key selector, the Relative and Parallel buttons jump you to the related scale instantly. For example, from C Major, Relative takes you to A Natural Minor.</p>
+
+    <h3>Key Up</h3>
+    <p>The Key ↑+3 button shifts the current scale up 3 semitones. Press it repeatedly to cycle through keys. When a scale is playing in loop mode, the change waits until the end of the current loop before switching — no interruption.</p>
+
+    <h3>Playback</h3>
+    <ul class="feature-list">
+      <li>Press ▶ to play the scale at the current tempo</li>
+      <li>Press the loop button to keep repeating</li>
+      <li>Choose Both, RH or LH to hear one or both hands</li>
+      <li>Tap the BPM number to type a specific tempo</li>
+      <li>Scroll Sync keeps both keyboards scrolled together</li>
+    </ul>
+
+    <div class="tip"><p>Tap any highlighted key on the keyboard to hear that individual note.</p></div>
   </div>
 
-  <h2>Get in touch</h2>
-  <div class="contact">
-    <p>Questions, feedback or support?</p>
-    <a href="mailto:excelatscales@gmail.com">excelatscales@gmail.com</a>
+  <!-- CHORDS -->
+  <div class="section" id="chords">
+    <div class="section-header">
+      <span>🎵</span>
+      <h2>Chords</h2>
+    </div>
+    <p>The Chords page shows you every chord in the current key on a scrollable piano keyboard, and lets you loop chord progressions.</p>
+
+    <h3>Chord Display</h3>
+    <p>The keyboard highlights the notes of each chord as you tap them. The chord name and Roman numeral are shown above.</p>
+
+    <h3>Chord Progressions</h3>
+    <p>Scroll down to see a library of common progressions — Pop, Blues, Jazz, Classical and more. Each has a play and loop button.</p>
+    <ul class="feature-list">
+      <li>▶ plays the progression once</li>
+      <li>↻ loops it continuously — press again to play out the current loop then stop</li>
+      <li>Tap the BPM number to set your tempo</li>
+    </ul>
+
+    <h3>Key Changes While Looping</h3>
+    <p>While a progression is looping, press the Key ↑+3, Relative or Parallel buttons to queue a key change. The change fires cleanly at the end of the current loop with no interruption.</p>
+
+    <div class="tip"><p>The Relative button cycles between a major key and its relative minor — great for practising both together.</p></div>
   </div>
-</section>
+
+  <!-- PADS -->
+  <div class="section" id="pads">
+    <div class="section-header">
+      <span>🎸</span>
+      <h2>Pads</h2>
+    </div>
+    <p>The Pads page is the most interactive part of the app — a performance playground with three modes: Chord, Drum and Melody.</p>
+
+    <h3>Switching Modes</h3>
+    <p>Tap the mode selector button at the top to switch between Chord, Drum and Melody pads.</p>
+
+    <h3>8 or 12 Pads</h3>
+    <p>The 8⊞ button next to the mode selector toggles between 8 and 12 pads in all three modes. 12 pads extends the range with additional notes and sounds.</p>
+
+    <h3>Chord Pads</h3>
+    <p>Eight or twelve chord pads laid out in the key you select. Hold multiple pads at once to combine chords.</p>
+    <ul class="feature-list">
+      <li>Tap the key button to change key</li>
+      <li>Maj/Min toggles between major and minor chord qualities</li>
+      <li>Chord Pattern selects the chord progression playing in the background</li>
+      <li>▶ starts and stops the chord loop</li>
+      <li>↻ toggles looping — press while looping to play out the bar then stop</li>
+      <li>♫ Arp switches to arpeggio mode — chords play as arpeggios</li>
+      <li>↑ Key queues a key change at the next bar 1</li>
+      <li>↺ Key resets to the original key</li>
+    </ul>
+
+    <h3>Drum Pads</h3>
+    <p>Eight or twelve drum pads with synthesised drum sounds. Tap to trigger sounds, or use the drum pattern buttons to play an auto pattern.</p>
+    <ul class="feature-list">
+      <li>Simple, Disco, Rock, Breakdown — auto drum patterns that switch cleanly on beat 1</li>
+      <li>Fill — triggers a drum fill on the next bar</li>
+      <li>▶ starts and stops the drum loop</li>
+      <li>⇄ Move — rearrange the pads into any order you like</li>
+      <li>12 pads adds Rim, Cowbell, Shaker and Ride sounds</li>
+    </ul>
+
+    <h3>Melody Pads</h3>
+    <p>Eight or twelve pads mapped to the notes of the current scale. Play melodies over the chord and drum loops running beneath.</p>
+    <ul class="feature-list">
+      <li>Pads are colour-coded by note</li>
+      <li>Swipe between pads to slide between notes</li>
+      <li>Multiple fingers play multiple notes simultaneously</li>
+      <li>Maj/Min switches the scale quality — queued at beat 1 when loops are running</li>
+      <li>♫ Arp plays notes as arpeggios instead of sustained chords</li>
+      <li>↑ Key queues a key change at beat 1</li>
+    </ul>
+
+    <h3>Layering All Three Together</h3>
+    <p>All three layers can run simultaneously. Start a drum pattern, add a chord loop, then play melody on top. When you add drums to a running chord loop, they snap to beat 1 automatically — perfectly in sync.</p>
+
+    <div class="tip"><p>Press a new drum pattern button while playing to queue it — it switches cleanly on the next bar 1, never mid-bar.</p></div>
+  </div>
+
+  <!-- FINGERING -->
+  <div class="section" id="fingering">
+    <div class="section-header">
+      <span>✏️</span>
+      <h2>Fingering Editor</h2>
+    </div>
+    <p>The Fingering page shows you the recommended fingering for the current scale on both hands, and lets you customise it to suit your own technique.</p>
+
+    <h3>Viewing Fingering</h3>
+    <p>Select any scale from the scale selector grid at the bottom of the page. The keyboards at the top update to show fingering numbers on each highlighted key.</p>
+
+    <h3>Editing Fingering</h3>
+    <p>Two ways to edit:</p>
+    <ul class="feature-list">
+      <li><strong>Tap a key</strong> — cycles the finger number 1→2→3→4→5→1</li>
+      <li><strong>Input boxes</strong> — type directly into the numbered boxes below each keyboard for precise entry</li>
+    </ul>
+    <p>Both methods stay in sync — tap a key and the input box updates, type in a box and the keyboard updates.</p>
+
+    <h3>Saving</h3>
+    <p>Press Save to store your changes. They persist between sessions.</p>
+
+    <h3>Restoring Defaults</h3>
+    <ul class="feature-list">
+      <li>Restore this scale — resets just the current scale to its built-in default</li>
+      <li>Restore ALL scales — resets every scale back to defaults</li>
+    </ul>
+
+    <div class="tip"><p>For Melodic Minor, switch between ASC and DESC on the Scales page to edit ascending and descending fingerings separately.</p></div>
+  </div>
+
+  <!-- METRO -->
+  <div class="section" id="metro">
+    <div class="section-header">
+      <span>🥁</span>
+      <h2>Metronome</h2>
+    </div>
+    <p>A full-featured metronome with visual beat display, tap tempo, and multiple sound options.</p>
+
+    <h3>Basic Use</h3>
+    <ul class="feature-list">
+      <li>Press ▶ to start and stop</li>
+      <li>Drag the tempo slider or tap the BPM number to type a value directly</li>
+      <li>Use the −10, −5, +5, +10 buttons for quick adjustments</li>
+      <li>Tap Tempo — tap the button repeatedly in time to set tempo by feel</li>
+    </ul>
+
+    <h3>Time Signatures</h3>
+    <p>Choose from 2/4, 3/4, 4/4 or 6/8. Or tap Custom to enter any time signature — 5/4, 7/8, 11/8, whatever you need. The beat dots at the top update to reflect the new time signature.</p>
+
+    <h3>No Accent</h3>
+    <p>Turns off the beat 1 accent so every click sounds identical — useful for practising without a strong downbeat emphasis.</p>
+
+    <h3>Sound Options</h3>
+    <ul class="feature-list">
+      <li><strong>Sine</strong> — clean electronic click</li>
+      <li><strong>Wood</strong> — wooden block sound</li>
+      <li><strong>Rimshot</strong> — sharp rimshot crack</li>
+      <li><strong>Loud</strong> — louder version for noisy environments</li>
+    </ul>
+  </div>
+
+  <!-- SYNTH -->
+  <div class="section" id="synth">
+    <div class="section-header">
+      <span>🎛️</span>
+      <h2>Synth</h2>
+    </div>
+    <p>The Synth panel controls the sound character of the piano keyboard and scale playback. Tap the wave icon (∿) in the top right of any page to open it.</p>
+
+    <h3>Wave Type</h3>
+    <p>Choose the basic waveform that forms the core of the sound:</p>
+    <ul class="feature-list">
+      <li><strong>Sine</strong> — pure, smooth tone. Closest to a clean piano or flute</li>
+      <li><strong>Triangle</strong> — slightly brighter than sine, soft and warm</li>
+      <li><strong>Sawtooth</strong> — rich and bright, full of harmonics. Closest to strings or brass</li>
+      <li><strong>Square</strong> — hollow and buzzy, classic synth or clarinet character</li>
+    </ul>
+
+    <h3>Sliders</h3>
+    <ul class="feature-list">
+      <li><strong>Attack</strong> — how quickly the note reaches full volume. Short = punchy, Long = swells in gradually</li>
+      <li><strong>Decay</strong> — how long the note rings after you release. Short = staccato, Long = notes ring on</li>
+      <li><strong>Harmonics</strong> — adds upper overtones to thicken the sound. Higher = brighter and more complex</li>
+      <li><strong>Reverb</strong> — adds room ambience. Low = dry and close, High = spacious and distant</li>
+      <li><strong>Noise Mix</strong> — blends in a noise layer for a breathier, more organic texture</li>
+    </ul>
+
+    <div class="tip"><p>For a piano-like sound, try Sine wave with short attack, medium decay, low harmonics and a touch of reverb.</p></div>
+  </div>
+
+  <!-- SETTINGS -->
+  <div class="section" id="settings">
+    <div class="section-header">
+      <span>⚙️</span>
+      <h2>Settings</h2>
+    </div>
+    <p>Open settings by tapping the gear icon ⚙️ in the top right corner of any page.</p>
+
+    <h3>Appearance</h3>
+    <ul class="feature-list">
+      <li><strong>Dark</strong> — default dark theme</li>
+      <li><strong>Midnight</strong> — deeper, richer dark theme</li>
+      <li><strong>Cream</strong> — warm light theme</li>
+      <li><strong>Light</strong> — bright white theme</li>
+    </ul>
+
+    <h3>Key Highlight Palette</h3>
+    <p>Six colour palettes for the left and right hand highlights on the piano keyboards. Choose whichever feels most readable to you.</p>
+
+    <h3>Haptic Feedback</h3>
+    <p>Toggles vibration on keyboard taps. Turn off if you find it distracting during practice.</p>
+
+    <h3>Display</h3>
+    <ul class="feature-list">
+      <li><strong>Show note names on keys</strong> — toggles the C D E F G A B labels below every piano key across the whole app</li>
+    </ul>
+
+    <h3>Playback</h3>
+    <ul class="feature-list">
+      <li><strong>Keep playing when screen locks</strong> — by default all playback stops when your screen turns off. Turn this on to keep the metronome or drum loops running with the screen locked — useful if you want to practise to a beat without keeping the screen on</li>
+    </ul>
+
+    <h3>Defaults</h3>
+    <p>Set what the app opens with every time you launch it:</p>
+    <ul class="feature-list">
+      <li><strong>Default Key</strong> — which key is selected on launch</li>
+      <li><strong>Default Scale Type</strong> — which scale type is selected on launch</li>
+      <li><strong>Default Pad Mode</strong> — whether Pads opens on Chord, Drum or Melody</li>
+      <li><strong>Default Pad Count</strong> — whether pads start with 8 or 12 pads</li>
+    </ul>
+  </div>
+
+</main>
 
 <footer>
-  <p>© 2026 Excel at Scales &nbsp;·&nbsp; <a href="/guide">User Guide</a> &nbsp;·&nbsp; <a href="/privacy">Privacy Policy</a></p>
+  <p>© 2026 Excel at Scales &nbsp;·&nbsp; <a href="/">Home</a> &nbsp;·&nbsp; <a href="/privacy">Privacy Policy</a></p>
 </footer>
 
 </body>
