@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Music Theory Reference – Excel at Scales</title>
+  <style>
+    *{margin:0;padding:0;box-sizing:border-box;}
+    body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;
+      background:#0d0d1a;color:#fff;min-height:100vh;}
+    nav{background:rgba(255,255,255,0.03);border-bottom:1px solid rgba(255,255,255,0.06);
+      padding:12px 24px;display:flex;justify-content:space-between;align-items:center;}
+    nav .logo{font-size:0.9rem;font-weight:700;color:rgba(255,255,255,0.7);letter-spacing:0.04em;}
+    nav a{font-size:0.82rem;color:#a78bfa;text-decoration:none;}
+    nav a:hover{text-decoration:underline;}
+    header{background:linear-gradient(135deg,#1a1a2e 0%,#16213e 100%);
+      padding:40px 24px;border-bottom:1px solid rgba(255,255,255,0.06);}
+    header h1{font-size:1.8rem;font-weight:800;margin-top:4px;
+      background:linear-gradient(135deg,#a78bfa,#60a5fa);
+      -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+    header p{color:rgba(255,255,255,0.4);font-size:0.9rem;margin-top:8px;}
+    main{max-width:720px;margin:0 auto;padding:48px 24px 80px;}
+    .toc{background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.07);
+      border-radius:14px;padding:24px;margin-bottom:48px;}
+    .toc h2{font-size:0.8rem;letter-spacing:0.1em;color:rgba(255,255,255,0.3);margin-bottom:14px;}
+    .toc a{display:block;color:#a78bfa;text-decoration:none;font-size:0.9rem;
+      padding:5px 0;border-bottom:1px solid rgba(255,255,255,0.05);}
+    .toc a:last-child{border-bottom:none;}
+    .section{margin-bottom:56px;}
+    .section-header{display:flex;align-items:center;gap:12px;margin-bottom:20px;
+      padding-bottom:16px;border-bottom:1px solid rgba(255,255,255,0.07);}
+    .section-header h2{font-size:1.4rem;font-weight:700;}
+    p{font-size:0.92rem;color:rgba(255,255,255,0.55);line-height:1.7;margin-bottom:14px;}
+    h3{font-size:1rem;font-weight:600;color:rgba(255,255,255,0.85);margin:28px 0 10px;}
+    .tip{background:rgba(167,139,250,0.08);border:1px solid rgba(167,139,250,0.2);
+      border-radius:10px;padding:14px 16px;margin:16px 0;}
+    .tip p{color:rgba(255,255,255,0.6);margin:0;font-size:0.85rem;}
+    .tip p:before{content:'💡 ';}
+    table{width:100%;border-collapse:collapse;margin-bottom:24px;font-size:0.85rem;}
+    th{text-align:left;padding:8px 12px;background:rgba(255,255,255,0.06);
+      color:rgba(255,255,255,0.5);font-weight:600;letter-spacing:0.06em;font-size:0.72rem;}
+    td{padding:8px 12px;border-bottom:1px solid rgba(255,255,255,0.05);
+      color:rgba(255,255,255,0.6);line-height:1.5;vertical-align:top;}
+    tr:last-child td{border-bottom:none;}
+    .key-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:24px;}
+    .key-pill{background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.08);
+      border-radius:8px;padding:8px 6px;text-align:center;font-size:0.8rem;
+      color:rgba(255,255,255,0.7);}
+    .key-pill span{display:block;font-size:0.65rem;color:rgba(255,255,255,0.3);margin-top:2px;}
+    .interval-row{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:8px;}
+    .interval{background:rgba(167,139,250,0.1);border:1px solid rgba(167,139,250,0.2);
+      border-radius:6px;padding:4px 8px;font-size:0.75rem;color:#a78bfa;}
+    footer{text-align:center;padding:32px 24px;
+      border-top:1px solid rgba(255,255,255,0.06);
+      color:rgba(255,255,255,0.2);font-size:0.8rem;}
+    footer a{color:rgba(255,255,255,0.3);text-decoration:none;}
+  </style>
+</head>
+<body>
+
+<nav>
+  <span class="logo">Excel at Scales</span>
+  <a href="/">← Home</a>
+</nav>
+
+<header>
+  <span style="font-size:2rem">📖</span>
+  <h1>Music Theory Reference</h1>
+  <p>Scales, arpeggios, keys and chords explained</p>
+</header>
+
+<main>
+
+  <div class="toc">
+    <h2>CONTENTS</h2>
+    <a href="#keys">The 12 Keys</a>
+    <a href="#major">Major Scale</a>
+    <a href="#natural-minor">Natural Minor Scale</a>
+    <a href="#harmonic-minor">Harmonic Minor Scale</a>
+    <a href="#melodic-minor">Melodic Minor Scale</a>
+    <a href="#arpeggios">Arpeggios</a>
+    <a href="#relative">Relative & Parallel Keys</a>
+    <a href="#chords">Chords & Progressions</a>
+    <a href="#fingering">Fingering Numbers</a>
+  </div>
+
+  <!-- KEYS -->
+  <div class="section" id="keys">
+    <div class="section-header">
+      <h2>The 12 Keys</h2>
+    </div>
+    <p>Western music is built on 12 notes, each a semitone apart. Every scale, chord and arpeggio in Excel at Scales can be played starting from any of these 12 root notes.</p>
+    <p>Some notes have two names — for example C♯ and D♭ refer to the same piano key. The app shows both where relevant.</p>
+
+    <div class="key-grid">
+      <div class="key-pill">C<span>Do</span></div>
+      <div class="key-pill">C♯/D♭<span>—</span></div>
+      <div class="key-pill">D<span>Re</span></div>
+      <div class="key-pill">D♯/E♭<span>—</span></div>
+      <div class="key-pill">E<span>Mi</span></div>
+      <div class="key-pill">F<span>Fa</span></div>
+      <div class="key-pill">F♯/G♭<span>—</span></div>
+      <div class="key-pill">G<span>Sol</span></div>
+      <div class="key-pill">G♯/A♭<span>—</span></div>
+      <div class="key-pill">A<span>La</span></div>
+      <div class="key-pill">A♯/B♭<span>—</span></div>
+      <div class="key-pill">B<span>Si</span></div>
+    </div>
+
+    <div class="tip"><p>The white keys on a piano spell out C D E F G A B — the C Major scale. The black keys are the sharps and flats in between.</p></div>
+  </div>
+
+  <!-- MAJOR -->
+  <div class="section" id="major">
+    <div class="section-header">
+      <h2>Major Scale</h2>
+    </div>
+    <p>The major scale is the most common scale in Western music. It has a bright, happy, resolved character. When people hum a tune without thinking about it, it's usually major.</p>
+    <p>It is built from 7 notes following a specific pattern of tones (T) and semitones (S):</p>
+    <div class="interval-row">
+      <span class="interval">T</span><span class="interval">T</span><span class="interval">S</span>
+      <span class="interval">T</span><span class="interval">T</span><span class="interval">T</span>
+      <span class="interval">S</span>
+    </div>
+    <p>In C Major this gives: C D E F G A B C</p>
+
+    <h3>Scale Degrees</h3>
+    <table>
+      <tr><th>Degree</th><th>Name</th><th>Character</th></tr>
+      <tr><td>1</td><td>Tonic</td><td>Home note — feels resolved and stable</td></tr>
+      <tr><td>2</td><td>Supertonic</td><td>Tension, wants to move</td></tr>
+      <tr><td>3</td><td>Mediant</td><td>Defines major quality</td></tr>
+      <tr><td>4</td><td>Subdominant</td><td>Moves away from home</td></tr>
+      <tr><td>5</td><td>Dominant</td><td>Strong tension, pulls back to tonic</td></tr>
+      <tr><td>6</td><td>Submediant</td><td>Relative minor root</td></tr>
+      <tr><td>7</td><td>Leading tone</td><td>Strong pull up to tonic</td></tr>
+    </table>
+
+    <div class="tip"><p>Twinkle Twinkle Little Star, Happy Birthday and the opening of Eye of the Tiger are all major scales at heart.</p></div>
+  </div>
+
+  <!-- NATURAL MINOR -->
+  <div class="section" id="natural-minor">
+    <div class="section-header">
+      <h2>Natural Minor Scale</h2>
+    </div>
+    <p>The natural minor scale has a darker, more melancholic or emotional character than major. Much of classical music, rock, and film scores use minor keys for tension, drama or sadness.</p>
+    <p>It follows this pattern:</p>
+    <div class="interval-row">
+      <span class="interval">T</span><span class="interval">S</span><span class="interval">T</span>
+      <span class="interval">T</span><span class="interval">S</span><span class="interval">T</span>
+      <span class="interval">T</span>
+    </div>
+    <p>In A Natural Minor: A B C D E F G A</p>
+    <p>The key difference from major is the flattened 3rd, 6th and 7th degrees — these three notes give minor its characteristic dark sound.</p>
+
+    <div class="tip"><p>A Natural Minor uses exactly the same notes as C Major — they are relative keys. The root note is what changes the feel.</p></div>
+  </div>
+
+  <!-- HARMONIC MINOR -->
+  <div class="section" id="harmonic-minor">
+    <div class="section-header">
+      <h2>Harmonic Minor Scale</h2>
+    </div>
+    <p>The harmonic minor is a natural minor scale with one change — the 7th degree is raised by a semitone. This creates a stronger pull back to the tonic (the leading tone effect) which is useful when writing chord progressions and harmonies.</p>
+    <div class="interval-row">
+      <span class="interval">T</span><span class="interval">S</span><span class="interval">T</span>
+      <span class="interval">T</span><span class="interval">S</span><span class="interval">T+S</span>
+      <span class="interval">S</span>
+    </div>
+    <p>In A Harmonic Minor: A B C D E F G♯ A</p>
+    <p>Notice the gap of 3 semitones between the 6th and 7th degrees (F to G♯). This augmented second gives harmonic minor its distinctive exotic, Eastern European or Middle Eastern flavour.</p>
+
+    <div class="tip"><p>Harmonic minor is widely used in classical music and metal — the raised 7th creates a powerful dominant V chord that pulls strongly back to the tonic.</p></div>
+  </div>
+
+  <!-- MELODIC MINOR -->
+  <div class="section" id="melodic-minor">
+    <div class="section-header">
+      <h2>Melodic Minor Scale</h2>
+    </div>
+    <p>The melodic minor scale resolves an awkward issue in harmonic minor — the large jump between the 6th and 7th. It raises both the 6th and 7th degrees when ascending, making the melody smoother. Traditionally the descending version reverts to natural minor.</p>
+
+    <h3>Ascending</h3>
+    <div class="interval-row">
+      <span class="interval">T</span><span class="interval">S</span><span class="interval">T</span>
+      <span class="interval">T</span><span class="interval">T</span><span class="interval">T</span>
+      <span class="interval">S</span>
+    </div>
+    <p>A Melodic Minor ascending: A B C D E F♯ G♯ A</p>
+
+    <h3>Descending</h3>
+    <p>A Melodic Minor descending: A G F E D C B A (same as natural minor, reversed)</p>
+
+    <p>In the app you can toggle between ASC and DESC views to see and practise each direction's fingering separately.</p>
+
+    <div class="tip"><p>Jazz musicians often use melodic minor ascending in both directions — the smooth ascending form works well over many chord types.</p></div>
+  </div>
+
+  <!-- ARPEGGIOS -->
+  <div class="section" id="arpeggios">
+    <div class="section-header">
+      <h2>Arpeggios</h2>
+    </div>
+    <p>An arpeggio is a chord played one note at a time rather than simultaneously — the notes of a chord spread out into a sequence. The word comes from the Italian <em>arpeggiare</em>, meaning to play the harp.</p>
+    <p>Where a scale steps through every note in a key, an arpeggio skips through just the chord tones — the 1st, 3rd and 5th degrees (and optionally the 7th).</p>
+
+    <h3>Major Arpeggio</h3>
+    <p>Built from the 1st, 3rd and 5th of the major scale. In C: C E G C E G (over two octaves)</p>
+    <div class="interval-row">
+      <span class="interval">Root</span><span class="interval">Major 3rd</span><span class="interval">Perfect 5th</span>
+    </div>
+
+    <h3>Minor Arpeggio</h3>
+    <p>Built from the 1st, flattened 3rd and 5th. In A: A C E A C E (over two octaves)</p>
+    <div class="interval-row">
+      <span class="interval">Root</span><span class="interval">Minor 3rd</span><span class="interval">Perfect 5th</span>
+    </div>
+
+    <h3>How Arpeggios Differ from Scales</h3>
+    <table>
+      <tr><th></th><th>Scale</th><th>Arpeggio</th></tr>
+      <tr><td>Notes used</td><td>All 7 degrees</td><td>Just chord tones (1, 3, 5)</td></tr>
+      <tr><td>Steps</td><td>Mostly stepwise (adjacent)</td><td>Wider leaps between notes</td></tr>
+      <tr><td>Use</td><td>Melody, runs, technique</td><td>Outlining chords, technique</td></tr>
+      <tr><td>Fingering</td><td>Thumb crosses under 3 or 4</td><td>Thumb crosses under less frequently</td></tr>
+    </table>
+
+    <div class="tip"><p>Arpeggios are essential technique — they train your hand to span wider intervals cleanly and help you hear the outline of chords as you play.</p></div>
+  </div>
+
+  <!-- RELATIVE & PARALLEL -->
+  <div class="section" id="relative">
+    <div class="section-header">
+      <h2>Relative & Parallel Keys</h2>
+    </div>
+
+    <h3>Relative Keys</h3>
+    <p>Every major key has a relative minor — a minor key that shares exactly the same notes, just starting from a different root. The relative minor starts on the 6th degree of the major scale.</p>
+    <table>
+      <tr><th>Major</th><th>Relative Minor</th></tr>
+      <tr><td>C Major</td><td>A Natural Minor</td></tr>
+      <tr><td>G Major</td><td>E Natural Minor</td></tr>
+      <tr><td>F Major</td><td>D Natural Minor</td></tr>
+      <tr><td>D Major</td><td>B Natural Minor</td></tr>
+      <tr><td>B♭ Major</td><td>G Natural Minor</td></tr>
+    </table>
+    <p>Because they share notes, moving between relative keys is smooth — the same fingering pattern applies, just starting from a different point.</p>
+
+    <h3>Parallel Keys</h3>
+    <p>Parallel keys share the same root note but use different scales. C Major and C Minor are parallel — they both start on C but have different notes and a very different feel.</p>
+    <p>Switching between parallel keys is a powerful compositional device — the same root but a sudden shift from bright to dark (or vice versa) creates strong contrast.</p>
+
+    <div class="tip"><p>In the app, the Relative button swaps between a major key and its relative minor. The Parallel button swaps between major and minor versions of the same root note.</p></div>
+  </div>
+
+  <!-- CHORDS -->
+  <div class="section" id="chords">
+    <div class="section-header">
+      <h2>Chords & Progressions</h2>
+    </div>
+    <p>A chord is three or more notes played together. The most common chords in the app are triads — built from three notes stacked in thirds.</p>
+
+    <h3>Chord Types</h3>
+    <table>
+      <tr><th>Type</th><th>Intervals</th><th>Character</th></tr>
+      <tr><td>Major (I, IV, V)</td><td>Root + Major 3rd + Perfect 5th</td><td>Bright, stable, resolved</td></tr>
+      <tr><td>Minor (ii, iii, vi)</td><td>Root + Minor 3rd + Perfect 5th</td><td>Dark, emotional, introspective</td></tr>
+      <tr><td>Diminished (vii°)</td><td>Root + Minor 3rd + Diminished 5th</td><td>Tense, unstable, dramatic</td></tr>
+    </table>
+
+    <h3>Roman Numerals</h3>
+    <p>Chords in a key are labelled with Roman numerals based on which degree of the scale they're built on. Uppercase = major, lowercase = minor.</p>
+    <table>
+      <tr><th>Numeral</th><th>In C Major</th><th>Type</th></tr>
+      <tr><td>I</td><td>C</td><td>Major</td></tr>
+      <tr><td>ii</td><td>Dm</td><td>Minor</td></tr>
+      <tr><td>iii</td><td>Em</td><td>Minor</td></tr>
+      <tr><td>IV</td><td>F</td><td>Major</td></tr>
+      <tr><td>V</td><td>G</td><td>Major</td></tr>
+      <tr><td>vi</td><td>Am</td><td>Minor</td></tr>
+      <tr><td>vii°</td><td>Bdim</td><td>Diminished</td></tr>
+    </table>
+
+    <h3>Common Progressions</h3>
+    <table>
+      <tr><th>Name</th><th>Numerals</th><th>Famous examples</th></tr>
+      <tr><td>Pop</td><td>I – V – vi – IV</td><td>Hundreds of pop songs</td></tr>
+      <tr><td>12-Bar Blues</td><td>I – I – I – I – IV – IV – I – I – V – IV – I – V</td><td>Blues, rock and roll</td></tr>
+      <tr><td>Circle of Fifths</td><td>ii – V – I</td><td>Jazz standard cornerstone</td></tr>
+      <tr><td>Andalusian Cadence</td><td>i – VII – VI – V</td><td>Flamenco, classical, metal</td></tr>
+      <tr><td>Canon</td><td>I – V – vi – iii – IV – I – IV – V</td><td>Pachelbel Canon</td></tr>
+    </table>
+
+    <div class="tip"><p>The I – V – vi – IV progression is so common in pop music that hundreds of completely different songs share the exact same four chords. The melody is what makes each song unique.</p></div>
+  </div>
+
+  <!-- FINGERING -->
+  <div class="section" id="fingering">
+    <div class="section-header">
+      <h2>Fingering Numbers</h2>
+    </div>
+    <p>Piano fingering uses numbers 1–5 for each finger:</p>
+    <table>
+      <tr><th>Number</th><th>Finger</th></tr>
+      <tr><td>1</td><td>Thumb</td></tr>
+      <tr><td>2</td><td>Index finger</td></tr>
+      <tr><td>3</td><td>Middle finger</td></tr>
+      <tr><td>4</td><td>Ring finger</td></tr>
+      <tr><td>5</td><td>Little finger (pinky)</td></tr>
+    </table>
+
+    <h3>Why Fingering Matters</h3>
+    <p>Using the correct fingering makes scales and arpeggios flow smoothly at speed. The key technique is the thumb crossing — passing the thumb under the hand (or the hand over the thumb) to continue the scale without a break in sound.</p>
+    <p>Standard fingering places thumb crossings at musically logical points and avoids putting the thumb on black keys where possible, which makes the hand position more stable.</p>
+
+    <h3>Right Hand vs Left Hand</h3>
+    <p>Right and left hand fingerings are often mirror images of each other but not always — the hands naturally sit differently on the keyboard and thumb crossings fall at different points to keep both hands comfortable and independent.</p>
+
+    <div class="tip"><p>The fingering shown in the app is the standard Royal College of Music recommended fingering. You can customise it in the Fingering Editor to suit your own hand size and technique.</p></div>
+  </div>
+
+</main>
+
+<footer>
+  <p>© 2026 Excel at Scales &nbsp;·&nbsp; <a href="/guide">Full Guide</a> &nbsp;·&nbsp; <a href="/privacy">Privacy Policy</a></p>
+</footer>
+
+</body>
+</html>
