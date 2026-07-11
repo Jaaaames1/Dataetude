@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Melody & Chord Pads – Excel at Scales</title>
+  <style>
+    *{margin:0;padding:0;box-sizing:border-box;}
+    body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;
+      background:#0d0d1a;color:#fff;min-height:100vh;}
+    nav{background:rgba(255,255,255,0.03);border-bottom:1px solid rgba(255,255,255,0.06);
+      padding:12px 24px;display:flex;justify-content:space-between;align-items:center;}
+    nav .logo{font-size:0.9rem;font-weight:700;color:rgba(255,255,255,0.7);letter-spacing:0.04em;}
+    nav a{font-size:0.82rem;color:#a78bfa;text-decoration:none;}
+    header{background:linear-gradient(135deg,#1a1a2e 0%,#16213e 100%);
+      padding:40px 24px;border-bottom:1px solid rgba(255,255,255,0.06);}
+    header h1{font-size:1.8rem;font-weight:800;margin-top:4px;
+      background:linear-gradient(135deg,#a78bfa,#60a5fa);
+      -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+    header p{color:rgba(255,255,255,0.4);font-size:0.9rem;margin-top:8px;}
+    main{max-width:720px;margin:0 auto;padding:48px 24px 80px;}
+    p{font-size:0.92rem;color:rgba(255,255,255,0.55);line-height:1.7;margin-bottom:14px;}
+    h2{font-size:1rem;font-weight:600;color:rgba(255,255,255,0.85);margin:28px 0 10px;}
+    ul{list-style:none;margin-bottom:16px;}
+    ul li{font-size:0.88rem;color:rgba(255,255,255,0.5);
+      padding:7px 0 7px 20px;border-bottom:1px solid rgba(255,255,255,0.04);
+      position:relative;line-height:1.5;}
+    ul li:before{content:'→';position:absolute;left:0;color:#a78bfa;}
+    .tip{background:rgba(167,139,250,0.08);border:1px solid rgba(167,139,250,0.2);
+      border-radius:10px;padding:14px 16px;margin:16px 0;}
+    .tip p{color:rgba(255,255,255,0.6);margin:0;font-size:0.85rem;}
+    .tip p:before{content:'💡 ';}
+    .nav-links{display:flex;justify-content:space-between;margin-top:48px;
+      padding-top:24px;border-top:1px solid rgba(255,255,255,0.06);}
+    .nav-links a{color:#a78bfa;text-decoration:none;font-size:0.85rem;}
+    footer{text-align:center;padding:32px 24px;
+      border-top:1px solid rgba(255,255,255,0.06);
+      color:rgba(255,255,255,0.2);font-size:0.8rem;}
+    footer a{color:rgba(255,255,255,0.3);text-decoration:none;}
+  </style>
+</head>
+<body>
+<nav>
+  <span class="logo">Excel at Scales</span>
+  <a href="/">← Home</a>
+</nav>
+<header>
+  <span style="font-size:2rem">🎸</span>
+  <h1>Melody & Chord Pads</h1>
+  <p>A performance playground with three interactive pad modes</p>
+</header>
+<main>
+  <p>The Pads page is the most interactive part of the app. Three modes — Chord, Drum and Melody — can all run simultaneously.</p>
+
+  <h2>Switching Modes</h2>
+  <p>Tap the mode selector button at the top to switch between Chord, Drum and Melody pads.</p>
+
+  <h2>8 or 12 Pads</h2>
+  <p>The 8⊞ button toggles between 8 and 12 pads across all three modes. 12 pads extends the range with additional notes and drum sounds.</p>
+
+  <h2>Chord Pads</h2>
+  <p>Eight or twelve chord pads in the current key. Hold multiple pads at once to combine chords.</p>
+  <ul>
+    <li>Tap the key button to change key</li>
+    <li>Maj/Min toggles between major and minor chord qualities — queued at beat 1 when looping</li>
+    <li>Chord Pattern selects which progression plays in the background</li>
+    <li>▶ starts and stops the chord loop</li>
+    <li>↻ toggles looping — press while looping to play out the bar then stop cleanly</li>
+    <li>♫ Arp switches to arpeggio mode</li>
+    <li>↑ Key queues a key change at the next bar 1</li>
+    <li>↺ Key resets back to the original key</li>
+  </ul>
+
+  <h2>Drum Pads</h2>
+  <p>Eight or twelve synthesised drum pads. Tap to trigger sounds or use auto patterns.</p>
+  <ul>
+    <li>Simple, Disco, Rock, Breakdown — patterns switch cleanly on beat 1</li>
+    <li>Fill — triggers a drum fill on the next bar</li>
+    <li>▶ starts and stops the drum loop</li>
+    <li>⇄ Move — rearrange pads into any order</li>
+    <li>12 pads adds Rim, Cowbell, Shaker and Ride</li>
+  </ul>
+
+  <h2>Melody Pads</h2>
+  <p>Eight or twelve pads mapped to the notes of the current scale.</p>
+  <ul>
+    <li>Pads are colour-coded by scale degree</li>
+    <li>Multiple fingers play multiple notes simultaneously</li>
+    <li>Maj/Min switches the scale quality at beat 1</li>
+    <li>♫ Arp plays notes as arpeggios instead of sustained</li>
+    <li>↑ Key queues a key change at beat 1</li>
+  </ul>
+
+  <h2>Layering All Three Together</h2>
+  <p>Start a drum pattern, add a chord loop, then play melody on top. When you add drums to a running chord loop they snap to beat 1 automatically — perfectly in sync.</p>
+
+  <div class="tip"><p>Queue a new drum pattern while playing — it switches cleanly on the next bar 1, never mid-bar.</p></div>
+
+  <div class="nav-links">
+    <a href="/chords">← Chords</a>
+    <a href="/fingering">Fingering Editor →</a>
+  </div>
+</main>
+<footer>
+  <p>© 2026 Excel at Scales &nbsp;·&nbsp; <a href="/guide">Full Guide</a> &nbsp;·&nbsp; <a href="/privacy">Privacy Policy</a></p>
+</footer>
+</body>
+</html>
