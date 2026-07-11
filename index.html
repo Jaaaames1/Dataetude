@@ -1,84 +1,4 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Excel at Scales</title>
-  <style>
-    *{margin:0;padding:0;box-sizing:border-box;}
-    body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;
-      background:#0d0d1a;color:#fff;min-height:100vh;}
-    nav{background:rgba(255,255,255,0.03);border-bottom:1px solid rgba(255,255,255,0.06);
-      padding:12px 24px;display:flex;justify-content:space-between;align-items:center;}
-    nav .logo{font-size:0.9rem;font-weight:700;color:rgba(255,255,255,0.7);letter-spacing:0.04em;}
-    nav a{font-size:0.82rem;color:#a78bfa;text-decoration:none;}
-    nav a:hover{text-decoration:underline;}
-    header{background:linear-gradient(135deg,#1a1a2e 0%,#16213e 100%);
-      padding:60px 24px 80px;text-align:center;
-      border-bottom:1px solid rgba(255,255,255,0.06);}
-    header h1{font-size:2.8rem;font-weight:800;letter-spacing:-0.02em;
-      background:linear-gradient(135deg,#a78bfa,#60a5fa);
-      -webkit-background-clip:text;-webkit-text-fill-color:transparent;
-      background-clip:text;margin-bottom:12px;}
-    header p{font-size:1.1rem;color:rgba(255,255,255,0.6);
-      max-width:480px;margin:0 auto 32px;line-height:1.6;}
-    .badge{display:inline-block;background:rgba(255,255,255,0.06);
-      border:1px solid rgba(255,255,255,0.12);border-radius:50px;
-      padding:14px 28px;font-size:0.95rem;color:rgba(255,255,255,0.4);
-      letter-spacing:0.04em;}
-    section{max-width:720px;margin:0 auto;padding:60px 24px;}
-    h2{font-size:1.3rem;font-weight:700;margin-bottom:20px;
-      color:rgba(255,255,255,0.9);letter-spacing:-0.01em;}
-    .screenshots{display:flex;gap:16px;overflow-x:auto;
-      padding-bottom:16px;margin-bottom:60px;scrollbar-width:none;}
-    .screenshots::-webkit-scrollbar{display:none;}
-    .screenshots img{height:420px;width:auto;border-radius:16px;
-      border:1px solid rgba(255,255,255,0.1);
-      box-shadow:0 8px 32px rgba(0,0,0,0.4);flex-shrink:0;}
-    .features{display:grid;grid-template-columns:1fr;gap:14px;margin-bottom:60px;}
-    .feature{background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.07);
-      border-radius:14px;padding:20px;text-decoration:none;color:inherit;
-      display:flex;align-items:center;gap:16px;transition:background 0.2s;}
-    .feature:hover{background:rgba(255,255,255,0.07);}
-    .feature span{font-size:2rem;flex-shrink:0;}
-    .feature-text h3{font-size:0.95rem;font-weight:600;margin-bottom:4px;
-      color:rgba(255,255,255,0.9);}
-    .feature-text p{font-size:0.8rem;color:rgba(255,255,255,0.45);line-height:1.5;margin:0;}
-    .feature-arrow{margin-left:auto;color:#a78bfa;font-size:1.2rem;flex-shrink:0;}
-    .contact{background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.07);
-      border-radius:14px;padding:28px;text-align:center;}
-    .contact p{color:rgba(255,255,255,0.5);font-size:0.9rem;margin-bottom:12px;}
-    .contact a{color:#a78bfa;text-decoration:none;font-weight:600;}
-    footer{text-align:center;padding:32px 24px;
-      border-top:1px solid rgba(255,255,255,0.06);
-      color:rgba(255,255,255,0.2);font-size:0.8rem;}
-    footer a{color:rgba(255,255,255,0.3);text-decoration:none;}
-    footer a:hover{color:rgba(255,255,255,0.6);}
-  </style>
-</head>
-<body>
-
-<nav>
-  <span class="logo">Excel at Scales</span>
-  <a href="/guide">📖 Full Guide</a>
-</nav>
-
-<header>
-  <h1>Excel at Scales</h1>
-  <p>The piano practice app that makes scales, chords and fingering second nature.</p>
-  <div class="badge">🎵 Coming soon on Google Play</div>
-</header>
-
-<section>
-  <h2>See it in action</h2>
-  <div class="screenshots">
-    <img src="Scales.jpg" alt="Scales page">
-    <img src="Chords.jpg" alt="Chords page">
-    <img src="Pads.jpg" alt="Pads page">
-    <img src="Metro.jpg" alt="Metronome page">
-  </div>
-
-  <h2>Explore the features</h2>
+<h2>Explore the features</h2>
   <div class="features">
     <a href="/scales" class="feature">
       <span>🎹</span>
@@ -93,6 +13,14 @@
       <div class="feature-text">
         <h3>Chord Progressions</h3>
         <p>Loop chord patterns in any key. Switch between major and minor instantly.</p>
+      </div>
+      <span class="feature-arrow">›</span>
+    </a>
+    <a href="/info" class="feature">
+      <span>📖</span>
+      <div class="feature-text">
+        <h3>Music Theory Reference</h3>
+        <p>Scales, arpeggios, keys, chords and fingering explained in full.</p>
       </div>
       <span class="feature-arrow">›</span>
     </a>
@@ -137,17 +65,3 @@
       <span class="feature-arrow">›</span>
     </a>
   </div>
-
-  <h2>Get in touch</h2>
-  <div class="contact">
-    <p>Questions, feedback or support?</p>
-    <a href="mailto:excelatscales@gmail.com">excelatscales@gmail.com</a>
-  </div>
-</section>
-
-<footer>
-  <p>© 2026 Excel at Scales &nbsp;·&nbsp; <a href="/guide">Full Guide</a> &nbsp;·&nbsp; <a href="/privacy">Privacy Policy</a></p>
-</footer>
-
-</body>
-</html>
