@@ -37,6 +37,7 @@
     .section-header h2{font-size:1.4rem;font-weight:700;}
     p{font-size:0.92rem;color:rgba(255,255,255,0.55);line-height:1.7;margin-bottom:14px;}
     h3{font-size:1rem;font-weight:600;color:rgba(255,255,255,0.85);margin:24px 0 10px;}
+    h4{font-size:0.88rem;font-weight:600;color:rgba(255,255,255,0.65);margin:16px 0 8px;}
     .feature-list{list-style:none;margin-bottom:16px;}
     .feature-list li{font-size:0.88rem;color:rgba(255,255,255,0.5);
       padding:7px 0 7px 20px;border-bottom:1px solid rgba(255,255,255,0.04);
@@ -46,6 +47,10 @@
       border-radius:10px;padding:14px 16px;margin:16px 0;}
     .tip p{color:rgba(255,255,255,0.6);margin:0;font-size:0.85rem;}
     .tip p:before{content:'💡 ';}
+    .highlight{background:rgba(90,170,130,0.08);border:1px solid rgba(90,170,130,0.2);
+      border-radius:10px;padding:14px 16px;margin:16px 0;}
+    .highlight p{color:rgba(255,255,255,0.6);margin:0;font-size:0.85rem;}
+    .highlight p:before{content:'⚡ ';}
     footer{text-align:center;padding:32px 24px;
       border-top:1px solid rgba(255,255,255,0.06);
       color:rgba(255,255,255,0.2);font-size:0.8rem;}
@@ -83,7 +88,7 @@
       <span>🎹</span>
       <h2>Scales</h2>
     </div>
-    <p>The Scales page shows you fingering for every scale and arpeggio in all 12 keys, with interactive piano keyboards for both hands.</p>
+    <p>The Scales page shows fingering for every scale and arpeggio in all 12 keys, with interactive piano keyboards for both hands.</p>
 
     <h3>Choosing a Scale</h3>
     <p>Tap any scale type at the top — Major, Nat Min, Harm, Melodic, Maj Arp or Min Arp. Then tap a key from the grid to select your root note.</p>
@@ -99,10 +104,20 @@
     </ul>
 
     <h3>Relative & Parallel</h3>
-    <p>Below the key selector, the Relative and Parallel buttons jump you to the related scale instantly. For example, from C Major, Relative takes you to A Natural Minor.</p>
+    <p>Below the key selector, the Relative and Parallel buttons jump you to the related scale instantly. From C Major, Relative takes you to A Natural Minor. Parallel takes you to C Minor.</p>
 
     <h3>Key Up</h3>
     <p>The Key ↑+3 button shifts the current scale up 3 semitones. Press it repeatedly to cycle through keys. When a scale is playing in loop mode, the change waits until the end of the current loop before switching — no interruption.</p>
+
+    <h3>Changing Key While Looping</h3>
+    <p>While a scale is looping you can queue changes without stopping playback:</p>
+    <ul class="feature-list">
+      <li>Tap any <strong>tonic key</strong> — queues a key change at the end of the current run. The tapped key glows amber while waiting.</li>
+      <li>Tap a <strong>scale type</strong> (Major, Harm etc) — marks it as pending without changing the display. Then tap a tonic key to queue that combination.</li>
+      <li>Tap <strong>Relative or Parallel</strong> — queues the related scale change the same way.</li>
+      <li>Tap the <strong>currently playing key</strong> — ignored unless a different scale type is pending.</li>
+    </ul>
+    <div class="tip"><p>The currently playing key stays highlighted in its colour. The newly queued key glows dimly amber so you can see both at once.</p></div>
 
     <h3>Playback</h3>
     <ul class="feature-list">
@@ -112,8 +127,50 @@
       <li>Tap the BPM number to type a specific tempo</li>
       <li>Scroll Sync keeps both keyboards scrolled together</li>
     </ul>
-
     <div class="tip"><p>Tap any highlighted key on the keyboard to hear that individual note.</p></div>
+
+    <h3>Tempo Trainer</h3>
+    <p>The Tempo Trainer automatically increases the tempo as you practise — a classic exam preparation technique. Configure it below the transport controls.</p>
+    <ul class="feature-list">
+      <li><strong>Start BPM</strong> — the tempo training begins at. Hold + or − to scroll quickly.</li>
+      <li><strong>Target BPM</strong> — training ends when this is reached</li>
+      <li><strong>Increment BPM</strong> — how much the tempo increases each step</li>
+      <li><strong>Every N loops</strong> — how many loops to complete at each tempo before stepping up</li>
+    </ul>
+    <p>Press <strong>▶ Start Trainer</strong> to begin. The tempo increments automatically after each set of loops. Press <strong>■ Stop Trainer</strong> at any time. Once the target tempo is reached, "Goal reached!" flashes on screen and the scale keeps looping freely at that tempo until you stop.</p>
+
+    <h4>Metro Only</h4>
+    <p>Silences the piano and plays only metronome clicks. The keys still flash showing which note to play — useful for practising technique without the sound guiding your fingers.</p>
+
+    <h4>Count-in</h4>
+    <p>Adds a metronome count before the scale starts. Choose 1, 2 or 3 bars. The count displays as a large number overlay (1, 2, 3, 4) and <strong>Go!</strong> flashes green when the scale begins.</p>
+
+    <h4>Training Info</h4>
+    <p>A slim bar appears below the keyboards during a training session. Set it to show Off, BPM, Time (countdown) or Both. The countdown ticks in real time and can be switched on or off mid-session — it will always be accurate.</p>
+
+    <h3>Scale Cycle</h3>
+    <p>Extends the Tempo Trainer to rotate through multiple keys automatically. Instead of repeating one scale, the trainer cycles through your selected keys — playing each one the set number of times before moving on, then repeating the round at the next tempo step.</p>
+
+    <h4>Setting up Scale Cycle</h4>
+    <ul class="feature-list">
+      <li>Toggle <strong>Enable Scale Cycle</strong> in the Tempo Trainer panel</li>
+      <li>Tap <strong>⟳</strong> to open the key picker</li>
+      <li>Choose a <strong>scale type</strong> — all keys in the cycle use this type</li>
+      <li>Tap keys to include them — tap again to deselect</li>
+      <li>Choose <strong>Chromatic</strong> or <strong>Fifths</strong> order for the playback sequence</li>
+    </ul>
+    <div class="tip"><p>With 3 keys and Every N loops set to 2: C×2, D×2, E×2 at the first tempo, then all three again at the next tempo, and so on.</p></div>
+
+    <h4>Key Change Mode</h4>
+    <ul class="feature-list">
+      <li><strong>Full Scale</strong> (default) — completes every note including the final root before switching. The most natural way to practise.</li>
+      <li><strong>Smooth Transition</strong> — skips the final note and plays the first note of the next key in its place. Seamless, no gap.</li>
+    </ul>
+
+    <h4>Pause Between Keys</h4>
+    <p>Available in Full Scale mode only. Adds a single beat gap with a metronome click between key changes — giving you a moment to prepare. Enabled by default.</p>
+
+    <div class="highlight"><p>For exam preparation across all keys: select all 12 keys in fifths order, set your start and target BPM, Every N loops to 2, enable Count-in and Pause Between Keys. The app works through every key systematically, getting faster each round.</p></div>
   </div>
 
   <!-- CHORDS -->
@@ -122,7 +179,7 @@
       <span>🎵</span>
       <h2>Chords</h2>
     </div>
-    <p>The Chords page shows you every chord in the current key on a scrollable piano keyboard, and lets you loop chord progressions.</p>
+    <p>The Chords page shows every chord in the current key on a scrollable piano keyboard, and lets you loop chord progressions.</p>
 
     <h3>Chord Display</h3>
     <p>The keyboard highlights the notes of each chord as you tap them. The chord name and Roman numeral are shown above.</p>
@@ -147,39 +204,39 @@
       <span>🎸</span>
       <h2>Pads</h2>
     </div>
-    <p>The Pads page is the most interactive part of the app — a performance playground with three modes: Chord, Drum and Melody.</p>
+    <p>The Pads page is a performance playground with three modes: Chord, Drum and Melody.</p>
 
     <h3>Switching Modes</h3>
     <p>Tap the mode selector button at the top to switch between Chord, Drum and Melody pads.</p>
 
     <h3>8 or 12 Pads</h3>
-    <p>The 8⊞ button next to the mode selector toggles between 8 and 12 pads in all three modes. 12 pads extends the range with additional notes and sounds.</p>
+    <p>The 8⊞ button toggles between 8 and 12 pads in all three modes. 12 pads extends the range with additional notes and sounds.</p>
 
     <h3>Chord Pads</h3>
     <p>Eight or twelve chord pads laid out in the key you select. Hold multiple pads at once to combine chords.</p>
     <ul class="feature-list">
       <li>Tap the key button to change key</li>
       <li>Maj/Min toggles between major and minor chord qualities</li>
-      <li>Chord Pattern selects the chord progression playing in the background</li>
+      <li>Chord Pattern selects the progression playing in the background</li>
       <li>▶ starts and stops the chord loop</li>
       <li>↻ toggles looping — press while looping to play out the bar then stop</li>
-      <li>♫ Arp switches to arpeggio mode — chords play as arpeggios</li>
+      <li>♫ Arp switches to arpeggio mode</li>
       <li>↑ Key queues a key change at the next bar 1</li>
       <li>↺ Key resets to the original key</li>
     </ul>
 
     <h3>Drum Pads</h3>
-    <p>Eight or twelve drum pads with synthesised drum sounds. Tap to trigger sounds, or use the drum pattern buttons to play an auto pattern.</p>
+    <p>Eight or twelve drum pads with synthesised sounds. Tap to trigger, or use the auto pattern buttons.</p>
     <ul class="feature-list">
-      <li>Simple, Disco, Rock, Breakdown — auto drum patterns that switch cleanly on beat 1</li>
+      <li>Simple, Disco, Rock, Breakdown — auto patterns that switch cleanly on beat 1</li>
       <li>Fill — triggers a drum fill on the next bar</li>
       <li>▶ starts and stops the drum loop</li>
-      <li>⇄ Move — rearrange the pads into any order you like</li>
+      <li>⇄ Move — rearrange the pads into any order</li>
       <li>12 pads adds Rim, Cowbell, Shaker and Ride sounds</li>
     </ul>
 
     <h3>Melody Pads</h3>
-    <p>Eight or twelve pads mapped to the notes of the current scale. Play melodies over the chord and drum loops running beneath.</p>
+    <p>Eight or twelve pads mapped to the notes of the current scale. Play melodies over the chord and drum loops.</p>
     <ul class="feature-list">
       <li>Pads are colour-coded by note</li>
       <li>Swipe between pads to slide between notes</li>
@@ -190,7 +247,7 @@
     </ul>
 
     <h3>Layering All Three Together</h3>
-    <p>All three layers can run simultaneously. Start a drum pattern, add a chord loop, then play melody on top. When you add drums to a running chord loop, they snap to beat 1 automatically — perfectly in sync.</p>
+    <p>All three layers can run simultaneously. Start a drum pattern, add a chord loop, then play melody on top. Drums snap to beat 1 automatically when added to a running loop.</p>
 
     <div class="tip"><p>Press a new drum pattern button while playing to queue it — it switches cleanly on the next bar 1, never mid-bar.</p></div>
   </div>
@@ -201,44 +258,46 @@
       <span>✏️</span>
       <h2>Fingering Editor</h2>
     </div>
-    <p>The Fingering page shows you the recommended fingering for the current scale on both hands, and lets you customise it to suit your own technique.</p>
+    <p>The Fingering page shows recommended fingering for the current scale on both hands, and lets you customise it to suit your own technique.</p>
 
     <h3>Viewing Fingering</h3>
-    <p>Select any scale from the scale selector grid at the bottom of the page. The keyboards at the top update to show fingering numbers on each highlighted key.</p>
+    <p>Select any scale from the grid at the bottom of the page. The keyboards update to show fingering numbers on each highlighted key.</p>
 
     <h3>Editing Fingering</h3>
-    <p>Two ways to edit:</p>
     <ul class="feature-list">
       <li><strong>Tap a key</strong> — cycles the finger number 1→2→3→4→5→1</li>
       <li><strong>Input boxes</strong> — type directly into the numbered boxes below each keyboard for precise entry</li>
     </ul>
     <p>Both methods stay in sync — tap a key and the input box updates, type in a box and the keyboard updates.</p>
 
-    <h3>Saving</h3>
-    <p>Press Save to store your changes. They persist between sessions.</p>
-
-    <h3>Restoring Defaults</h3>
+    <h3>Saving & Restoring</h3>
     <ul class="feature-list">
-      <li>Restore this scale — resets just the current scale to its built-in default</li>
-      <li>Restore ALL scales — resets every scale back to defaults</li>
+      <li>Press <strong>Save</strong> to store your changes — they persist between sessions</li>
+      <li><strong>Restore this scale</strong> — resets just the current scale to its built-in default</li>
+      <li><strong>Restore ALL scales</strong> — resets every scale back to defaults</li>
     </ul>
     <div class="tip"><p>For Melodic Minor, switch between ASC and DESC on the Scales page to edit ascending and descending fingerings separately.</p></div>
   </div>
 
+  <!-- METRO -->
   <div class="section" id="metro">
     <div class="section-header"><span>🥁</span><h2>Metronome</h2></div>
-    <p>A full-featured metronome with visual beat display, tap tempo, and multiple sound options.</p>
+    <p>A full-featured metronome with visual beat display, tap tempo and multiple sound options.</p>
+
     <h3>Basic Use</h3>
     <ul class="feature-list">
       <li>Press ▶ to start and stop</li>
       <li>Drag the tempo slider or tap the BPM number to type a value directly</li>
-      <li>Use the −10, −5, +5, +10 buttons for quick adjustments</li>
+      <li>Use the −10, −5, +5, +10 buttons for quick adjustments — hold any button to scroll continuously</li>
       <li>Tap Tempo — tap the button repeatedly in time to set tempo by feel</li>
     </ul>
+
     <h3>Time Signatures</h3>
     <p>Choose from 2/4, 3/4, 4/4 or 6/8. Or tap Custom to enter any time signature — 5/4, 7/8, 11/8, whatever you need.</p>
+
     <h3>No Accent</h3>
     <p>Turns off the beat 1 accent so every click sounds identical.</p>
+
     <h3>Sound Options</h3>
     <ul class="feature-list">
       <li><strong>Sine</strong> — clean electronic click</li>
@@ -248,9 +307,11 @@
     </ul>
   </div>
 
+  <!-- SYNTH -->
   <div class="section" id="synth">
     <div class="section-header"><span>🎛️</span><h2>Synth</h2></div>
     <p>The Synth panel controls the sound character of the piano keyboard and scale playback. Tap the wave icon (∿) in the top right of any page to open it.</p>
+
     <h3>Wave Type</h3>
     <ul class="feature-list">
       <li><strong>Sine</strong> — pure, smooth tone. Closest to a clean piano or flute</li>
@@ -258,39 +319,50 @@
       <li><strong>Sawtooth</strong> — rich and bright, full of harmonics. Closest to strings or brass</li>
       <li><strong>Square</strong> — hollow and buzzy, classic synth or clarinet character</li>
     </ul>
+
     <h3>Sliders</h3>
     <ul class="feature-list">
       <li><strong>Attack</strong> — how quickly the note reaches full volume. Short = punchy, Long = swells in gradually</li>
-      <li><strong>Decay</strong> — how long the note rings after you release. Short = staccato, Long = notes ring on</li>
+      <li><strong>Decay</strong> — how long the note rings after the peak. Short = staccato, Long = notes ring on</li>
       <li><strong>Harmonics</strong> — adds upper overtones to thicken the sound. Higher = brighter and more complex</li>
       <li><strong>Reverb</strong> — adds room ambience. Low = dry and close, High = spacious and distant</li>
       <li><strong>Noise Mix</strong> — blends in a noise layer for a breathier, more organic texture</li>
     </ul>
+
     <div class="tip"><p>For a piano-like sound try Sine wave with short attack, medium decay, low harmonics and a touch of reverb.</p></div>
   </div>
 
+  <!-- SETTINGS -->
   <div class="section" id="settings">
     <div class="section-header"><span>⚙️</span><h2>Settings</h2></div>
     <p>Open settings by tapping the gear icon ⚙️ in the top right corner of any page.</p>
+
     <h3>Appearance</h3>
     <ul class="feature-list">
       <li><strong>Dark</strong> — default dark theme</li>
-      <li><strong>Midnight</strong> — deeper, richer dark theme</li>
-      <li><strong>Cream</strong> — warm light theme</li>
-      <li><strong>Light</strong> — bright white theme</li>
+      <li><strong>Midnight</strong> — deeper, richer dark theme with true blacks</li>
+      <li><strong>Cream</strong> — warm off-white light theme</li>
+      <li><strong>Light</strong> — clean bright white theme</li>
     </ul>
+
     <h3>Key Highlight Palette</h3>
     <p>Six colour palettes for the left and right hand highlights on the piano keyboards.</p>
+
     <h3>Haptic Feedback</h3>
     <p>Toggles vibration on keyboard taps.</p>
+
     <h3>Display</h3>
     <ul class="feature-list">
       <li><strong>Show note names on keys</strong> — toggles the C D E F G A B labels below every piano key across the whole app</li>
+      <li><strong>Dark piano keys</strong> — switches the piano keyboard to a dark colour scheme. Purely visual — scale highlighting and fingering numbers are unaffected.</li>
+      <li><strong>Bluetooth delay</strong> — delays the keyboard flash to compensate for Bluetooth headphone latency. Adjust in 10ms steps until visuals sync with what you hear. Typical starting point: 150ms for standard Bluetooth, 100ms for AAC, 80ms for aptX.</li>
     </ul>
+
     <h3>Playback</h3>
     <ul class="feature-list">
       <li><strong>Keep playing when screen locks</strong> — keeps the metronome or drum loops running with the screen locked</li>
     </ul>
+
     <h3>Defaults</h3>
     <ul class="feature-list">
       <li><strong>Default Key</strong> — which key is selected on launch</li>
