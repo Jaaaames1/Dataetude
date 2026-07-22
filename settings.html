@@ -37,6 +37,12 @@
       border-top:1px solid rgba(255,255,255,0.06);
       color:rgba(255,255,255,0.2);font-size:0.8rem;}
     footer a{color:rgba(255,255,255,0.3);text-decoration:none;}
+    table{width:100%;border-collapse:collapse;margin:12px 0 20px;font-size:0.85rem;}
+    th{text-align:left;color:rgba(255,255,255,0.4);font-weight:500;
+      padding:6px 10px;border-bottom:1px solid rgba(255,255,255,0.08);}
+    td{padding:7px 10px;color:rgba(255,255,255,0.5);
+      border-bottom:1px solid rgba(255,255,255,0.04);}
+    td:first-child{color:rgba(255,255,255,0.7);font-weight:500;}
   </style>
 </head>
 <body>
@@ -69,6 +75,21 @@
 
   <h2>Show Note Names on Keys</h2>
   <p>Toggles the C D E F G A B labels below every piano key across the whole app. Turn off for a cleaner look once you know your way around the keyboard.</p>
+
+  <h2>Dark Piano Keys</h2>
+  <p>Switches the piano keyboard to a dark colour scheme — black and charcoal instead of the default white and cream. Purely a visual preference; the scale highlighting and fingering numbers are unaffected.</p>
+
+  <h2>Bluetooth Delay</h2>
+  <p>If you use Bluetooth headphones, there is typically a short delay between the keyboard visual flashing and the note sound reaching your ears. This setting shifts the keyboard flash to match, keeping the visuals in sync with what you hear.</p>
+  <p>Adjust in 10ms steps until the highlighted key lines up with the note you hear. Typical starting points by Bluetooth codec:</p>
+  <table>
+    <tr><th>Codec</th><th>Suggested starting point</th></tr>
+    <tr><td>SBC (most common)</td><td>150ms</td></tr>
+    <tr><td>AAC / Samsung</td><td>100ms</td></tr>
+    <tr><td>aptX</td><td>80ms</td></tr>
+    <tr><td>aptX Low Latency</td><td>40ms</td></tr>
+  </table>
+  <div class="tip"><p>Not sure which codec your headphones use? Start at 150ms and reduce until the visuals feel in sync. Leave at 0ms when using wired headphones or the phone speaker.</p></div>
 
   <h2>Keep Playing When Screen Locks</h2>
   <p>By default all playback stops when your screen turns off. Turn this on to keep the metronome or drum loops running with the screen locked — great for hands-free practice without needing to keep the screen awake.</p>
