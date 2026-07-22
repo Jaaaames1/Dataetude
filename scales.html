@@ -22,6 +22,7 @@
     main{max-width:720px;margin:0 auto;padding:48px 24px 80px;}
     p{font-size:0.92rem;color:rgba(255,255,255,0.55);line-height:1.7;margin-bottom:14px;}
     h2{font-size:1rem;font-weight:600;color:rgba(255,255,255,0.85);margin:28px 0 10px;}
+    h3{font-size:0.9rem;font-weight:600;color:rgba(255,255,255,0.7);margin:18px 0 8px;}
     ul{list-style:none;margin-bottom:16px;}
     ul li{font-size:0.88rem;color:rgba(255,255,255,0.5);
       padding:7px 0 7px 20px;border-bottom:1px solid rgba(255,255,255,0.04);
@@ -101,20 +102,54 @@
   <h2>Tempo Trainer</h2>
   <p>The Tempo Trainer section below the transport automatically increases the tempo as you practise — a classic exam preparation technique.</p>
   <ul>
-    <li><strong>Start BPM</strong> — the tempo training begins at</li>
-    <li><strong>Target BPM</strong> — training stops when this is reached</li>
-    <li><strong>Increment BPM</strong> — how much the tempo increases each time (+5 default)</li>
-    <li><strong>Every N loops</strong> — how many loops to complete before stepping up (2 default)</li>
+    <li><strong>Start BPM</strong> — the tempo training begins at. Hold + or − to scroll quickly.</li>
+    <li><strong>Target BPM</strong> — training ends when this is reached</li>
+    <li><strong>Increment BPM</strong> — how much the tempo increases each step (+5 default)</li>
+    <li><strong>Every N loops</strong> — how many loops to complete at each tempo before stepping up (2 default)</li>
   </ul>
-  <p>Press <strong>▶ Start Training</strong> to begin. The tempo increments automatically every N loops and the current progress is shown. Press <strong>■ Stop Training</strong> at any time — this also stops playback.</p>
+  <p>Press <strong>▶ Start Trainer</strong> to begin. The tempo increments automatically and current progress is shown in the status line. Press <strong>■ Stop Trainer</strong> at any time — this also stops playback. Once the target is reached, "Goal reached!" flashes on screen and the scale keeps looping freely at the target tempo until you stop.</p>
 
   <h2>Metro Only Mode</h2>
-  <p>Toggle <strong>Metro only</strong> in the Speed Trainer to practise silently. The piano keys still light up showing which note to play and what finger to use, but instead of piano sounds you hear only metronome clicks. Useful for developing physical technique without letting the sound guide your fingers.</p>
+  <p>Toggle <strong>Metro only</strong> in the Tempo Trainer to practise silently. The piano keys still light up showing which note to play and what finger to use, but instead of piano sounds you hear only metronome clicks. Useful for developing physical technique without letting the sound guide your fingers.</p>
 
   <h2>Count-in</h2>
-  <p>Enable <strong>Count-in</strong> in the Speed Trainer to get a metronome count before the scale starts. Choose 1, 2 or 3 bars of count-in. The count displays as a large overlay number (1, 2, 3, 4...) and <strong>Go!</strong> flashes in green the moment the scale begins.</p>
+  <p>Enable <strong>Count-in</strong> in the Tempo Trainer to get a metronome count before the scale starts. Choose 1, 2 or 3 bars of count-in. The count displays as a large overlay number (1, 2, 3, 4) and <strong>Go!</strong> flashes in green the moment the scale begins.</p>
 
-  <div class="highlight"><p>For exam preparation: set Start BPM to a comfortable speed, Target BPM to your exam tempo, Increment BPM to 5, Every N loops to 2, and enable Count-in. The app does the rest.</p></div>
+  <h2>Training Info</h2>
+  <p>A slim bar appears below the keyboards during a training session showing live session information. Choose what to display:</p>
+  <ul>
+    <li><strong>Off</strong> — nothing shown</li>
+    <li><strong>BPM</strong> — current tempo, updates each time it increments</li>
+    <li><strong>Time</strong> — countdown to the end of the session, ticking down in real time</li>
+    <li><strong>Both</strong> — current BPM and countdown side by side</li>
+  </ul>
+  <p>The bar can be switched on or off at any point — even mid-session — and the countdown will always be accurate to where you are in the session.</p>
+
+  <h2>Scale Cycle</h2>
+  <p>Scale Cycle extends the Tempo Trainer to automatically rotate through multiple keys during a session. Instead of repeating the same scale, the trainer cycles through whichever keys you select — at each tempo step, every selected key is played the set number of times before moving on.</p>
+
+  <h3>Setting up Scale Cycle</h3>
+  <ul>
+    <li>Toggle <strong>Enable Scale Cycle</strong> in the Tempo Trainer panel</li>
+    <li>Tap the <strong>⟳ button</strong> to open the key picker</li>
+    <li>Select a <strong>scale type</strong> for the cycle — all keys will use this type</li>
+    <li>Tap any keys to include them — tap again to deselect. All 12 can be selected.</li>
+    <li>Choose <strong>Chromatic</strong> or <strong>Fifths</strong> order to determine the sequence keys play in</li>
+  </ul>
+
+  <div class="tip"><p>With 3 keys selected and Every N loops set to 2, the trainer plays each key twice before moving to the next — C×2, D×2, E×2 — then repeats at the next tempo step.</p></div>
+
+  <h3>Key Change Mode</h3>
+  <p>Controls how the app transitions between keys:</p>
+  <ul>
+    <li><strong>Full Scale</strong> (default) — completes every note of the scale including the final root note before switching to the next key. The most natural way to practise.</li>
+    <li><strong>Smooth Transition</strong> — skips the final note of each scale and plays the first note of the next key in its place. Creates a seamless join with no gap.</li>
+  </ul>
+
+  <h3>Pause Between Keys</h3>
+  <p>Available in Full Scale mode only. Adds a single beat gap with a metronome click between each key change — giving you a moment to prepare before the next scale begins. Enabled by default.</p>
+
+  <div class="highlight"><p>For exam preparation across all keys: select all 12 keys in fifths order, set Start BPM to a comfortable speed, Target BPM to your exam tempo, Every N loops to 2, enable Count-in and Pause Between Keys. The app works through every key systematically, getting faster with each round.</p></div>
 
   <div class="nav-links">
     <a href="/">← Home</a>
