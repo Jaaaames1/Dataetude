@@ -1,1 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Piano Scales Lab – Data Etude Studios</title>
+  <style>
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;
+  background:#000;color:#e8e8e8;min-height:100vh;line-height:1.6;}
+nav{background:#0a0a0a;border-bottom:1px solid rgba(255,255,255,0.06);
+  padding:13px 24px;display:flex;justify-content:space-between;align-items:center;}
+nav .logo{font-size:0.88rem;font-weight:700;color:rgba(232,232,232,0.65);
+  letter-spacing:0.06em;text-decoration:none;}
+nav a.back{font-size:0.8rem;color:#a78bfa;text-decoration:none;}
+nav a.back:hover{color:#c4b5fd;}
+.page-header{max-width:720px;margin:0 auto;padding:48px 24px 36px;}
+.page-header .eyebrow{font-size:0.68rem;font-weight:600;letter-spacing:0.16em;
+  text-transform:uppercase;color:#a78bfa;margin-bottom:14px;}
+.page-header h1{font-size:1.9rem;font-weight:800;line-height:1.15;
+  background:linear-gradient(135deg,#a78bfa,#60a5fa);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+  background-clip:text;margin-bottom:10px;}
+.page-header p{font-size:0.9rem;color:#555;line-height:1.65;}
+.divider{border:none;border-top:1px solid rgba(255,255,255,0.06);}
+main{max-width:720px;margin:0 auto;padding:40px 24px 80px;}
+h2{font-size:1rem;font-weight:700;color:#e8e8e8;margin:32px 0 10px;
+  padding-bottom:8px;border-bottom:1px solid rgba(255,255,255,0.06);}
+h3{font-size:0.92rem;font-weight:600;color:#e8e8e8;margin:22px 0 8px;}
+h4{font-size:0.85rem;font-weight:600;color:#555;margin:16px 0 6px;letter-spacing:0.02em;}
+p{font-size:0.88rem;color:rgba(232,232,232,0.5);line-height:1.75;margin-bottom:14px;}
+ul.guide{list-style:none;margin-bottom:18px;}
+ul.guide li{font-size:0.86rem;color:rgba(232,232,232,0.45);
+  padding:7px 0 7px 18px;border-bottom:1px solid rgba(255,255,255,0.04);
+  position:relative;line-height:1.6;}
+ul.guide li:before{content:'→';position:absolute;left:0;color:#a78bfa;}
+ul.guide li strong{color:rgba(232,232,232,0.75);font-weight:600;}
+.tip{background:rgba(167,139,250,0.06);border:1px solid rgba(167,139,250,0.18);
+  border-radius:10px;padding:14px 16px;margin:18px 0;}
+.tip p{color:rgba(232,232,232,0.55);margin:0;font-size:0.84rem;}
+.tip p::before{content:'💡  ';}
+.highlight{background:rgba(90,170,130,0.06);border:1px solid rgba(90,170,130,0.18);
+  border-radius:10px;padding:14px 16px;margin:18px 0;}
+.highlight p{color:rgba(232,232,232,0.55);margin:0;font-size:0.84rem;}
+.highlight p::before{content:'⚡  ';}
+.toc{background:#0a0a0a;border:1px solid rgba(255,255,255,0.06);
+  border-radius:12px;padding:22px;margin-bottom:44px;}
+.toc .toc-label{font-size:0.66rem;font-weight:700;letter-spacing:0.14em;
+  text-transform:uppercase;color:#333;margin-bottom:14px;}
+.toc a{display:block;color:rgba(167,139,250,0.8);text-decoration:none;
+  font-size:0.87rem;padding:5px 0;border-bottom:1px solid rgba(255,255,255,0.04);}
+.toc a:last-child{border-bottom:none;}
+.toc a:hover{color:#a78bfa;}
+.section{margin-bottom:56px;}
+.section-head{display:flex;align-items:center;gap:12px;margin-bottom:20px;
+  padding-bottom:14px;border-bottom:1px solid rgba(255,255,255,0.06);}
+.section-head .icon{font-size:1.5rem;}
+.section-head h2{font-size:1.25rem;font-weight:700;border:none;
+  margin:0;padding:0;color:#e8e8e8;}
+table{width:100%;border-collapse:collapse;margin:12px 0 18px;font-size:0.84rem;}
+th{text-align:left;color:#333;font-weight:600;font-size:0.7rem;
+  letter-spacing:0.08em;text-transform:uppercase;
+  padding:7px 12px;border-bottom:1px solid rgba(255,255,255,0.06);}
+td{padding:8px 12px;border-bottom:1px solid rgba(255,255,255,0.04);
+  color:rgba(232,232,232,0.45);}
+td:first-child{color:rgba(232,232,232,0.7);font-weight:500;}
+.nav-links{display:flex;justify-content:space-between;margin-top:56px;
+  padding-top:22px;border-top:1px solid rgba(255,255,255,0.06);}
+.nav-links a{color:#a78bfa;text-decoration:none;font-size:0.84rem;}
+.nav-links a:hover{color:#c4b5fd;}
+footer{text-align:center;padding:28px 24px;
+  border-top:1px solid rgba(255,255,255,0.06);
+  color:#333;font-size:0.78rem;}
+footer a{color:#444;text-decoration:none;}
+footer a:hover{color:#666;}
+
+.hero{max-width:720px;margin:0 auto;padding:48px 24px 36px;}
+.hero .eyebrow{font-size:0.68rem;font-weight:600;letter-spacing:0.16em;
+  text-transform:uppercase;color:#a78bfa;margin-bottom:14px;}
+.hero h1{font-size:1.9rem;font-weight:800;margin-bottom:10px;
+  background:linear-gradient(135deg,#a78bfa,#60a5fa);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+.hero p{font-size:0.9rem;color:#555;line-height:1.65;}
+.feature-list{list-style:none;margin:0 0 40px;}
+.feature-list li{border-bottom:1px solid rgba(255,255,255,0.05);}
+.feature-list li a{display:flex;align-items:center;gap:16px;
+  padding:18px 0;text-decoration:none;transition:opacity 0.15s;}
+.feature-list li a:hover{opacity:0.7;}
+.fi{font-size:1.3rem;flex-shrink:0;width:30px;text-align:center;}
+.ft h3{font-size:0.92rem;font-weight:600;color:#e8e8e8;margin-bottom:3px;}
+.ft p{font-size:0.8rem;color:rgba(232,232,232,0.38);line-height:1.5;margin:0;}
+.arr{margin-left:auto;color:#333;flex-shrink:0;}
+.guide-cta{display:block;text-align:center;padding:14px;
+  color:#a78bfa;text-decoration:none;font-size:0.84rem;}
+.guide-cta:hover{color:#c4b5fd;}
+.section-label{font-size:0.66rem;font-weight:700;letter-spacing:0.14em;
+  text-transform:uppercase;color:#333;margin-bottom:18px;}
+  </style>
+</head>
+<body>
+<nav>
+  <a href="/" class="logo">Data Etude Studios</a>
+  <a href="/" class="back">← Home</a>
+</nav>
+<hr class="divider">
+<div class="hero">
+  <div class="eyebrow">Data Etude Studios</div>
+  <h1>Piano Scales Lab</h1>
+  <p>Scales, arpeggios, chords and a full tempo trainer for every key. Built for pianists who want to practise smarter.</p>
+</div>
+<main>
+  <div class="section-label">What's in the app</div>
+  <ul class="feature-list">
+    <li><a href="/piano-scales-lab/scales"><span class="fi">🎹</span><div class="ft"><h3>Scales &amp; Arpeggios</h3><p>Every scale type in all 12 keys with correct fingering for both hands. Includes chromatic, melodic minor and arpeggios.</p></div><span class="arr">→</span></a></li>
+    <li><a href="/piano-scales-lab/scales"><span class="fi">📈</span><div class="ft"><h3>Tempo Trainer</h3><p>Set a start and target BPM. The app increases tempo automatically. Scale Cycle rotates through multiple keys at increasing tempos.</p></div><span class="arr">→</span></a></li>
+    <li><a href="/piano-scales-lab/chords"><span class="fi">🎵</span><div class="ft"><h3>Chord Progressions</h3><p>Every chord in the current key on a scrollable keyboard. Loop progressions from a built-in library across Pop, Blues, Jazz and more.</p></div><span class="arr">→</span></a></li>
+    <li><a href="/piano-scales-lab/pads"><span class="fi">🎸</span><div class="ft"><h3>Pads</h3><p>Chord, drum and melody pads — all three running simultaneously. A performance playground built into your practice tool.</p></div><span class="arr">→</span></a></li>
+    <li><a href="/piano-scales-lab/fingering"><span class="fi">✏️</span><div class="ft"><h3>Fingering Editor</h3><p>View and customise fingering for every scale. Built-in defaults, fully editable and saved between sessions.</p></div><span class="arr">→</span></a></li>
+    <li><a href="/piano-scales-lab/metro"><span class="fi">🥁</span><div class="ft"><h3>Metronome</h3><p>Full-featured metronome with tap tempo, custom time signatures and multiple click sounds.</p></div><span class="arr">→</span></a></li>
+    <li><a href="/piano-scales-lab/synth"><span class="fi">🎛️</span><div class="ft"><h3>Synth &amp; Sound</h3><p>Eight instrument presets with full parameter control. Shape the sound to suit how you practise.</p></div><span class="arr">→</span></a></li>
+    <li><a href="/piano-scales-lab/info"><span class="fi">📖</span><div class="ft"><h3>Music Theory Reference</h3><p>Scales, keys, chords and fingering numbers explained. A handy reference built into the app.</p></div><span class="arr">→</span></a></li>
+    <li><a href="/piano-scales-lab/settings"><span class="fi">⚙️</span><div class="ft"><h3>Themes &amp; Settings</h3><p>Four themes, six colour palettes, Bluetooth delay compensation and fully configurable defaults.</p></div><span class="arr">→</span></a></li>
+  </ul>
+  <a href="/piano-scales-lab/guide" class="guide-cta">View full user guide →</a>
+</main>
+<footer>
+  <p>© 2026 Data Etude Studios &nbsp;·&nbsp; <a href="/">Home</a> &nbsp;·&nbsp; <a href="/privacy">Privacy Policy</a></p>
+</footer>
+</body>
+</html>
 
