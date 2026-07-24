@@ -79,8 +79,23 @@ footer a:hover{color:#666;}
   text-transform:uppercase;color:#a78bfa;margin-bottom:14px;}
 .hero h1{font-size:1.9rem;font-weight:800;margin-bottom:10px;
   background:linear-gradient(135deg,#a78bfa,#60a5fa);
-  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+  background-clip:text;}
 .hero p{font-size:0.9rem;color:#555;line-height:1.65;}
+.screenshots-section{padding:0 0 8px;}
+.screenshots-label{font-size:0.66rem;font-weight:700;letter-spacing:0.14em;
+  text-transform:uppercase;color:#333;margin-bottom:16px;}
+.screenshots-scroll{display:flex;gap:14px;overflow-x:auto;padding-bottom:16px;
+  -webkit-overflow-scrolling:touch;scrollbar-width:none;}
+.screenshots-scroll::-webkit-scrollbar{display:none;}
+.screenshot-item{flex-shrink:0;width:160px;}
+.screenshot-item img{width:160px;height:284px;object-fit:cover;
+  border-radius:16px;border:1px solid rgba(255,255,255,0.08);
+  display:block;background:#0a0a0a;}
+.screenshot-item p{font-size:0.75rem;color:#555;margin:8px 0 0;
+  text-align:center;line-height:1.4;}
+.section-divider{border:none;border-top:1px solid rgba(255,255,255,0.05);
+  margin:40px 0;}
 .feature-list{list-style:none;margin:0 0 40px;}
 .feature-list li{border-bottom:1px solid rgba(255,255,255,0.05);}
 .feature-list li a{display:flex;align-items:center;gap:16px;
@@ -108,7 +123,40 @@ footer a:hover{color:#666;}
   <h1>Piano Scales Lab</h1>
   <p>Scales, arpeggios, chords and a full tempo trainer for every key. Built for pianists who want to practise smarter.</p>
 </div>
+
 <main>
+  <div class="screenshots-section">
+    <div class="screenshots-label">Screenshots</div>
+    <div class="screenshots-scroll">
+      <div class="screenshot-item">
+        <img src="/piano-scales-lab/screenshots/Scales.jpg" alt="Scales">
+        <p>Scales &amp; fingering in all 12 keys</p>
+      </div>
+      <div class="screenshot-item">
+        <img src="/piano-scales-lab/screenshots/Tempo%20Trainer.jpg" alt="Tempo Trainer">
+        <p>Tempo Trainer with Scale Cycle</p>
+      </div>
+      <div class="screenshot-item">
+        <img src="/piano-scales-lab/screenshots/Chords.jpg" alt="Chords">
+        <p>Chord progressions in any key</p>
+      </div>
+      <div class="screenshot-item">
+        <img src="/piano-scales-lab/screenshots/Chord_Pads.jpg" alt="Chord Pads">
+        <p>Chord pads with loop and arpeggio</p>
+      </div>
+      <div class="screenshot-item">
+        <img src="/piano-scales-lab/screenshots/Drum_Pads.jpg" alt="Drum Pads">
+        <p>Drum pads with auto patterns</p>
+      </div>
+      <div class="screenshot-item">
+        <img src="/piano-scales-lab/screenshots/Metro.jpg" alt="Metronome">
+        <p>Full-featured metronome</p>
+      </div>
+    </div>
+  </div>
+
+  <hr class="section-divider">
+
   <div class="section-label">What's in the app</div>
   <ul class="feature-list">
     <li><a href="/piano-scales-lab/scales"><span class="fi">🎹</span><div class="ft"><h3>Scales &amp; Arpeggios</h3><p>Every scale type in all 12 keys with correct fingering for both hands. Includes chromatic, melodic minor and arpeggios.</p></div><span class="arr">→</span></a></li>
@@ -121,11 +169,12 @@ footer a:hover{color:#666;}
     <li><a href="/piano-scales-lab/info"><span class="fi">📖</span><div class="ft"><h3>Music Theory Reference</h3><p>Scales, keys, chords and fingering numbers explained. A handy reference built into the app.</p></div><span class="arr">→</span></a></li>
     <li><a href="/piano-scales-lab/settings"><span class="fi">⚙️</span><div class="ft"><h3>Themes &amp; Settings</h3><p>Four themes, six colour palettes, Bluetooth delay compensation and fully configurable defaults.</p></div><span class="arr">→</span></a></li>
   </ul>
+
   <a href="/piano-scales-lab/guide" class="guide-cta">View full user guide →</a>
 </main>
+
 <footer>
   <p>© 2026 Data Etude Studios &nbsp;·&nbsp; <a href="/">Home</a> &nbsp;·&nbsp; <a href="/privacy">Privacy Policy</a></p>
 </footer>
 </body>
 </html>
-
