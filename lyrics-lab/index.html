@@ -79,8 +79,25 @@ footer a:hover{color:#666;}
   text-transform:uppercase;color:#4fc4cf;margin-bottom:14px;}
 .hero h1{font-size:1.9rem;font-weight:800;margin-bottom:10px;
   background:linear-gradient(135deg,#4fc4cf,#60a5fa);
-  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+  background-clip:text;}
 .hero p{font-size:0.9rem;color:#555;line-height:1.65;}
+.screenshots-section{padding:0 0 8px;}
+.screenshots-label{font-size:0.66rem;font-weight:700;letter-spacing:0.14em;
+  text-transform:uppercase;color:#333;margin-bottom:16px;}
+.screenshots-scroll{display:flex;gap:14px;overflow-x:auto;padding-bottom:16px;
+  -webkit-overflow-scrolling:touch;scrollbar-width:none;}
+.screenshots-scroll::-webkit-scrollbar{display:none;}
+.screenshot-item{flex-shrink:0;width:160px;}
+.screenshot-item img{width:160px;height:284px;object-fit:cover;
+  border-radius:16px;border:1px solid rgba(255,255,255,0.08);
+  display:block;background:#0a0a0a;}
+.screenshot-item p{font-size:0.75rem;color:#555;margin:8px 0 0;
+  text-align:center;line-height:1.4;}
+.section-divider{border:none;border-top:1px solid rgba(255,255,255,0.05);
+  margin:40px 0;}
+.section-label{font-size:0.66rem;font-weight:700;letter-spacing:0.14em;
+  text-transform:uppercase;color:#333;margin-bottom:18px;}
 .feature-list{list-style:none;margin:0 0 40px;}
 .feature-list li{border-bottom:1px solid rgba(255,255,255,0.05);}
 .feature-list li a{display:flex;align-items:center;gap:16px;
@@ -93,8 +110,6 @@ footer a:hover{color:#666;}
 .guide-cta{display:block;text-align:center;padding:14px;
   color:#4fc4cf;text-decoration:none;font-size:0.84rem;}
 .guide-cta:hover{color:#7fd8e0;}
-.section-label{font-size:0.66rem;font-weight:700;letter-spacing:0.14em;
-  text-transform:uppercase;color:#333;margin-bottom:18px;}
 nav a.back{color:#4fc4cf;}
   </style>
 </head>
@@ -109,18 +124,49 @@ nav a.back{color:#4fc4cf;}
   <h1>Lyrics Lab</h1>
   <p>Write, organise and refine your song lyrics. Rhyme suggestions, word counts and PDF export — everything in one place.</p>
 </div>
+
 <main>
+  <div class="screenshots-section">
+    <div class="screenshots-label">Screenshots</div>
+    <div class="screenshots-scroll">
+      <div class="screenshot-item">
+        <img src="/lyrics-lab/screenshots/Write.jpg" alt="Write">
+        <p>Section-based lyric editor with word counts</p>
+      </div>
+      <div class="screenshot-item">
+        <img src="/lyrics-lab/screenshots/View.jpg" alt="View">
+        <p>Clean read-only view with zoom and fullscreen</p>
+      </div>
+      <div class="screenshot-item">
+        <img src="/lyrics-lab/screenshots/Songs.jpg" alt="Songs">
+        <p>Song library with search and sort</p>
+      </div>
+      <div class="screenshot-item">
+        <img src="/lyrics-lab/screenshots/Rhymes.jpg" alt="Rhymes">
+        <p>Rhyme finder with definitions by syllable count</p>
+      </div>
+      <div class="screenshot-item">
+        <img src="/lyrics-lab/screenshots/Notes.jpg" alt="Notes">
+        <p>Free-form notes for ideas and fragments</p>
+      </div>
+    </div>
+  </div>
+
+  <hr class="section-divider">
+
   <div class="section-label">What's in the app</div>
   <ul class="feature-list">
     <li><a href="/lyrics-lab/guide#editor"><span class="fi">✍️</span><div class="ft"><h3>Lyric Editor</h3><p>Section-based editor with Verse, Chorus, Bridge and more. Drag to resize, duplicate or reorder. Live word and line counts throughout.</p></div><span class="arr">→</span></a></li>
+    <li><a href="/lyrics-lab/guide#editor"><span class="fi">👁️</span><div class="ft"><h3>View Mode</h3><p>Clean read-only view of your lyrics with single and double column layouts, zoom and fullscreen. PDF export built in.</p></div><span class="arr">→</span></a></li>
+    <li><a href="/lyrics-lab/guide#songs"><span class="fi">📚</span><div class="ft"><h3>Song Library</h3><p>All your songs in one place with search, sort by date or title and timestamps. Auto-incrementing names so you can start writing immediately.</p></div><span class="arr">→</span></a></li>
     <li><a href="/lyrics-lab/guide#rhymes"><span class="fi">🔤</span><div class="ft"><h3>Rhyme Finder</h3><p>Type any word and get rhyme suggestions grouped by syllable count, with definitions and part of speech for each result.</p></div><span class="arr">→</span></a></li>
-    <li><a href="/lyrics-lab/guide#songs"><span class="fi">📚</span><div class="ft"><h3>Song Library</h3><p>All your songs in one place with search, sort by date or title, and timestamps.</p></div><span class="arr">→</span></a></li>
-    <li><a href="/lyrics-lab/guide#editor"><span class="fi">📄</span><div class="ft"><h3>PDF Export</h3><p>Export any song as a formatted PDF to share, print or archive. Opens in your device share sheet.</p></div><span class="arr">→</span></a></li>
     <li><a href="/lyrics-lab/guide#notes"><span class="fi">📝</span><div class="ft"><h3>Notes</h3><p>Free-form note tiles for ideas, references and fragments that do not belong inside a specific song.</p></div><span class="arr">→</span></a></li>
     <li><a href="/lyrics-lab/guide#settings"><span class="fi">💾</span><div class="ft"><h3>Backup and Restore</h3><p>Export a full backup of all your songs and settings. Restore any time on the same or a new device.</p></div><span class="arr">→</span></a></li>
   </ul>
+
   <a href="/lyrics-lab/guide" class="guide-cta">View full user guide →</a>
 </main>
+
 <footer>
   <p>© 2026 Data Etude Studios &nbsp;·&nbsp; <a href="/">Home</a> &nbsp;·&nbsp; <a href="/privacy">Privacy Policy</a></p>
 </footer>
