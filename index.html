@@ -89,7 +89,8 @@ nav .logo{text-decoration:none;}
 .app-card:hover{border-color:rgba(167,139,250,0.3);}
 .app-card.ll:hover{border-color:rgba(79,196,207,0.3);}
 .app-top{display:flex;align-items:center;gap:14px;margin-bottom:8px;}
-.app-icon{font-size:1.8rem;flex-shrink:0;}
+.app-icon{width:44px;height:44px;border-radius:11px;flex-shrink:0;
+  display:block;object-fit:cover;}
 .app-tag{font-size:0.66rem;font-weight:700;letter-spacing:0.1em;
   text-transform:uppercase;color:#a78bfa;margin-bottom:3px;}
 .app-tag.ll{color:#4fc4cf;}
@@ -113,7 +114,7 @@ nav .logo{text-decoration:none;}
   <div class="apps-label">Our apps</div>
   <a href="/piano-scales-lab" class="app-card">
     <div class="app-top">
-      <span class="app-icon">🎹</span>
+      <img src="/icons/piano-scales-lab-icon.png" alt="Piano Scales Lab icon" class="app-icon">
       <div>
         <div class="app-tag">Piano Practice</div>
         <div class="app-name">Piano Scales Lab</div>
@@ -124,7 +125,7 @@ nav .logo{text-decoration:none;}
   </a>
   <a href="/lyrics-lab" class="app-card ll">
     <div class="app-top">
-      <span class="app-icon">✍️</span>
+      <img src="/icons/lyrics-lab-icon.png" alt="Lyrics Lab icon" class="app-icon">
       <div>
         <div class="app-tag ll">Songwriting</div>
         <div class="app-name">Lyrics Lab</div>
