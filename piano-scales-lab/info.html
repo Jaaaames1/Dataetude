@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Music Theory Reference – Piano Scales Lab</title>
+  <style>
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;
+  background:#000;color:#e8e8e8;min-height:100vh;line-height:1.6;}
+nav{background:#0a0a0a;border-bottom:1px solid rgba(255,255,255,0.06);
+  padding:13px 24px;display:flex;justify-content:space-between;align-items:center;}
+nav .logo{font-size:0.88rem;font-weight:700;color:rgba(232,232,232,0.65);
+  letter-spacing:0.06em;text-decoration:none;}
+nav a.back{font-size:0.8rem;color:#a78bfa;text-decoration:none;}
+nav a.back:hover{color:#c4b5fd;}
+.page-header{max-width:720px;margin:0 auto;padding:48px 24px 36px;}
+.page-header .eyebrow{font-size:0.68rem;font-weight:600;letter-spacing:0.16em;
+  text-transform:uppercase;color:#a78bfa;margin-bottom:14px;}
+.page-header h1{font-size:1.9rem;font-weight:800;line-height:1.15;
+  background:linear-gradient(135deg,#a78bfa,#60a5fa);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+  background-clip:text;margin-bottom:10px;}
+.page-header p{font-size:0.9rem;color:#555;line-height:1.65;}
+.divider{border:none;border-top:1px solid rgba(255,255,255,0.06);}
+main{max-width:720px;margin:0 auto;padding:40px 24px 80px;}
+h2{font-size:1rem;font-weight:700;color:#e8e8e8;margin:32px 0 10px;
+  padding-bottom:8px;border-bottom:1px solid rgba(255,255,255,0.06);}
+h3{font-size:0.92rem;font-weight:600;color:#e8e8e8;margin:22px 0 8px;}
+h4{font-size:0.85rem;font-weight:600;color:#555;margin:16px 0 6px;letter-spacing:0.02em;}
+p{font-size:0.88rem;color:rgba(232,232,232,0.5);line-height:1.75;margin-bottom:14px;}
+ul.guide{list-style:none;margin-bottom:18px;}
+ul.guide li{font-size:0.86rem;color:rgba(232,232,232,0.45);
+  padding:7px 0 7px 18px;border-bottom:1px solid rgba(255,255,255,0.04);
+  position:relative;line-height:1.6;}
+ul.guide li:before{content:'→';position:absolute;left:0;color:#a78bfa;}
+ul.guide li strong{color:rgba(232,232,232,0.75);font-weight:600;}
+.tip{background:rgba(167,139,250,0.06);border:1px solid rgba(167,139,250,0.18);
+  border-radius:10px;padding:14px 16px;margin:18px 0;}
+.tip p{color:rgba(232,232,232,0.55);margin:0;font-size:0.84rem;}
+.tip p::before{content:'💡  ';}
+.highlight{background:rgba(90,170,130,0.06);border:1px solid rgba(90,170,130,0.18);
+  border-radius:10px;padding:14px 16px;margin:18px 0;}
+.highlight p{color:rgba(232,232,232,0.55);margin:0;font-size:0.84rem;}
+.highlight p::before{content:'⚡  ';}
+.toc{background:#0a0a0a;border:1px solid rgba(255,255,255,0.06);
+  border-radius:12px;padding:22px;margin-bottom:44px;}
+.toc .toc-label{font-size:0.66rem;font-weight:700;letter-spacing:0.14em;
+  text-transform:uppercase;color:#333;margin-bottom:14px;}
+.toc a{display:block;color:rgba(167,139,250,0.8);text-decoration:none;
+  font-size:0.87rem;padding:5px 0;border-bottom:1px solid rgba(255,255,255,0.04);}
+.toc a:last-child{border-bottom:none;}
+.toc a:hover{color:#a78bfa;}
+.section{margin-bottom:56px;}
+.section-head{display:flex;align-items:center;gap:12px;margin-bottom:20px;
+  padding-bottom:14px;border-bottom:1px solid rgba(255,255,255,0.06);}
+.section-head .icon{font-size:1.5rem;}
+.section-head h2{font-size:1.25rem;font-weight:700;border:none;
+  margin:0;padding:0;color:#e8e8e8;}
+table{width:100%;border-collapse:collapse;margin:12px 0 18px;font-size:0.84rem;}
+th{text-align:left;color:#333;font-weight:600;font-size:0.7rem;
+  letter-spacing:0.08em;text-transform:uppercase;
+  padding:7px 12px;border-bottom:1px solid rgba(255,255,255,0.06);}
+td{padding:8px 12px;border-bottom:1px solid rgba(255,255,255,0.04);
+  color:rgba(232,232,232,0.45);}
+td:first-child{color:rgba(232,232,232,0.7);font-weight:500;}
+.nav-links{display:flex;justify-content:space-between;margin-top:56px;
+  padding-top:22px;border-top:1px solid rgba(255,255,255,0.06);}
+.nav-links a{color:#a78bfa;text-decoration:none;font-size:0.84rem;}
+.nav-links a:hover{color:#c4b5fd;}
+footer{text-align:center;padding:28px 24px;
+  border-top:1px solid rgba(255,255,255,0.06);
+  color:#333;font-size:0.78rem;}
+footer a{color:#444;text-decoration:none;}
+footer a:hover{color:#666;}
+
+.key-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:20px;}
+.key-pill{background:#0a0a0a;border:1px solid rgba(255,255,255,0.07);border-radius:8px;
+  padding:10px 6px;text-align:center;font-size:0.82rem;color:#e8e8e8;font-weight:500;}
+.key-pill span{display:block;font-size:0.6rem;color:#444;margin-top:2px;}
+.interval-row{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px;}
+.interval{background:rgba(167,139,250,0.1);border:1px solid rgba(167,139,250,0.2);
+  border-radius:6px;padding:4px 10px;font-size:0.75rem;color:#a78bfa;}
+  </style>
+</head>
+<body>
+<nav>
+  <a href="/" class="logo">Data Etude Studios</a>
+  <a href="/piano-scales-lab" class="back">← Piano Scales Lab</a>
+</nav>
+<hr class="divider">
+<div class="page-header">
+  <div class="eyebrow">Piano Scales Lab</div>
+  <h1>Music Theory Reference</h1>
+  <p>Scales, arpeggios, keys and chords explained</p>
+</div>
+<main>
+<div class="toc">
+  <div class="toc-label">Contents</div>
+  <a href="#keys">The 12 Keys</a>
+  <a href="#major">Major Scale</a>
+  <a href="#natural-minor">Natural Minor Scale</a>
+  <a href="#harmonic-minor">Harmonic Minor Scale</a>
+  <a href="#melodic-minor">Melodic Minor Scale</a>
+  <a href="#chromatic">Chromatic Scale</a>
+  <a href="#arpeggios">Arpeggios</a>
+  <a href="#relative">Relative and Parallel Keys</a>
+  <a href="#chords">Chords and Progressions</a>
+  <a href="#fingering">Fingering Numbers</a>
+</div>
+<div class="section" id="keys">
+  <h2>The 12 Keys</h2>
+  <p>Western music is built on 12 notes, each a semitone apart. Every scale, chord and arpeggio in Piano Scales Lab can be played starting from any of these 12 root notes.</p>
+  <div class="key-grid">
+    <div class="key-pill">C<span>Do</span></div>
+    <div class="key-pill">C#/Db</div>
+    <div class="key-pill">D<span>Re</span></div>
+    <div class="key-pill">D#/Eb</div>
+    <div class="key-pill">E<span>Mi</span></div>
+    <div class="key-pill">F<span>Fa</span></div>
+    <div class="key-pill">F#/Gb</div>
+    <div class="key-pill">G<span>Sol</span></div>
+    <div class="key-pill">G#/Ab</div>
+    <div class="key-pill">A<span>La</span></div>
+    <div class="key-pill">A#/Bb</div>
+    <div class="key-pill">B<span>Si</span></div>
+  </div>
+</div>
+<div class="section" id="major">
+  <h2>Major Scale</h2>
+  <p>The major scale is the foundation of Western tonal music. It has a bright, settled sound and is the starting point for most music theory.</p>
+  <p>Interval pattern (semitones):</p>
+  <div class="interval-row"><span class="interval">2</span><span class="interval">2</span><span class="interval">1</span><span class="interval">2</span><span class="interval">2</span><span class="interval">2</span><span class="interval">1</span></div>
+  <table><tr><th>Key</th><th>Notes</th></tr>
+  <tr><td>C Major</td><td>C D E F G A B</td></tr>
+  <tr><td>G Major</td><td>G A B C D E F#</td></tr>
+  <tr><td>D Major</td><td>D E F# G A B C#</td></tr>
+  <tr><td>F Major</td><td>F G A Bb C D E</td></tr></table>
+</div>
+<div class="section" id="natural-minor">
+  <h2>Natural Minor Scale</h2>
+  <p>The natural minor scale has a darker, more melancholic sound than major. It uses the same notes as its relative major but starts on the 6th degree.</p>
+  <p>Interval pattern:</p>
+  <div class="interval-row"><span class="interval">2</span><span class="interval">1</span><span class="interval">2</span><span class="interval">2</span><span class="interval">1</span><span class="interval">2</span><span class="interval">2</span></div>
+</div>
+<div class="section" id="harmonic-minor">
+  <h2>Harmonic Minor Scale</h2>
+  <p>The harmonic minor raises the 7th degree of the natural minor by a semitone. This creates a stronger pull back to the root and gives the scale its distinctive exotic sound.</p>
+  <p>Interval pattern:</p>
+  <div class="interval-row"><span class="interval">2</span><span class="interval">1</span><span class="interval">2</span><span class="interval">2</span><span class="interval">1</span><span class="interval">3</span><span class="interval">1</span></div>
+</div>
+<div class="section" id="melodic-minor">
+  <h2>Melodic Minor Scale</h2>
+  <p>The melodic minor raises both the 6th and 7th degrees when ascending, then reverts to natural minor when descending. This smooths out the augmented second of the harmonic minor.</p>
+  <p>Ascending intervals:</p>
+  <div class="interval-row"><span class="interval">2</span><span class="interval">1</span><span class="interval">2</span><span class="interval">2</span><span class="interval">2</span><span class="interval">2</span><span class="interval">1</span></div>
+  <p>Descending: same as natural minor, played in reverse. Switch between ASC and DESC on the Scales page to see both.</p>
+</div>
+<div class="section" id="chromatic">
+  <h2>Chromatic Scale</h2>
+  <p>The chromatic scale includes all 12 semitones within an octave. Every note is equally spaced — there is no tonal centre beyond the starting note.</p>
+  <p>Interval pattern: all semitones (1 1 1 1 1 1 1 1 1 1 1 1)</p>
+  <p>Fingering rule: finger 3 on every black key, finger 1 on most white keys, finger 2 used at E-F and B-C (where two white keys sit adjacent with no black key between them).</p>
+  <div class="tip"><p>Chromatic scales do not have relative or parallel counterparts — those buttons are disabled when Chromatic is selected.</p></div>
+</div>
+<div class="section" id="arpeggios">
+  <h2>Arpeggios</h2>
+  <p>An arpeggio is a chord played one note at a time. The app covers major and minor arpeggios over two octaves.</p>
+  <p>Major arpeggio intervals:</p>
+  <div class="interval-row"><span class="interval">4</span><span class="interval">3</span><span class="interval">5</span></div>
+  <p>Minor arpeggio intervals:</p>
+  <div class="interval-row"><span class="interval">3</span><span class="interval">4</span><span class="interval">5</span></div>
+</div>
+<div class="section" id="relative">
+  <h2>Relative and Parallel Keys</h2>
+  <h3>Relative keys</h3>
+  <p>A major key and its relative minor share the same notes and key signature. C Major and A Natural Minor are relatives — both use the white keys only. The relative minor starts on the 6th degree of the major scale.</p>
+  <h3>Parallel keys</h3>
+  <p>Parallel keys share the same root note but have different scales. C Major and C Minor are parallel — both start on C but use different notes.</p>
+  <div class="tip"><p>The Relative button in the app cycles between a major key and its relative minor — useful for practising both in the same session.</p></div>
+</div>
+<div class="section" id="chords">
+  <h2>Chords and Progressions</h2>
+  <p>A chord is three or more notes played together, usually built by stacking thirds. The chords built on each degree of a major scale follow a fixed pattern:</p>
+  <table><tr><th>Degree</th><th>Roman numeral</th><th>Quality</th></tr>
+  <tr><td>1st</td><td>I</td><td>Major</td></tr>
+  <tr><td>2nd</td><td>ii</td><td>Minor</td></tr>
+  <tr><td>3rd</td><td>iii</td><td>Minor</td></tr>
+  <tr><td>4th</td><td>IV</td><td>Major</td></tr>
+  <tr><td>5th</td><td>V</td><td>Major</td></tr>
+  <tr><td>6th</td><td>vi</td><td>Minor</td></tr>
+  <tr><td>7th</td><td>vii°</td><td>Diminished</td></tr></table>
+</div>
+<div class="section" id="fingering">
+  <h2>Fingering Numbers</h2>
+  <table><tr><th>Number</th><th>Finger</th></tr>
+  <tr><td>1</td><td>Thumb</td></tr>
+  <tr><td>2</td><td>Index finger</td></tr>
+  <tr><td>3</td><td>Middle finger</td></tr>
+  <tr><td>4</td><td>Ring finger</td></tr>
+  <tr><td>5</td><td>Little finger (pinky)</td></tr></table>
+  <p>Fingering shown in the app follows standard classical conventions. You can customise any scale in the Fingering Editor.</p>
+</div>
+</main>
+<footer><p>© 2026 Data Etude Studios &nbsp;·&nbsp; <a href="/piano-scales-lab/guide">Full Guide</a> &nbsp;·&nbsp; <a href="/privacy">Privacy Policy</a></p></footer>
+</body>
+</html>
