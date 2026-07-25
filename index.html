@@ -10,7 +10,10 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;
   background:#000;color:#e8e8e8;min-height:100vh;line-height:1.6;}
 nav{background:#0a0a0a;border-bottom:1px solid rgba(255,255,255,0.06);
   padding:13px 24px;display:flex;justify-content:space-between;align-items:center;}
-nav .logo-img{height:28px;width:auto;display:block;opacity:0.85;}
+nav .logo{font-size:0.88rem;font-weight:700;color:rgba(232,232,232,0.65);
+  letter-spacing:0.06em;text-decoration:none;
+  display:flex;align-items:center;gap:8px;}
+nav .logo img{height:22px;width:auto;display:block;opacity:0.85;}
 nav a.back{font-size:0.8rem;color:#a78bfa;text-decoration:none;}
 nav a.back:hover{color:#c4b5fd;}
 .divider{border:none;border-top:1px solid rgba(255,255,255,0.06);}
@@ -19,10 +22,11 @@ footer{text-align:center;padding:28px 24px;
   color:#333;font-size:0.78rem;}
 footer a{color:#444;text-decoration:none;}
 footer a:hover{color:#666;}
-.hero{max-width:720px;margin:0 auto;padding:56px 24px 48px;
-  display:flex;flex-direction:column;align-items:flex-start;gap:20px;}
-.hero-logo{height:56px;width:auto;display:block;opacity:0.92;}
-.hero p{font-size:0.9rem;color:#555;max-width:480px;line-height:1.75;}
+.hero{max-width:720px;margin:0 auto;padding:64px 24px 48px;}
+.hero h1{font-size:2rem;font-weight:800;margin-bottom:12px;
+  background:linear-gradient(135deg,#a78bfa,#60a5fa);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+.hero p{font-size:0.9rem;color:#555;max-width:480px;line-height:1.65;}
 .apps{max-width:720px;margin:0 auto;padding:0 24px 80px;}
 .apps-label{font-size:0.66rem;font-weight:700;letter-spacing:0.14em;
   text-transform:uppercase;color:#333;margin-bottom:18px;}
@@ -46,14 +50,17 @@ footer a:hover{color:#666;}
 </head>
 <body>
 <nav>
-  <a href="/"><img src="/Logo.png" alt="Data Etude Studios" class="logo-img"></a>
+  <a href="/" class="logo">
+    <img src="/Logo.png" alt="Data Etude Studios">
+    Data Etude Studios
+  </a>
 </nav>
 <hr class="divider">
 <div class="hero">
-  <img src="/Logo.png" alt="Data Etude Studios" class="hero-logo">
+  <h1>Data Etude Studios</h1>
   <p>Thoughtful, well-crafted apps for musicians.<br>
     Free forever — no subscriptions, no ads, no data collected.<br>
-    More to come.</p>
+    More to come!</p>
 </div>
 <div class="apps">
   <div class="apps-label">Our apps</div>
