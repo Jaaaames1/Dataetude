@@ -28,11 +28,12 @@ footer a:hover{color:#666;}
 .apps{max-width:720px;margin:0 auto;padding:0 24px 80px;}
 .apps-label{font-size:0.66rem;font-weight:700;letter-spacing:0.14em;
   text-transform:uppercase;color:#333;margin-bottom:18px;}
-.app-card{display:block;text-decoration:none;
+.app-card{display:block;
   background:#0a0a0a;border:1px solid rgba(255,255,255,0.07);
-  border-radius:14px;padding:26px;margin-bottom:14px;transition:border-color 0.2s;}
-.app-card:hover{border-color:rgba(167,139,250,0.3);}
-.app-card.ll:hover{border-color:rgba(79,196,207,0.3);}
+  border-radius:14px;padding:26px;margin-bottom:10px;transition:border-color 0.2s;}
+.app-card-link{text-decoration:none;display:block;}
+.app-card-link:hover .app-card{border-color:rgba(167,139,250,0.3);}
+.app-card-link.ll:hover .app-card{border-color:rgba(79,196,207,0.3);}
 .app-top{display:flex;align-items:center;gap:14px;margin-bottom:8px;}
 .app-icon{width:44px;height:44px;border-radius:11px;flex-shrink:0;
   display:block;object-fit:cover;}
@@ -44,6 +45,17 @@ footer a:hover{color:#666;}
   line-height:1.6;margin-bottom:14px;}
 .app-cta{font-size:0.8rem;font-weight:600;color:#a78bfa;}
 .app-cta.ll{color:#4fc4cf;}
+.app-actions{margin-bottom:20px;}
+.btn-launch{display:inline-block;text-decoration:none;
+  font-size:0.78rem;font-weight:700;letter-spacing:0.04em;
+  padding:9px 18px;border-radius:8px;
+  background:rgba(167,139,250,0.12);
+  border:1px solid rgba(167,139,250,0.35);
+  color:#a78bfa;transition:background 0.15s,border-color 0.15s;}
+.btn-launch:hover{background:rgba(167,139,250,0.22);border-color:rgba(167,139,250,0.6);}
+.btn-launch.ll{background:rgba(79,196,207,0.1);
+  border-color:rgba(79,196,207,0.3);color:#4fc4cf;}
+.btn-launch.ll:hover{background:rgba(79,196,207,0.2);border-color:rgba(79,196,207,0.55);}
   </style>
 </head>
 <body>
@@ -57,36 +69,48 @@ footer a:hover{color:#666;}
     <h1>Data Etude Studios</h1>
   </div>
   <p>Thoughtful, well-crafted apps for musicians.<br>
-    Free forever...no subscriptions, no ads, no data collected.</p>
+    Free forever — no subscriptions, no ads, no data collected.</p>
 </div>
 <div class="apps">
   <div class="apps-label">Our apps</div>
-  <a href="/piano-scales-lab" class="app-card">
-    <div class="app-top">
-      <img src="/icons/piano-scales-lab-icon.png" alt="Piano Scales Lab icon" class="app-icon">
-      <div>
-        <div class="app-name">Piano Scales Lab</div>
-        <div class="app-tag">Piano Practice</div>
+
+  <a href="/piano-scales-lab" class="app-card-link">
+    <div class="app-card">
+      <div class="app-top">
+        <img src="/icons/piano-scales-lab-icon.png" alt="Piano Scales Lab icon" class="app-icon">
+        <div>
+          <div class="app-name">Piano Scales Lab</div>
+          <div class="app-tag">Piano Practice</div>
+        </div>
       </div>
+      <p class="app-desc">Scales, arpeggios, chords and a full tempo trainer — all 12 keys, with fingering editor, metronome and performance pads.</p>
+      <div class="app-cta">Explore →</div>
     </div>
-    <p class="app-desc">Scales, arpeggios, chords and a full tempo trainer — all 12 keys, with fingering editor, metronome and performance pads.</p>
-    <div class="app-cta">Explore →</div>
   </a>
-  <a href="/lyrics-lab" class="app-card ll">
-    <div class="app-top">
-      <img src="/icons/lyrics-lab-icon.png" alt="Lyrics Lab icon" class="app-icon">
-      <div>
-        <div class="app-name">Lyrics Lab</div>
-        <div class="app-tag ll">Songwriting</div>
+  <div class="app-actions">
+    <a href="/Apps/Scales-App.html" class="btn-launch">🚀 Launch Web App</a>
+  </div>
+
+  <a href="/lyrics-lab" class="app-card-link ll">
+    <div class="app-card">
+      <div class="app-top">
+        <img src="/icons/lyrics-lab-icon.png" alt="Lyrics Lab icon" class="app-icon">
+        <div>
+          <div class="app-name">Lyrics Lab</div>
+          <div class="app-tag ll">Songwriting</div>
+        </div>
       </div>
+      <p class="app-desc">Write, organise and refine your song lyrics — with rhyme suggestions, word counts, PDF export and full song library.</p>
+      <div class="app-cta ll">Explore →</div>
     </div>
-    <p class="app-desc">Write, organise and refine your song lyrics — with rhyme suggestions, word counts, PDF export and full song library.</p>
-    <div class="app-cta ll">Explore →</div>
   </a>
+  <div class="app-actions">
+    <a href="/Apps/Lyrics-App.html" class="btn-launch ll">🚀 Launch Web App</a>
+  </div>
+
 </div>
 <footer>
   <p>© 2026 Data Etude Studios &nbsp;·&nbsp; <a href="/privacy">Privacy Policy</a></p>
 </footer>
 </body>
 </html>
- 
