@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Scales & Arpeggios – Piano Scales Lab</title>
+  <title>Scales &amp; Arpeggios – Piano Scales Lab</title>
   <style>
 *{margin:0;padding:0;box-sizing:border-box;}
 body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;
@@ -90,55 +90,69 @@ footer a:hover{color:#666;}
 </div>
 <main>
 <p>The Scales page shows fingering for every scale and arpeggio in all 12 keys, with interactive piano keyboards for both hands.</p>
+
 <h2>Choosing a Scale</h2>
-<p>Tap any scale type at the top — Major, Nat Min, Harm, Melodic, Maj Arp, Min Arp or Chromatic. Then tap a key from the grid to select your root note.</p>
+<p>Tap any scale type at the top of the sidebar, then tap a key from the grid below it to select your root note.</p>
+
 <h2>Scale Types</h2>
 <ul class="guide">
-  <li><strong>Major</strong> — standard major scale</li>
-  <li><strong>Nat Min</strong> — natural minor scale</li>
-  <li><strong>Harm</strong> — harmonic minor, raised 7th</li>
+  <li><strong>Major</strong> — standard major scale over 2 octaves</li>
+  <li><strong>Nat Min</strong> — natural minor scale over 2 octaves</li>
+  <li><strong>Harm</strong> — harmonic minor, raised 7th, over 2 octaves</li>
   <li><strong>Melodic</strong> — melodic minor with separate ascending and descending views</li>
   <li><strong>Maj Arp</strong> — major arpeggio over 2 octaves</li>
   <li><strong>Min Arp</strong> — minor arpeggio over 2 octaves</li>
+  <li><strong>Maj Pent</strong> — major pentatonic scale over 1 octave</li>
+  <li><strong>Min Pent</strong> — minor pentatonic scale over 1 octave</li>
   <li><strong>Chromatic</strong> — all 12 semitones over 2 octaves</li>
 </ul>
+
 <h2>Relative and Parallel</h2>
-<p>The Relative and Parallel buttons jump you to the related scale instantly. From C Major, Relative takes you to A Natural Minor. Parallel takes you to C Minor. Not available for Chromatic.</p>
+<p>The Relative and Parallel buttons jump you to the related scale instantly. From C Major, Relative takes you to A Natural Minor. Parallel takes you to C Minor. Both work for pentatonic scales — C Major Pentatonic relative is A Minor Pentatonic. Not available for Chromatic.</p>
+
 <h2>Key Up</h2>
 <p>The Key +3 button shifts the scale up 3 semitones. When playing in loop mode, the change waits until the end of the current loop.</p>
+
 <h2>Changing Key While Looping</h2>
 <ul class="guide">
   <li>Tap any <strong>tonic key</strong> — queues a key change at the end of the current run. The tapped key glows amber while waiting.</li>
   <li>Tap a <strong>scale type</strong> (Major, Harm etc) — marks it as pending. Then tap a tonic key to queue that combination.</li>
   <li>Tap <strong>Relative or Parallel</strong> — queues the related scale change the same way.</li>
 </ul>
-<div class="tip"><p>The currently playing key stays highlighted in its colour. The newly queued key glows dimly amber so you can see both at once.</p></div>
+<div class="tip"><p>The currently playing key stays highlighted in its colour. The newly queued key glows amber so you can see both at once.</p></div>
+
 <h2>Playback</h2>
 <ul class="guide">
-  <li>Press ▶ to play the scale at the current tempo</li>
+  <li>Press &#x25B6; to play the scale at the current tempo</li>
   <li>Press the loop button to keep repeating</li>
   <li>Choose Both, RH or LH to hear one or both hands</li>
   <li>Tap the BPM number to type a specific tempo</li>
   <li>Scroll Sync keeps both keyboards scrolled together</li>
 </ul>
 <div class="tip"><p>Tap any highlighted key on the keyboard to hear that individual note.</p></div>
+
 <h2>Tempo Trainer</h2>
 <p>Automatically increases the tempo as you practise.</p>
 <ul class="guide">
-  <li><strong>Start BPM</strong> — tempo training begins here. Hold + or − to scroll quickly.</li>
+  <li><strong>Start BPM</strong> — tempo training begins here. Hold + or minus to scroll quickly.</li>
   <li><strong>Target BPM</strong> — training ends when this is reached</li>
   <li><strong>Increment BPM</strong> — how much the tempo increases each step</li>
   <li><strong>Every N loops</strong> — how many loops to complete at each tempo before stepping up</li>
 </ul>
 <p>Press Start Trainer to begin. Once the target is reached, Goal reached! flashes and the scale keeps looping freely until you stop.</p>
+
 <h2>Metro Only Mode</h2>
 <p>Toggle Metro only to practise silently. The keys still flash showing which note to play, but you hear only metronome clicks.</p>
+
 <h2>Count-in</h2>
 <p>Enable Count-in to get a metronome count before the scale starts. Choose 1, 2 or 3 bars. Go! flashes green when the scale begins.</p>
+
 <h2>Training Info</h2>
 <p>A slim bar below the keyboards during a session. Select BPM, Time countdown or Next Scale — any combination. The countdown is always accurate, even if switched on mid-session.</p>
+
 <h2>Scale Cycle</h2>
 <p>Extends the Tempo Trainer to rotate through multiple keys automatically at each tempo step.</p>
+
 <h3>Setting up Scale Cycle</h3>
 <ul class="guide">
   <li>Toggle Enable Scale Cycle in the Tempo Trainer panel</li>
@@ -147,16 +161,20 @@ footer a:hover{color:#666;}
   <li>Tap keys to include them — tap again to deselect</li>
   <li>Choose Chromatic or Fifths order for the playback sequence</li>
 </ul>
-<div class="tip"><p>With 3 keys and Every N loops set to 2: C×2, D×2, E×2 at the first tempo, then all three again at the next tempo.</p></div>
+<div class="tip"><p>With 3 keys and Every N loops set to 2: C x2, D x2, E x2 at the first tempo, then all three again at the next tempo.</p></div>
+
 <h3>Key Change Mode</h3>
 <ul class="guide">
   <li><strong>Full Scale</strong> (default) — completes every note including the final root before switching.</li>
   <li><strong>Smooth Transition</strong> — skips the final note and plays the first note of the next key in its place.</li>
 </ul>
+
 <h3>Pause Between Keys</h3>
 <p>Full Scale mode only. Adds a single beat gap with a metronome click between key changes. Enabled by default.</p>
-<div class="highlight"><p>For exam prep across all keys: select all 12 in fifths order, set your start and target BPM, Every N loops to 2, enable Count-in and Pause Between Keys. The app works through every key systematically, getting faster each round.</p></div><div class="nav-links"><a href="/piano-scales-lab">← Piano Scales Lab</a><a href="/piano-scales-lab/chords">Chord Progressions →</a></div>
+<div class="highlight"><p>For exam prep across all keys: select all 12 in fifths order, set your start and target BPM, Every N loops to 2, enable Count-in and Pause Between Keys. The app works through every key systematically, getting faster each round.</p></div>
+
+<div class="nav-links"><a href="/piano-scales-lab">← Piano Scales Lab</a><a href="/piano-scales-lab/chords">Chord Progressions →</a></div>
 </main>
-<footer><p>© 2026 Data Etude Studios &nbsp;·&nbsp; <a href="/piano-scales-lab/guide">Full Guide</a> &nbsp;·&nbsp; <a href="/privacy">Privacy Policy</a></p></footer>
+<footer><p>&#169; 2026 Data Etude Studios &nbsp;&#183;&nbsp; <a href="/piano-scales-lab/guide">Full Guide</a> &nbsp;&#183;&nbsp; <a href="/privacy">Privacy Policy</a></p></footer>
 </body>
 </html>
