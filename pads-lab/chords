@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Chords – Pads Lab</title>
+  <style>
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;
+  background:#000;color:#e8e8e8;min-height:100vh;line-height:1.6;}
+nav{background:#0a0a0a;border-bottom:1px solid rgba(255,255,255,0.06);
+  padding:13px 24px;display:flex;justify-content:space-between;align-items:center;}
+nav .logo{font-size:0.88rem;font-weight:700;color:rgba(232,232,232,0.65);
+  letter-spacing:0.06em;text-decoration:none;}
+nav a.back{font-size:0.8rem;color:#f5aab1;text-decoration:none;}
+nav a.back:hover{color:#f8c4ca;}
+.page-header{max-width:720px;margin:0 auto;padding:48px 24px 36px;}
+.page-header .eyebrow{font-size:0.68rem;font-weight:600;letter-spacing:0.16em;
+  text-transform:uppercase;color:#f5aab1;margin-bottom:14px;}
+.page-header h1{font-size:1.9rem;font-weight:800;line-height:1.15;
+  background:linear-gradient(135deg,#f5aab1,#f5c869);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+  background-clip:text;margin-bottom:10px;}
+.page-header p{font-size:0.9rem;color:#555;line-height:1.65;}
+.divider{border:none;border-top:1px solid rgba(255,255,255,0.06);}
+main{max-width:720px;margin:0 auto;padding:40px 24px 80px;}
+h2{font-size:1rem;font-weight:700;color:#e8e8e8;margin:32px 0 10px;
+  padding-bottom:8px;border-bottom:1px solid rgba(255,255,255,0.06);}
+p{font-size:0.88rem;color:rgba(232,232,232,0.5);line-height:1.75;margin-bottom:14px;}
+ul.guide{list-style:none;margin-bottom:18px;}
+ul.guide li{font-size:0.86rem;color:rgba(232,232,232,0.45);
+  padding:7px 0 7px 18px;border-bottom:1px solid rgba(255,255,255,0.04);
+  position:relative;line-height:1.6;}
+ul.guide li:before{content:'→';position:absolute;left:0;color:#f5aab1;}
+ul.guide li strong{color:rgba(232,232,232,0.75);font-weight:600;}
+.tip{background:rgba(245,170,177,0.06);border:1px solid rgba(245,170,177,0.18);
+  border-radius:10px;padding:14px 16px;margin:18px 0;}
+.tip p{color:rgba(232,232,232,0.55);margin:0;font-size:0.84rem;}
+.tip p::before{content:'💡  ';}
+.nav-links{display:flex;justify-content:space-between;margin-top:56px;
+  padding-top:22px;border-top:1px solid rgba(255,255,255,0.06);}
+.nav-links a{color:#f5aab1;text-decoration:none;font-size:0.84rem;}
+.nav-links a:hover{color:#f8c4ca;}
+footer{text-align:center;padding:28px 24px;
+  border-top:1px solid rgba(255,255,255,0.06);
+  color:#333;font-size:0.78rem;}
+footer a{color:#444;text-decoration:none;}
+footer a:hover{color:#666;}
+  </style>
+</head>
+<body>
+<nav>
+  <a href="/" class="logo">Data Etude Studios</a>
+  <a href="/pads-lab" class="back">← Pads Lab</a>
+</nav>
+<hr class="divider">
+<div class="page-header">
+  <div class="eyebrow">Pads Lab</div>
+  <h1>Chords</h1>
+  <p>Every chord in any key, ready to loop</p>
+</div>
+<main>
+<p>The Chords page lays out every diatonic chord of the current key across 8 or 12 pads, with a library of progressions to loop underneath whatever you're doing on the other pages.</p>
+
+<h2>Chord Pads</h2>
+<p>Pads 1–7 are the seven diatonic triads of the current key (I through vii°), coloured by root note. An 8th pad repeats the tonic an octave up. Switch to 12-pad mode to add the II–V chords an octave up as well.</p>
+
+<h2>Key</h2>
+<p>Choose any of the 12 keys and Major or Minor — the whole pad grid updates instantly to match.</p>
+
+<h2>Chord Progressions</h2>
+<p>A built-in library of progressions you can loop hands-free — Pop/Rock, Blues, 50s/Doo-wop, Jazz, Canon, Country/Folk, Anthem, Modern Pop, Gospel, Soul/R&amp;B in major, plus Rock minor, Classic minor vamp, Cinematic/Epic, Andalusian and Dramatic in minor.</p>
+<ul class="guide">
+  <li>Pick a progression and tap Play — it loops continuously</li>
+  <li>Tap again to stop cleanly at the end of the current bar, never mid-chord</li>
+  <li>Tap the BPM number to set the tempo</li>
+</ul>
+<div class="tip"><p>This is a library of ready-made progressions to play along to — recording your own performance is what the Melody Loops page's loop recorder is for.</p></div>
+
+<div class="nav-links"><a href="/pads-lab/melody-loops">← Melody Loops</a><a href="/pads-lab/drums">Drums →</a></div>
+</main>
+<footer><p>© 2026 Data Etude Studios &nbsp;·&nbsp; <a href="/pads-lab/guide">Full Guide</a> &nbsp;·&nbsp; <a href="/privacy">Privacy Policy</a></p></footer>
+</body>
+</html>
+ 
