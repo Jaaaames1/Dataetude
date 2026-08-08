@@ -1,1 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pads Lab – Data Etude Studios</title>
+  <style>
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;
+  background:#000;color:#e8e8e8;min-height:100vh;line-height:1.6;}
+nav{background:#0a0a0a;border-bottom:1px solid rgba(255,255,255,0.06);
+  padding:13px 24px;display:flex;justify-content:space-between;align-items:center;}
+nav .logo{font-size:0.88rem;font-weight:700;color:rgba(232,232,232,0.65);
+  letter-spacing:0.06em;text-decoration:none;}
+nav a.back{font-size:0.8rem;color:#f5aab1;text-decoration:none;}
+nav a.back:hover{color:#f8c4ca;}
+.divider{border:none;border-top:1px solid rgba(255,255,255,0.06);}
+main{max-width:720px;margin:0 auto;padding:40px 24px 80px;}
+footer{text-align:center;padding:28px 24px;
+  border-top:1px solid rgba(255,255,255,0.06);
+  color:#333;font-size:0.78rem;}
+footer a{color:#444;text-decoration:none;}
+footer a:hover{color:#666;}
+
+.hero{max-width:720px;margin:0 auto;padding:48px 24px 36px;}
+.hero .eyebrow{font-size:0.68rem;font-weight:600;letter-spacing:0.16em;
+  text-transform:uppercase;color:#f5aab1;margin-bottom:14px;}
+.hero h1{font-size:1.9rem;font-weight:800;margin-bottom:10px;
+  background:linear-gradient(135deg,#f5aab1,#f5c869);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+  background-clip:text;}
+.hero p{font-size:0.9rem;color:#555;line-height:1.65;}
+.screenshots-section{padding:0 0 8px;}
+.screenshots-label{font-size:0.66rem;font-weight:700;letter-spacing:0.14em;
+  text-transform:uppercase;color:#333;margin-bottom:16px;}
+.screenshots-scroll{display:flex;gap:14px;overflow-x:auto;padding-bottom:16px;
+  -webkit-overflow-scrolling:touch;scrollbar-width:none;}
+.screenshots-scroll::-webkit-scrollbar{display:none;}
+.screenshot-item{flex-shrink:0;width:160px;}
+.screenshot-item .ph{width:160px;height:284px;border-radius:16px;
+  border:1px dashed rgba(255,255,255,0.14);display:flex;align-items:center;
+  justify-content:center;background:#0a0a0a;color:#333;font-size:0.72rem;
+  text-align:center;padding:16px;}
+.screenshot-item p{font-size:0.75rem;color:#555;margin:8px 0 0;
+  text-align:center;line-height:1.4;}
+.section-divider{border:none;border-top:1px solid rgba(255,255,255,0.05);
+  margin:40px 0;}
+.feature-list{list-style:none;margin:0 0 40px;}
+.feature-list li{border-bottom:1px solid rgba(255,255,255,0.05);}
+.feature-list li a{display:flex;align-items:center;gap:16px;
+  padding:18px 0;text-decoration:none;transition:opacity 0.15s;}
+.feature-list li a:hover{opacity:0.7;}
+.fi{font-size:1.3rem;flex-shrink:0;width:30px;text-align:center;}
+.ft h3{font-size:0.92rem;font-weight:600;color:#e8e8e8;margin-bottom:3px;}
+.ft p{font-size:0.8rem;color:rgba(232,232,232,0.38);line-height:1.5;margin:0;}
+.arr{margin-left:auto;color:#333;flex-shrink:0;}
+.guide-cta{display:block;text-align:center;padding:14px;
+  color:#f5aab1;text-decoration:none;font-size:0.84rem;}
+.guide-cta:hover{color:#f8c4ca;}
+.section-label{font-size:0.66rem;font-weight:700;letter-spacing:0.14em;
+  text-transform:uppercase;color:#333;margin-bottom:18px;}
+</style>
+</head>
+<body>
+<nav>
+  <a href="/" class="logo">Data Etude Studios</a>
+  <a href="/" class="back">← Home</a>
+</nav>
+<hr class="divider">
+<div class="hero">
+  <div class="eyebrow">Data Etude Studios</div>
+  <h1>Pads Lab</h1>
+  <p>Drum beats, chord loops, melody pads and custom samples. Record, layer and loop your own tracks — all in one place.</p>
+</div>
+
+<main>
+  <div class="screenshots-section">
+    <div class="screenshots-label">Screenshots</div>
+    <div class="screenshots-scroll">
+      <div class="screenshot-item">
+        <div class="ph">📸<br>Screenshot<br>coming soon</div>
+        <p>Melody Loops with chord-tone pads</p>
+      </div>
+      <div class="screenshot-item">
+        <div class="ph">📸<br>Screenshot<br>coming soon</div>
+        <p>Chords in any key</p>
+      </div>
+      <div class="screenshot-item">
+        <div class="ph">📸<br>Screenshot<br>coming soon</div>
+        <p>Drums with patterns and fills</p>
+      </div>
+      <div class="screenshot-item">
+        <div class="ph">📸<br>Screenshot<br>coming soon</div>
+        <p>Sample Pads — record, import, loop</p>
+      </div>
+    </div>
+  </div>
+
+  <hr class="section-divider">
+
+  <div class="section-label">What's in the app</div>
+  <ul class="feature-list">
+    <li><a href="/pads-lab/melody-loops"><span class="fi">🎵</span><div class="ft"><h3>Melody Loops</h3><p>Chord-tone pads for improvising melodies over a progression, with independent Pad and Loop octaves and a 4-slot loop recorder.</p></div><span class="arr">→</span></a></li>
+    <li><a href="/pads-lab/chords"><span class="fi">🎶</span><div class="ft"><h3>Chords</h3><p>Every diatonic chord in the current key on 8 or 12 pads. Loop built-in progressions across Pop, Blues, Jazz and more.</p></div><span class="arr">→</span></a></li>
+    <li><a href="/pads-lab/drums"><span class="fi">🥁</span><div class="ft"><h3>Drums</h3><p>Four drum patterns with queued fills, tempo and volume control, and a full 12-pad kit you can rearrange with Move mode.</p></div><span class="arr">→</span></a></li>
+    <li><a href="/pads-lab/samples"><span class="fi">🔊</span><div class="ft"><h3>Sample Pads</h3><p>Record your own sounds, import audio files, or choose from 36 built-in sounds. Save and load full pad setups, with an 8-slot loop recorder of its own.</p></div><span class="arr">→</span></a></li>
+    <li><a href="/pads-lab/settings"><span class="fi">⚙️</span><div class="ft"><h3>Themes &amp; Settings</h3><p>Four themes, haptic feedback, background playback and configurable defaults for how the app opens.</p></div><span class="arr">→</span></a></li>
+  </ul>
+
+  <a href="/pads-lab/guide" class="guide-cta">View full user guide →</a>
+</main>
+
+<footer>
+  <p>© 2026 Data Etude Studios &nbsp;·&nbsp; <a href="/">Home</a> &nbsp;·&nbsp; <a href="/privacy">Privacy Policy</a></p>
+</footer>
+</body>
+</html>
 
