@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>User Guide – Pads Lab</title>
+  <style>
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;
+  background:#000;color:#e8e8e8;min-height:100vh;line-height:1.6;}
+nav{background:#0a0a0a;border-bottom:1px solid rgba(255,255,255,0.06);
+  padding:13px 24px;display:flex;justify-content:space-between;align-items:center;}
+nav .logo{font-size:0.88rem;font-weight:700;color:rgba(232,232,232,0.65);
+  letter-spacing:0.06em;text-decoration:none;}
+nav a.back{font-size:0.8rem;color:#f5aab1;text-decoration:none;}
+nav a.back:hover{color:#f8c4ca;}
+.page-header{max-width:720px;margin:0 auto;padding:48px 24px 36px;}
+.page-header .eyebrow{font-size:0.68rem;font-weight:600;letter-spacing:0.16em;
+  text-transform:uppercase;color:#f5aab1;margin-bottom:14px;}
+.page-header h1{font-size:1.9rem;font-weight:800;line-height:1.15;
+  background:linear-gradient(135deg,#f5aab1,#f5c869);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+  background-clip:text;margin-bottom:10px;}
+.page-header p{font-size:0.9rem;color:#555;line-height:1.65;}
+.divider{border:none;border-top:1px solid rgba(255,255,255,0.06);}
+main{max-width:720px;margin:0 auto;padding:40px 24px 80px;}
+h2{font-size:1rem;font-weight:700;color:#e8e8e8;margin:32px 0 10px;
+  padding-bottom:8px;border-bottom:1px solid rgba(255,255,255,0.06);}
+h3{font-size:0.92rem;font-weight:600;color:#e8e8e8;margin:22px 0 8px;}
+p{font-size:0.88rem;color:rgba(232,232,232,0.5);line-height:1.75;margin-bottom:14px;}
+ul.guide{list-style:none;margin-bottom:18px;}
+ul.guide li{font-size:0.86rem;color:rgba(232,232,232,0.45);
+  padding:7px 0 7px 18px;border-bottom:1px solid rgba(255,255,255,0.04);
+  position:relative;line-height:1.6;}
+ul.guide li:before{content:'→';position:absolute;left:0;color:#f5aab1;}
+ul.guide li strong{color:rgba(232,232,232,0.75);font-weight:600;}
+.tip{background:rgba(245,170,177,0.06);border:1px solid rgba(245,170,177,0.18);
+  border-radius:10px;padding:14px 16px;margin:18px 0;}
+.tip p{color:rgba(232,232,232,0.55);margin:0;font-size:0.84rem;}
+.tip p::before{content:'💡  ';}
+.highlight{background:rgba(90,170,130,0.06);border:1px solid rgba(90,170,130,0.18);
+  border-radius:10px;padding:14px 16px;margin:18px 0;}
+.highlight p{color:rgba(232,232,232,0.55);margin:0;font-size:0.84rem;}
+.highlight p::before{content:'⚡  ';}
+.toc{background:#0a0a0a;border:1px solid rgba(255,255,255,0.06);
+  border-radius:12px;padding:22px;margin-bottom:44px;}
+.toc .toc-label{font-size:0.66rem;font-weight:700;letter-spacing:0.14em;
+  text-transform:uppercase;color:#333;margin-bottom:14px;}
+.toc a{display:block;color:rgba(245,170,177,0.8);text-decoration:none;
+  font-size:0.87rem;padding:5px 0;border-bottom:1px solid rgba(255,255,255,0.04);}
+.toc a:last-child{border-bottom:none;}
+.toc a:hover{color:#f5aab1;}
+.section{margin-bottom:56px;}
+.section-head{display:flex;align-items:center;gap:12px;margin-bottom:20px;
+  padding-bottom:14px;border-bottom:1px solid rgba(255,255,255,0.06);}
+.section-head .icon{font-size:1.5rem;}
+.section-head h2{font-size:1.25rem;font-weight:700;border:none;
+  margin:0;padding:0;color:#e8e8e8;}
+.nav-links{display:flex;justify-content:space-between;margin-top:56px;
+  padding-top:22px;border-top:1px solid rgba(255,255,255,0.06);}
+.nav-links a{color:#f5aab1;text-decoration:none;font-size:0.84rem;}
+.nav-links a:hover{color:#f8c4ca;}
+footer{text-align:center;padding:28px 24px;
+  border-top:1px solid rgba(255,255,255,0.06);
+  color:#333;font-size:0.78rem;}
+footer a{color:#444;text-decoration:none;}
+footer a:hover{color:#666;}
+  </style>
+</head>
+<body>
+<nav>
+  <a href="/" class="logo">Data Etude Studios</a>
+  <a href="/pads-lab" class="back">← Pads Lab</a>
+</nav>
+<hr class="divider">
+<div class="page-header">
+  <div class="eyebrow">Pads Lab</div>
+  <h1>User Guide</h1>
+  <p>Everything you need to know</p>
+</div>
+<main>
+<div class="toc">
+  <div class="toc-label">Contents</div>
+  <a href="#melody">🎵 Melody Loops</a>
+  <a href="#chords">🎶 Chords</a>
+  <a href="#drums">🥁 Drums</a>
+  <a href="#samples">🔊 Sample Pads</a>
+  <a href="#settings">⚙️ Settings</a>
+</div>
+
+<div class="section" id="melody">
+  <div class="section-head"><span class="icon">🎵</span><h2>Melody Loops</h2></div>
+  <p>Chord-tone pads for improvising melodies — tap in time with a chord progression and every pad stays musically in key.</p>
+  <h3>Melody Pads</h3>
+  <p>The pad grid always plays notes belonging to the current chord, so anything you tap fits. Choose 8 or 12 pads for a wider range.</p>
+  <h3>Pad Octave &amp; Loop Octave</h3>
+  <ul class="guide">
+    <li><strong>Pad Oct</strong> — shifts the melody pads up or down an octave, instantly, mid-performance</li>
+    <li><strong>Loop Oct</strong> — separately shifts the octave of whatever's currently recorded in the loop, without touching what the pads themselves play</li>
+  </ul>
+  <div class="tip"><p>Keeping these independent means you can record a bass-register loop, then shift the live pads up an octave to play a lead over it — without re-recording anything.</p></div>
+  <h3>Chord Pattern</h3>
+  <p>Choose a built-in progression to play underneath your melody — Pop/Rock, Blues, Jazz, Gospel, Soul/R&amp;B and more, in both major and minor. The chords advance automatically in time; your melody pads follow whatever chord is currently playing.</p>
+  <h3>Arp</h3>
+  <p>Toggles an arpeggiator on the chord accompaniment — instead of the chord playing as a block, its notes ripple in sequence underneath your melody.</p>
+  <h3>Key</h3>
+  <p>Tap Key Up to shift everything up 3 semitones. If a loop is playing, the change waits cleanly until the loop finishes before switching — never mid-bar.</p>
+  <h3>Loop Recorder</h3>
+  <p>Four independent loop slots let you record melody pad performances and play them back on a seamless cycle.</p>
+  <ul class="guide">
+    <li>Tap an empty slot to arm it — recording starts cleanly on the next bar</li>
+    <li>Tap while recording to stop early, or let it fill the full cycle automatically</li>
+    <li>Tap a stopped slot to queue playback — it joins in cleanly on the next bar</li>
+    <li>Tap a playing slot to queue a stop — it finishes the current loop first, never cuts off mid-phrase</li>
+    <li>Hold a stopped slot for Re-record or Clear</li>
+  </ul>
+  <div class="tip"><p>Loops recorded here have nothing to do with Sample Pads' own loop recorder — the two are entirely separate.</p></div>
+  <h3>Tone</h3>
+  <p>Tap the wave icon in the header to shape the sound of the melody pads — nine instrument presets (Piano, E.Piano, Cosmic, Synth, Organ, Flute, Sax, Harpsi, Bell) plus full manual control over wave shape, detune, modulation, vibrato, attack, decay, sustain, filter resonance and stereo width.</p>
+</div>
+
+<div class="section" id="chords">
+  <div class="section-head"><span class="icon">🎶</span><h2>Chords</h2></div>
+  <p>Every diatonic chord of the current key across 8 or 12 pads, with a library of progressions to loop.</p>
+  <h3>Chord Pads</h3>
+  <p>Pads 1–7 are the seven diatonic triads of the current key (I through vii°), coloured by root note. An 8th pad repeats the tonic an octave up. Switch to 12-pad mode to add the II–V chords an octave up as well.</p>
+  <h3>Key</h3>
+  <p>Choose any of the 12 keys and Major or Minor — the whole pad grid updates instantly to match.</p>
+  <h3>Chord Progressions</h3>
+  <p>A built-in library of progressions you can loop hands-free — Pop/Rock, Blues, 50s/Doo-wop, Jazz, Canon, Country/Folk, Anthem, Modern Pop, Gospel, Soul/R&amp;B in major, plus Rock minor, Classic minor vamp, Cinematic/Epic, Andalusian and Dramatic in minor.</p>
+  <ul class="guide">
+    <li>Pick a progression and tap Play — it loops continuously</li>
+    <li>Tap again to stop cleanly at the end of the current bar, never mid-chord</li>
+    <li>Tap the BPM number to set the tempo</li>
+  </ul>
+  <div class="tip"><p>This is a library of ready-made progressions to play along to — recording your own performance is what Melody Loops' loop recorder is for.</p></div>
+</div>
+
+<div class="section" id="drums">
+  <div class="section-head"><span class="icon">🥁</span><h2>Drums</h2></div>
+  <p>A full 12-pad drum kit combined with four ready-made patterns you can loop hands-free, or tap the pads yourself over the top.</p>
+  <h3>Patterns</h3>
+  <p>Choose from four built-in patterns — Simple, Disco, Rock and Breakdown. Tap one to start looping; tap the same one again to stop cleanly at the end of the bar. Switching patterns mid-loop queues the change to land exactly on the next bar.</p>
+  <h3>Fill</h3>
+  <p>Queue a drum fill for the next bar — press Fill at any point and it plays automatically when the current bar ends, then returns to the normal pattern.</p>
+  <h3>Drum Kit</h3>
+  <ul class="guide">
+    <li><strong>Kick, Snare, Hi-Hat, Open Hat, Hi Tom, Lo Tom, Crash, Clap</strong> — the core 8-pad kit</li>
+    <li><strong>Rim, Cowbell, Shaker, Ride</strong> — added in 12-pad mode</li>
+  </ul>
+  <p>Tap any pad any time, whether or not a pattern is playing — they layer over the loop live.</p>
+  <h3>Tempo &amp; Drum Volume</h3>
+  <p>Drag the tempo slider for a smooth, continuous glide — already-sounding hits are never cut off mid-note, and drums speed up or slow down seamlessly. Drum Volume controls the kit independently from the app's master volume.</p>
+  <h3>Move</h3>
+  <p>Rearrange the pad layout to suit how you play — enable Move, tap a pad to select it, then tap another to swap their positions.</p>
+  <h3>Metronome</h3>
+  <p>A compact metronome sits alongside the drum controls — choose a time signature, pick a click sound, and start or stop it independently of the drum patterns.</p>
+</div>
+
+<div class="section" id="samples">
+  <div class="section-head"><span class="icon">🔊</span><h2>Sample Pads</h2></div>
+  <p>Start with a blank grid of 8 or 12 pads. Fill each one with your own recording, an imported audio file, or a sound from the built-in library, then perform and loop with them like any other instrument.</p>
+  <h3>Adding a Sound</h3>
+  <p>Hold any empty pad to open Add Sound, with three ways to fill it:</p>
+  <ul class="guide">
+    <li><strong>Record</strong> — capture up to 3 seconds from your microphone, with a mandatory listen-back before it's committed to the pad</li>
+    <li><strong>Import</strong> — bring in an audio file from your device</li>
+    <li><strong>Library</strong> — 36 built-in synthesized sounds across Drums, Percussion, FX, Musical and Fun, each with its own preview button separate from selecting it</li>
+  </ul>
+  <div class="tip"><p>The Drums category in the library is the exact same synthesis as the Drums page's own kit — a Kick sample here sounds identical to the Drums page's Kick pad.</p></div>
+  <h3>Playing Pads</h3>
+  <p>Tap a loaded pad to play it instantly. Hold a loaded pad for Change Sound or Clear Pad.</p>
+  <h3>Move</h3>
+  <p>Rearrange pads to suit your performance — enable Move, tap a pad to select it, then tap another to swap their positions.</p>
+  <h3>Loop Recorder</h3>
+  <p>Eight independent loop slots — twice as many as Melody Loops' four — record your pad taps and play them back on a seamless cycle. A master Play/Stop button starts every recorded slot together, or queues a synchronized stop for everything currently playing.</p>
+  <ul class="guide">
+    <li>Tap an empty slot to arm it — recording starts cleanly on the next bar</li>
+    <li>Tap a stopped slot to queue playback, or a playing slot to queue a clean stop</li>
+    <li>Hold a stopped slot for Re-record or Clear</li>
+    <li>Adjust Cycle length (1× or 2×) to control how many bars each recording captures</li>
+  </ul>
+  <h3>Saving &amp; Loading Setups</h3>
+  <ul class="guide">
+    <li><strong>New</strong> — clears every pad and loop, with a confirmation first</li>
+    <li><strong>Save</strong> — stores the current setup under a name; updates it in place next time, or branch off a new version with Save As</li>
+    <li><strong>Library</strong> — browse, load, rename, duplicate or delete saved setups, sorted by name or date. Loading a setup asks for confirmation first, since it replaces everything currently on the grid</li>
+  </ul>
+  <div class="highlight"><p>Saved setups store references to your sounds, not duplicate copies of the audio itself — saving many setups stays lightweight even when each one includes real recordings.</p></div>
+</div>
+
+<div class="section" id="settings">
+  <div class="section-head"><span class="icon">⚙️</span><h2>Settings</h2></div>
+  <p>Open settings by tapping the gear icon in the top right corner of any page.</p>
+  <h3>Themes</h3>
+  <ul class="guide">
+    <li><strong>Midnight</strong> — deeper, richer dark theme with true blacks</li>
+    <li><strong>Dark</strong> — default dark theme</li>
+    <li><strong>High Contrast</strong> — bold black and yellow, maximum readability</li>
+    <li><strong>Light</strong> — clean bright white theme</li>
+  </ul>
+  <h3>Haptic Feedback</h3>
+  <p>Toggles vibration on pad taps.</p>
+  <h3>Playback</h3>
+  <p>Keep playing in background — when on, playback continues if the screen locks or you switch to another app.</p>
+  <h3>Defaults</h3>
+  <ul class="guide">
+    <li><strong>Default Pad Mode</strong> — which page opens on launch: Chord, Drum or Melody</li>
+    <li><strong>Default Pad Count</strong> — 8 or 12 pads on launch</li>
+  </ul>
+</div>
+</main>
+<footer><p>© 2026 Data Etude Studios &nbsp;·&nbsp; <a href="/pads-lab/guide">Full Guide</a> &nbsp;·&nbsp; <a href="/privacy">Privacy Policy</a></p></footer>
+</body>
+</html>
+ 
