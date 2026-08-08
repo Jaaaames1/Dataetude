@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sample Pads – Pads Lab</title>
+  <style>
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;
+  background:#000;color:#e8e8e8;min-height:100vh;line-height:1.6;}
+nav{background:#0a0a0a;border-bottom:1px solid rgba(255,255,255,0.06);
+  padding:13px 24px;display:flex;justify-content:space-between;align-items:center;}
+nav .logo{font-size:0.88rem;font-weight:700;color:rgba(232,232,232,0.65);
+  letter-spacing:0.06em;text-decoration:none;}
+nav a.back{font-size:0.8rem;color:#f5aab1;text-decoration:none;}
+nav a.back:hover{color:#f8c4ca;}
+.page-header{max-width:720px;margin:0 auto;padding:48px 24px 36px;}
+.page-header .eyebrow{font-size:0.68rem;font-weight:600;letter-spacing:0.16em;
+  text-transform:uppercase;color:#f5aab1;margin-bottom:14px;}
+.page-header h1{font-size:1.9rem;font-weight:800;line-height:1.15;
+  background:linear-gradient(135deg,#f5aab1,#f5c869);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+  background-clip:text;margin-bottom:10px;}
+.page-header p{font-size:0.9rem;color:#555;line-height:1.65;}
+.divider{border:none;border-top:1px solid rgba(255,255,255,0.06);}
+main{max-width:720px;margin:0 auto;padding:40px 24px 80px;}
+h2{font-size:1rem;font-weight:700;color:#e8e8e8;margin:32px 0 10px;
+  padding-bottom:8px;border-bottom:1px solid rgba(255,255,255,0.06);}
+h3{font-size:0.92rem;font-weight:600;color:#e8e8e8;margin:22px 0 8px;}
+p{font-size:0.88rem;color:rgba(232,232,232,0.5);line-height:1.75;margin-bottom:14px;}
+ul.guide{list-style:none;margin-bottom:18px;}
+ul.guide li{font-size:0.86rem;color:rgba(232,232,232,0.45);
+  padding:7px 0 7px 18px;border-bottom:1px solid rgba(255,255,255,0.04);
+  position:relative;line-height:1.6;}
+ul.guide li:before{content:'→';position:absolute;left:0;color:#f5aab1;}
+ul.guide li strong{color:rgba(232,232,232,0.75);font-weight:600;}
+.tip{background:rgba(245,170,177,0.06);border:1px solid rgba(245,170,177,0.18);
+  border-radius:10px;padding:14px 16px;margin:18px 0;}
+.tip p{color:rgba(232,232,232,0.55);margin:0;font-size:0.84rem;}
+.tip p::before{content:'💡  ';}
+.highlight{background:rgba(90,170,130,0.06);border:1px solid rgba(90,170,130,0.18);
+  border-radius:10px;padding:14px 16px;margin:18px 0;}
+.highlight p{color:rgba(232,232,232,0.55);margin:0;font-size:0.84rem;}
+.highlight p::before{content:'⚡  ';}
+.nav-links{display:flex;justify-content:space-between;margin-top:56px;
+  padding-top:22px;border-top:1px solid rgba(255,255,255,0.06);}
+.nav-links a{color:#f5aab1;text-decoration:none;font-size:0.84rem;}
+.nav-links a:hover{color:#f8c4ca;}
+footer{text-align:center;padding:28px 24px;
+  border-top:1px solid rgba(255,255,255,0.06);
+  color:#333;font-size:0.78rem;}
+footer a{color:#444;text-decoration:none;}
+footer a:hover{color:#666;}
+  </style>
+</head>
+<body>
+<nav>
+  <a href="/" class="logo">Data Etude Studios</a>
+  <a href="/pads-lab" class="back">← Pads Lab</a>
+</nav>
+<hr class="divider">
+<div class="page-header">
+  <div class="eyebrow">Pads Lab</div>
+  <h1>Sample Pads</h1>
+  <p>Record, import or choose sounds — then loop your own performance</p>
+</div>
+<main>
+<p>The Samples page starts as a blank grid of 8 or 12 pads. Fill each one with your own recording, an imported audio file, or a sound from the built-in library, then perform and loop with them like any other instrument.</p>
+
+<h2>Adding a Sound</h2>
+<p>Hold any empty pad to open Add Sound, with three ways to fill it:</p>
+<ul class="guide">
+  <li><strong>Record</strong> — capture up to 3 seconds from your microphone, with a mandatory listen-back before it's committed to the pad, so a bad take never gets stuck there</li>
+  <li><strong>Import</strong> — bring in an audio file from your device</li>
+  <li><strong>Library</strong> — 36 built-in synthesized sounds across Drums, Percussion, FX, Musical and Fun, each with its own preview button separate from selecting it</li>
+</ul>
+<div class="tip"><p>The Drums category in the library is the exact same synthesis as the Drums page's own kit — a Kick sample here sounds identical to the Drums page's Kick pad.</p></div>
+
+<h2>Playing Pads</h2>
+<p>Tap a loaded pad to play it instantly. Hold a loaded pad for Change Sound or Clear Pad.</p>
+
+<h2>Move</h2>
+<p>Rearrange pads to suit your performance — enable Move, tap a pad to select it, then tap another to swap their positions.</p>
+
+<h2>Loop Recorder</h2>
+<p>Eight independent loop slots — twice as many as Melody Loops' four — record your pad taps and play them back on a seamless cycle. A master Play/Stop button starts every recorded slot together, or queues a synchronized stop for everything currently playing.</p>
+<ul class="guide">
+  <li>Tap an empty slot to arm it — recording starts cleanly on the next bar</li>
+  <li>Tap a stopped slot to queue playback, or a playing slot to queue a clean stop</li>
+  <li>Hold a stopped slot for Re-record or Clear</li>
+  <li>Adjust Cycle length (1× or 2×) to control how many bars each recording captures</li>
+</ul>
+
+<h2>Saving &amp; Loading Setups</h2>
+<p>Save a full pad setup — every sound assignment and every recorded loop — and load it back later.</p>
+<ul class="guide">
+  <li><strong>New</strong> — clears every pad and loop, with a confirmation first</li>
+  <li><strong>Save</strong> — stores the current setup under a name; updates it in place next time, or branch off a new version with Save As</li>
+  <li><strong>Library</strong> — browse, load, rename, duplicate or delete saved setups, sorted by name or date. Loading a setup asks for confirmation first, since it replaces everything currently on the grid</li>
+</ul>
+<div class="highlight"><p>Saved setups store references to your sounds, not duplicate copies of the audio itself — saving many setups stays lightweight even when each one includes real recordings.</p></div>
+
+<div class="nav-links"><a href="/pads-lab/drums">← Drums</a><a href="/pads-lab/settings">Settings →</a></div>
+</main>
+<footer><p>© 2026 Data Etude Studios &nbsp;·&nbsp; <a href="/pads-lab/guide">Full Guide</a> &nbsp;·&nbsp; <a href="/privacy">Privacy Policy</a></p></footer>
+</body>
+</html>
+ 
