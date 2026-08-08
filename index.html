@@ -34,6 +34,7 @@ footer a:hover{color:#666;}
 .app-card-link{text-decoration:none;display:block;}
 .app-card-link:hover .app-card{border-color:rgba(167,139,250,0.3);}
 .app-card-link.ll:hover .app-card{border-color:rgba(79,196,207,0.3);}
+.app-card-link.pl:hover .app-card{border-color:rgba(245,170,177,0.35);}
 .app-top{display:flex;align-items:center;gap:14px;margin-bottom:8px;}
 .app-icon{width:44px;height:44px;border-radius:11px;flex-shrink:0;
   display:block;object-fit:cover;}
@@ -41,10 +42,12 @@ footer a:hover{color:#666;}
 .app-tag{font-size:0.66rem;font-weight:700;letter-spacing:0.1em;
   text-transform:uppercase;color:#a78bfa;}
 .app-tag.ll{color:#4fc4cf;}
+.app-tag.pl{color:#f5aab1;}
 .app-desc{font-size:0.83rem;color:rgba(232,232,232,0.4);
   line-height:1.6;margin-bottom:14px;}
 .app-cta{font-size:0.8rem;font-weight:600;color:#a78bfa;}
 .app-cta.ll{color:#4fc4cf;}
+.app-cta.pl{color:#f5aab1;}
 .app-actions{margin-bottom:20px;}
 .btn-launch{display:inline-block;text-decoration:none;
   font-size:0.78rem;font-weight:700;letter-spacing:0.04em;
@@ -56,6 +59,9 @@ footer a:hover{color:#666;}
 .btn-launch.ll{background:rgba(79,196,207,0.1);
   border-color:rgba(79,196,207,0.3);color:#4fc4cf;}
 .btn-launch.ll:hover{background:rgba(79,196,207,0.2);border-color:rgba(79,196,207,0.55);}
+.btn-launch.pl{background:rgba(245,170,177,0.12);
+  border-color:rgba(245,170,177,0.35);color:#f5aab1;}
+.btn-launch.pl:hover{background:rgba(245,170,177,0.22);border-color:rgba(245,170,177,0.6);}
   </style>
 </head>
 <body>
@@ -106,6 +112,23 @@ footer a:hover{color:#666;}
   </a>
   <div class="app-actions">
     <a href="/Apps/Lyrics-App.html" class="btn-launch ll">🚀 Launch Web App</a>
+  </div>
+
+  <a href="/pads-lab" class="app-card-link pl">
+    <div class="app-card">
+      <div class="app-top">
+        <img src="/icons/pads-lab-icon.png" alt="Pads Lab icon" class="app-icon">
+        <div>
+          <div class="app-name">Pads Lab</div>
+          <div class="app-tag pl">Beat Making</div>
+        </div>
+      </div>
+      <p class="app-desc">Drum beats, chord loops, melody pads and custom samples — record, layer and loop your own tracks, all in one place.</p>
+      <div class="app-cta pl">Explore →</div>
+    </div>
+  </a>
+  <div class="app-actions">
+    <a href="/Apps/Pads-App.html" class="btn-launch pl">🚀 Launch Web App</a>
   </div>
 
 </div>
