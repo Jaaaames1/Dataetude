@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Drums – Pads Lab</title>
+  <style>
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;
+  background:#000;color:#e8e8e8;min-height:100vh;line-height:1.6;}
+nav{background:#0a0a0a;border-bottom:1px solid rgba(255,255,255,0.06);
+  padding:13px 24px;display:flex;justify-content:space-between;align-items:center;}
+nav .logo{font-size:0.88rem;font-weight:700;color:rgba(232,232,232,0.65);
+  letter-spacing:0.06em;text-decoration:none;}
+nav a.back{font-size:0.8rem;color:#f5aab1;text-decoration:none;}
+nav a.back:hover{color:#f8c4ca;}
+.page-header{max-width:720px;margin:0 auto;padding:48px 24px 36px;}
+.page-header .eyebrow{font-size:0.68rem;font-weight:600;letter-spacing:0.16em;
+  text-transform:uppercase;color:#f5aab1;margin-bottom:14px;}
+.page-header h1{font-size:1.9rem;font-weight:800;line-height:1.15;
+  background:linear-gradient(135deg,#f5aab1,#f5c869);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+  background-clip:text;margin-bottom:10px;}
+.page-header p{font-size:0.9rem;color:#555;line-height:1.65;}
+.divider{border:none;border-top:1px solid rgba(255,255,255,0.06);}
+main{max-width:720px;margin:0 auto;padding:40px 24px 80px;}
+h2{font-size:1rem;font-weight:700;color:#e8e8e8;margin:32px 0 10px;
+  padding-bottom:8px;border-bottom:1px solid rgba(255,255,255,0.06);}
+p{font-size:0.88rem;color:rgba(232,232,232,0.5);line-height:1.75;margin-bottom:14px;}
+ul.guide{list-style:none;margin-bottom:18px;}
+ul.guide li{font-size:0.86rem;color:rgba(232,232,232,0.45);
+  padding:7px 0 7px 18px;border-bottom:1px solid rgba(255,255,255,0.04);
+  position:relative;line-height:1.6;}
+ul.guide li:before{content:'→';position:absolute;left:0;color:#f5aab1;}
+ul.guide li strong{color:rgba(232,232,232,0.75);font-weight:600;}
+.tip{background:rgba(245,170,177,0.06);border:1px solid rgba(245,170,177,0.18);
+  border-radius:10px;padding:14px 16px;margin:18px 0;}
+.tip p{color:rgba(232,232,232,0.55);margin:0;font-size:0.84rem;}
+.tip p::before{content:'💡  ';}
+.nav-links{display:flex;justify-content:space-between;margin-top:56px;
+  padding-top:22px;border-top:1px solid rgba(255,255,255,0.06);}
+.nav-links a{color:#f5aab1;text-decoration:none;font-size:0.84rem;}
+.nav-links a:hover{color:#f8c4ca;}
+footer{text-align:center;padding:28px 24px;
+  border-top:1px solid rgba(255,255,255,0.06);
+  color:#333;font-size:0.78rem;}
+footer a{color:#444;text-decoration:none;}
+footer a:hover{color:#666;}
+  </style>
+</head>
+<body>
+<nav>
+  <a href="/" class="logo">Data Etude Studios</a>
+  <a href="/pads-lab" class="back">← Pads Lab</a>
+</nav>
+<hr class="divider">
+<div class="page-header">
+  <div class="eyebrow">Pads Lab</div>
+  <h1>Drums</h1>
+  <p>A full drum kit with patterns, fills and a tap-along metronome</p>
+</div>
+<main>
+<p>The Drums page combines a full 12-pad drum kit with four ready-made patterns you can loop hands-free, or tap the pads yourself over the top.</p>
+
+<h2>Patterns</h2>
+<p>Choose from four built-in patterns — Simple, Disco, Rock and Breakdown. Tap one to start looping; tap the same one again to stop cleanly at the end of the bar. Switching patterns mid-loop queues the change to land exactly on the next bar, never mid-beat.</p>
+
+<h2>Fill</h2>
+<p>Queue a drum fill for the next bar — press Fill at any point and it plays automatically when the current bar ends, then returns to the normal pattern.</p>
+
+<h2>Drum Kit</h2>
+<p>Eight pads by default, or switch to 12 for the full kit:</p>
+<ul class="guide">
+  <li><strong>Kick, Snare, Hi-Hat, Open Hat, Hi Tom, Lo Tom, Crash, Clap</strong> — the core 8-pad kit</li>
+  <li><strong>Rim, Cowbell, Shaker, Ride</strong> — added in 12-pad mode</li>
+</ul>
+<p>Tap any pad any time, whether or not a pattern is playing — they layer over the loop live.</p>
+
+<h2>Tempo &amp; Drum Volume</h2>
+<p>Drag the tempo slider for a smooth, continuous glide — already-sounding hits are never cut off mid-note, and drums speed up or slow down seamlessly rather than stuttering. Drum Volume controls the kit independently from the app's master volume.</p>
+
+<h2>Move</h2>
+<p>Rearrange the pad layout to suit how you play — enable Move, tap a pad to select it, then tap another to swap their positions.</p>
+
+<h2>Metronome</h2>
+<p>A compact metronome sits alongside the drum controls — choose a time signature, pick a click sound, and start or stop it independently of the drum patterns.</p>
+
+<div class="nav-links"><a href="/pads-lab/chords">← Chords</a><a href="/pads-lab/samples">Sample Pads →</a></div>
+</main>
+<footer><p>© 2026 Data Etude Studios &nbsp;·&nbsp; <a href="/pads-lab/guide">Full Guide</a> &nbsp;·&nbsp; <a href="/privacy">Privacy Policy</a></p></footer>
+</body>
+</html>
+ 
