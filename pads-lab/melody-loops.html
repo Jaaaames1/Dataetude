@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Melody Loops – Pads Lab</title>
+  <title>Melody Loops – Pads Loop Lab</title>
   <style>
 *{margin:0;padding:0;box-sizing:border-box;}
 body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;
@@ -38,6 +38,10 @@ ul.guide li strong{color:rgba(232,232,232,0.75);font-weight:600;}
   border-radius:10px;padding:14px 16px;margin:18px 0;}
 .tip p{color:rgba(232,232,232,0.55);margin:0;font-size:0.84rem;}
 .tip p::before{content:'💡  ';}
+.highlight{background:rgba(90,170,130,0.06);border:1px solid rgba(90,170,130,0.18);
+  border-radius:10px;padding:14px 16px;margin:18px 0;}
+.highlight p{color:rgba(232,232,232,0.55);margin:0;font-size:0.84rem;}
+.highlight p::before{content:'⚡  ';}
 .nav-links{display:flex;justify-content:space-between;margin-top:56px;
   padding-top:22px;border-top:1px solid rgba(255,255,255,0.06);}
 .nav-links a{color:#f5aab1;text-decoration:none;font-size:0.84rem;}
@@ -52,11 +56,11 @@ footer a:hover{color:#666;}
 <body>
 <nav>
   <a href="/" class="logo">Data Etude Studios</a>
-  <a href="/pads-lab" class="back">← Pads Lab</a>
+  <a href="/pads-lab" class="back">← Pads Loop Lab</a>
 </nav>
 <hr class="divider">
 <div class="page-header">
-  <div class="eyebrow">Pads Lab</div>
+  <div class="eyebrow">Pads Loop Lab</div>
   <h1>Melody Loops</h1>
   <p>Improvise melodies over a chord progression</p>
 </div>
@@ -69,34 +73,36 @@ footer a:hover{color:#666;}
 <h2>Pad Octave &amp; Loop Octave</h2>
 <ul class="guide">
   <li><strong>Pad Oct</strong> — shifts the melody pads up or down an octave, instantly, mid-performance</li>
-  <li><strong>Loop Oct</strong> — separately shifts the octave of whatever's currently recorded in the loop, without touching what the pads themselves play</li>
+  <li><strong>Loop Oct</strong> — separately shifts the octave of the chord progression accompaniment, without touching what the pads themselves play</li>
 </ul>
-<div class="tip"><p>Keeping these independent means you can record a bass-register loop, then shift the live pads up an octave to play a lead over it — without re-recording anything.</p></div>
+<div class="tip"><p>Keeping these independent means you can play a bass-register lead over the accompaniment, or shift the accompaniment down a register while your pads stay put — no need to touch both together.</p></div>
 
 <h2>Chord Pattern</h2>
-<p>Choose a built-in progression to play underneath your melody — Pop/Rock, Blues, Jazz, Gospel, Soul/R&amp;B and more, in both major and minor. The chords advance automatically in time; your melody pads follow whatever chord is currently playing.</p>
+<p>Choose a built-in progression to play underneath your melody — Pop/Rock, Blues, Jazz, Gospel, Soul/R&amp;B and more, in both major and minor. The chords advance automatically in time; your melody pads follow whatever chord is currently playing. The <strong>Chord Tone</strong> button shapes the sound of this accompaniment specifically — it's separate from the tone of the pads themselves.</p>
 
 <h2>Arp</h2>
 <p>Toggles an arpeggiator on the chord accompaniment — instead of the chord playing as a block, its notes ripple in sequence underneath your melody.</p>
 
 <h2>Key</h2>
-<p>Tap Key Up to shift everything up 3 semitones. If a loop is playing, the change waits cleanly until the loop finishes before switching — never mid-bar.</p>
+<p>Tap Key Up to shift everything up 3 semitones, or open the key picker to jump straight to a specific key. Key (and Major/Minor) are shared across Melody Loops and Chords — change it from either page and both follow. If anything's currently playing, the change queues cleanly to the next bar rather than landing mid-phrase.</p>
 
 <h2>Loop Recorder</h2>
-<p>Four independent loop slots let you record melody pad performances and play them back on a seamless cycle.</p>
+<p>Melody Loops, Chords and Sample Pads all share the same 8 loop slots and the same recording engine — record a melody pad performance here and it sits alongside anything you've recorded on the Chords or Samples pages, ready to play together.</p>
 <ul class="guide">
   <li>Tap an empty slot to arm it — recording starts cleanly on the next bar</li>
   <li>Tap while recording to stop early, or let it fill the full cycle automatically</li>
   <li>Tap a stopped slot to queue playback — it joins in cleanly on the next bar</li>
   <li>Tap a playing slot to queue a stop — it finishes the current loop first, never cuts off mid-phrase</li>
-  <li>Hold a stopped slot for Re-record or Clear</li>
+  <li>Hold any slot with something recorded for Re-record, Clear, or its own independent <strong>Volume</strong> slider</li>
+  <li>The <strong>1×/2×</strong> button sets how many bars each new recording captures</li>
+  <li>The master Play/Stop button starts or stops every recorded slot together — across all three pages, since they're the same slots</li>
 </ul>
-<div class="tip"><p>Loops recorded here have nothing to do with Sample Pads' own loop recorder — the two are entirely separate, so building a melody loop never affects anything you've built on the Samples page.</p></div>
+<div class="tip"><p>Because the loop recorder is shared, re-recording a slot from the Chords page changes what plays back here too — they're the same loop, just recorded from wherever's convenient.</p></div>
 
 <h2>Tone</h2>
-<p>Tap the wave icon in the header to shape the sound of the melody pads themselves — nine instrument presets (Piano, E.Piano, Cosmic, Synth, Organ, Flute, Sax, Harpsi, Bell) plus full manual control over wave shape, detune, modulation, vibrato, attack, decay, sustain, filter resonance and stereo width.</p>
+<p>Tap the wave icon in the header to shape the sound of the melody pads — nine instrument presets (Piano, E.Piano, Cosmic, Synth, Organ, Flute, Sax, Harpsi, Bell) plus full manual control over wave shape, detune, modulation, vibrato, attack, decay, sustain, filter resonance and stereo width. This is the same tone the Chords page's own pads use — one shared sound across both.</p>
 
-<div class="nav-links"><a href="/pads-lab">← Pads Lab</a><a href="/pads-lab/chords">Chords →</a></div>
+<div class="nav-links"><a href="/pads-lab">← Pads Loop Lab</a><a href="/pads-lab/chords">Chords →</a></div>
 </main>
 <footer><p>© 2026 Data Etude Studios &nbsp;·&nbsp; <a href="/pads-lab/guide">Full Guide</a> &nbsp;·&nbsp; <a href="/privacy">Privacy Policy</a></p></footer>
 </body>
