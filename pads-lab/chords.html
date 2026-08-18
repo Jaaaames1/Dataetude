@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Chords – Pads Lab</title>
+  <title>Chords – Pads Loop Lab</title>
   <style>
 *{margin:0;padding:0;box-sizing:border-box;}
 body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;
@@ -26,6 +26,7 @@ nav a.back:hover{color:#f8c4ca;}
 main{max-width:720px;margin:0 auto;padding:40px 24px 80px;}
 h2{font-size:1rem;font-weight:700;color:#e8e8e8;margin:32px 0 10px;
   padding-bottom:8px;border-bottom:1px solid rgba(255,255,255,0.06);}
+h3{font-size:0.92rem;font-weight:600;color:#e8e8e8;margin:22px 0 8px;}
 p{font-size:0.88rem;color:rgba(232,232,232,0.5);line-height:1.75;margin-bottom:14px;}
 ul.guide{list-style:none;margin-bottom:18px;}
 ul.guide li{font-size:0.86rem;color:rgba(232,232,232,0.45);
@@ -37,6 +38,10 @@ ul.guide li strong{color:rgba(232,232,232,0.75);font-weight:600;}
   border-radius:10px;padding:14px 16px;margin:18px 0;}
 .tip p{color:rgba(232,232,232,0.55);margin:0;font-size:0.84rem;}
 .tip p::before{content:'💡  ';}
+.highlight{background:rgba(90,170,130,0.06);border:1px solid rgba(90,170,130,0.18);
+  border-radius:10px;padding:14px 16px;margin:18px 0;}
+.highlight p{color:rgba(232,232,232,0.55);margin:0;font-size:0.84rem;}
+.highlight p::before{content:'⚡  ';}
 .nav-links{display:flex;justify-content:space-between;margin-top:56px;
   padding-top:22px;border-top:1px solid rgba(255,255,255,0.06);}
 .nav-links a{color:#f5aab1;text-decoration:none;font-size:0.84rem;}
@@ -51,31 +56,52 @@ footer a:hover{color:#666;}
 <body>
 <nav>
   <a href="/" class="logo">Data Etude Studios</a>
-  <a href="/pads-lab" class="back">← Pads Lab</a>
+  <a href="/pads-lab" class="back">← Pads Loop Lab</a>
 </nav>
 <hr class="divider">
 <div class="page-header">
-  <div class="eyebrow">Pads Lab</div>
+  <div class="eyebrow">Pads Loop Lab</div>
   <h1>Chords</h1>
-  <p>Every chord in any key, ready to loop</p>
+  <p>Every chord in any key, ready to play, record and loop</p>
 </div>
 <main>
-<p>The Chords page lays out every diatonic chord of the current key across 8 or 12 pads, with a library of progressions to loop underneath whatever you're doing on the other pages.</p>
+<p>The Chords page lays out every diatonic chord of the current key across 8 or 12 pads. Play them live, record your own chord loop, or loop a built-in progression underneath whatever you're doing on the other pages.</p>
 
 <h2>Chord Pads</h2>
 <p>Pads 1–7 are the seven diatonic triads of the current key (I through vii°), coloured by root note. An 8th pad repeats the tonic an octave up. Switch to 12-pad mode to add the II–V chords an octave up as well.</p>
 
-<h2>Key</h2>
-<p>Choose any of the 12 keys and Major or Minor — the whole pad grid updates instantly to match.</p>
+<h2>Pad Octave &amp; Loop Octave</h2>
+<ul class="guide">
+  <li><strong>Pad Oct</strong> — shifts the chord pads up or down an octave, instantly, mid-performance</li>
+  <li><strong>Loop Oct</strong> — separately shifts the octave of the Chord Pattern accompaniment (see below), without touching what the pads themselves play</li>
+</ul>
 
-<h2>Chord Progressions</h2>
-<p>A built-in library of progressions you can loop hands-free — Pop/Rock, Blues, 50s/Doo-wop, Jazz, Canon, Country/Folk, Anthem, Modern Pop, Gospel, Soul/R&amp;B in major, plus Rock minor, Classic minor vamp, Cinematic/Epic, Andalusian and Dramatic in minor.</p>
+<h2>Key</h2>
+<p>Choose any of the 12 keys and Major or Minor, or tap Key Up to shift 3 semitones at a time — the whole pad grid updates to match. Key and Major/Minor are shared with Melody Loops: change it from either page and both follow. If a loop is currently playing, the change queues cleanly to the next bar rather than landing mid-phrase.</p>
+
+<h2>Arp</h2>
+<p>Toggles an arpeggiator on the Chord Pattern accompaniment — instead of each chord playing as a block, its notes ripple in sequence.</p>
+
+<h2>Loop Recorder</h2>
+<p>Record your own live chord pad performance — this is a different thing from the Chord Pattern library below: instead of looping a pre-made progression, you're recording exactly what you play. Melody Loops, Chords and Sample Pads all share the same 8 loop slots and the same recording engine, so a chord loop recorded here sits alongside anything recorded on the other two pages, ready to play together.</p>
+<ul class="guide">
+  <li>Tap an empty slot to arm it — recording starts cleanly on the next bar</li>
+  <li>Tap while recording to stop early, or let it fill the full cycle automatically</li>
+  <li>Tap a stopped slot to queue playback — it joins in cleanly on the next bar</li>
+  <li>Tap a playing slot to queue a stop — it finishes the current loop first, never cuts off mid-phrase</li>
+  <li>Hold any slot with something recorded for Re-record, Clear, or its own independent <strong>Volume</strong> slider</li>
+  <li>The <strong>1×/2×</strong> button sets how many bars each new recording captures</li>
+  <li>The master Play/Stop button starts or stops every recorded slot together — across all three pages, since they're the same slots</li>
+</ul>
+<div class="tip"><p>Recorded chord pads use the same tone as Melody Loops' own pads — shape it from the wave icon in the header on either page, it's one shared sound.</p></div>
+
+<h2>Chord Pattern</h2>
+<p>A built-in library of progressions you can loop hands-free, independent of your own recordings — Pop/Rock, Blues, 50s/Doo-wop, Jazz, Canon, Country/Folk, Anthem, Modern Pop, Gospel, Soul/R&amp;B in major, plus Rock minor, Classic minor vamp, Cinematic/Epic, Andalusian and Dramatic in minor. The <strong>Chord Tone</strong> button shapes the sound of this accompaniment specifically, separate from the chord pads' own tone.</p>
 <ul class="guide">
   <li>Pick a progression and tap Play — it loops continuously</li>
   <li>Tap again to stop cleanly at the end of the current bar, never mid-chord</li>
   <li>Tap the BPM number to set the tempo</li>
 </ul>
-<div class="tip"><p>This is a library of ready-made progressions to play along to — recording your own performance is what the Melody Loops page's loop recorder is for.</p></div>
 
 <div class="nav-links"><a href="/pads-lab/melody-loops">← Melody Loops</a><a href="/pads-lab/drums">Drums →</a></div>
 </main>
