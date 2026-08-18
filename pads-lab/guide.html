@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>User Guide – Pads Lab</title>
+  <title>User Guide – Pads Loop Lab</title>
   <style>
 *{margin:0;padding:0;box-sizing:border-box;}
 body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;
@@ -70,11 +70,11 @@ footer a:hover{color:#666;}
 <body>
 <nav>
   <a href="/" class="logo">Data Etude Studios</a>
-  <a href="/pads-lab" class="back">← Pads Lab</a>
+  <a href="/pads-lab" class="back">← Pads Loop Lab</a>
 </nav>
 <hr class="divider">
 <div class="page-header">
-  <div class="eyebrow">Pads Lab</div>
+  <div class="eyebrow">Pads Loop Lab</div>
   <h1>User Guide</h1>
   <p>Everything you need to know</p>
 </div>
@@ -88,6 +88,8 @@ footer a:hover{color:#666;}
   <a href="#settings">⚙️ Settings</a>
 </div>
 
+<div class="highlight"><p>Melody Loops, Chords and Sample Pads all share one recording environment — the same 8 loop slots, the same Save/Library, even the same pad tone. Record a chord loop on the Chords page, switch to Melody Loops, and it's sitting right there ready to play alongside whatever you record next.</p></div>
+
 <div class="section" id="melody">
   <div class="section-head"><span class="icon">🎵</span><h2>Melody Loops</h2></div>
   <p>Chord-tone pads for improvising melodies — tap in time with a chord progression and every pad stays musically in key.</p>
@@ -96,44 +98,63 @@ footer a:hover{color:#666;}
   <h3>Pad Octave &amp; Loop Octave</h3>
   <ul class="guide">
     <li><strong>Pad Oct</strong> — shifts the melody pads up or down an octave, instantly, mid-performance</li>
-    <li><strong>Loop Oct</strong> — separately shifts the octave of whatever's currently recorded in the loop, without touching what the pads themselves play</li>
+    <li><strong>Loop Oct</strong> — separately shifts the octave of the chord progression accompaniment, without touching what the pads themselves play</li>
   </ul>
-  <div class="tip"><p>Keeping these independent means you can record a bass-register loop, then shift the live pads up an octave to play a lead over it — without re-recording anything.</p></div>
+  <div class="tip"><p>Keeping these independent means you can play a bass-register lead over the accompaniment, or shift the accompaniment down a register while your pads stay put — no need to touch both together.</p></div>
   <h3>Chord Pattern</h3>
-  <p>Choose a built-in progression to play underneath your melody — Pop/Rock, Blues, Jazz, Gospel, Soul/R&amp;B and more, in both major and minor. The chords advance automatically in time; your melody pads follow whatever chord is currently playing.</p>
+  <p>Choose a built-in progression to play underneath your melody — Pop/Rock, Blues, Jazz, Gospel, Soul/R&amp;B and more, in both major and minor. The chords advance automatically in time; your melody pads follow whatever chord is currently playing. The <strong>Chord Tone</strong> button shapes the sound of this accompaniment specifically — it's separate from the tone of the pads themselves.</p>
   <h3>Arp</h3>
   <p>Toggles an arpeggiator on the chord accompaniment — instead of the chord playing as a block, its notes ripple in sequence underneath your melody.</p>
   <h3>Key</h3>
-  <p>Tap Key Up to shift everything up 3 semitones. If a loop is playing, the change waits cleanly until the loop finishes before switching — never mid-bar.</p>
+  <p>Tap Key Up to shift everything up 3 semitones, or open the key picker to jump straight to a specific key. Key (and Major/Minor) are shared with the Chords page: change it from either page and both follow. If anything's currently playing, the change queues cleanly to the next bar rather than landing mid-phrase.</p>
   <h3>Loop Recorder</h3>
-  <p>Four independent loop slots let you record melody pad performances and play them back on a seamless cycle.</p>
+  <p>Melody Loops, Chords and Sample Pads all share the same 8 loop slots and the same recording engine — record a melody pad performance here and it sits alongside anything you've recorded on the Chords or Samples pages, ready to play together.</p>
   <ul class="guide">
     <li>Tap an empty slot to arm it — recording starts cleanly on the next bar</li>
     <li>Tap while recording to stop early, or let it fill the full cycle automatically</li>
     <li>Tap a stopped slot to queue playback — it joins in cleanly on the next bar</li>
     <li>Tap a playing slot to queue a stop — it finishes the current loop first, never cuts off mid-phrase</li>
-    <li>Hold a stopped slot for Re-record or Clear</li>
+    <li>Hold any slot with something recorded for Re-record, Clear, or its own independent <strong>Volume</strong> slider</li>
+    <li>The <strong>1×/2×</strong> button sets how many bars each new recording captures</li>
+    <li>The master Play/Stop button starts or stops every recorded slot together, across all three pages</li>
   </ul>
-  <div class="tip"><p>Loops recorded here have nothing to do with Sample Pads' own loop recorder — the two are entirely separate.</p></div>
+  <div class="tip"><p>Because the loop recorder is shared, re-recording a slot from the Chords page changes what plays back here too — they're the same loop, just recorded from wherever's convenient.</p></div>
   <h3>Tone</h3>
-  <p>Tap the wave icon in the header to shape the sound of the melody pads — nine instrument presets (Piano, E.Piano, Cosmic, Synth, Organ, Flute, Sax, Harpsi, Bell) plus full manual control over wave shape, detune, modulation, vibrato, attack, decay, sustain, filter resonance and stereo width.</p>
+  <p>Tap the wave icon in the header to shape the sound of the melody pads — nine instrument presets (Piano, E.Piano, Cosmic, Synth, Organ, Flute, Sax, Harpsi, Bell) plus full manual control over wave shape, detune, modulation, vibrato, attack, decay, sustain, filter resonance and stereo width. This is the same tone the Chords page's own pads use — one shared sound across both.</p>
 </div>
 
 <div class="section" id="chords">
   <div class="section-head"><span class="icon">🎶</span><h2>Chords</h2></div>
-  <p>Every diatonic chord of the current key across 8 or 12 pads, with a library of progressions to loop.</p>
+  <p>Every diatonic chord of the current key across 8 or 12 pads — play them live, record your own chord loop, or loop a built-in progression.</p>
   <h3>Chord Pads</h3>
   <p>Pads 1–7 are the seven diatonic triads of the current key (I through vii°), coloured by root note. An 8th pad repeats the tonic an octave up. Switch to 12-pad mode to add the II–V chords an octave up as well.</p>
+  <h3>Pad Octave &amp; Loop Octave</h3>
+  <ul class="guide">
+    <li><strong>Pad Oct</strong> — shifts the chord pads up or down an octave, instantly, mid-performance</li>
+    <li><strong>Loop Oct</strong> — separately shifts the octave of the Chord Pattern accompaniment, without touching what the pads themselves play</li>
+  </ul>
   <h3>Key</h3>
-  <p>Choose any of the 12 keys and Major or Minor — the whole pad grid updates instantly to match.</p>
-  <h3>Chord Progressions</h3>
-  <p>A built-in library of progressions you can loop hands-free — Pop/Rock, Blues, 50s/Doo-wop, Jazz, Canon, Country/Folk, Anthem, Modern Pop, Gospel, Soul/R&amp;B in major, plus Rock minor, Classic minor vamp, Cinematic/Epic, Andalusian and Dramatic in minor.</p>
+  <p>Choose any of the 12 keys and Major or Minor, or tap Key Up to shift 3 semitones at a time — the whole pad grid updates to match. Key and Major/Minor are shared with Melody Loops: change it from either page and both follow. If a loop is currently playing, the change queues cleanly to the next bar.</p>
+  <h3>Arp</h3>
+  <p>Toggles an arpeggiator on the Chord Pattern accompaniment — instead of each chord playing as a block, its notes ripple in sequence.</p>
+  <h3>Loop Recorder</h3>
+  <p>Record your own live chord pad performance — a different thing from the Chord Pattern library below: instead of looping a pre-made progression, you're recording exactly what you play. This shares the same 8 slots and recording engine as Melody Loops and Sample Pads.</p>
+  <ul class="guide">
+    <li>Tap an empty slot to arm it — recording starts cleanly on the next bar</li>
+    <li>Tap while recording to stop early, or let it fill the full cycle automatically</li>
+    <li>Tap a stopped slot to queue playback, or a playing slot to queue a clean stop</li>
+    <li>Hold any slot with something recorded for Re-record, Clear, or its own independent <strong>Volume</strong> slider</li>
+    <li>The <strong>1×/2×</strong> button sets how many bars each new recording captures</li>
+    <li>The master Play/Stop button starts or stops every recorded slot together, across all three pages</li>
+  </ul>
+  <div class="tip"><p>Recorded chord pads use the same tone as Melody Loops' own pads — shape it from the wave icon in the header on either page, it's one shared sound.</p></div>
+  <h3>Chord Pattern</h3>
+  <p>A built-in library of progressions you can loop hands-free, independent of your own recordings — Pop/Rock, Blues, 50s/Doo-wop, Jazz, Canon, Country/Folk, Anthem, Modern Pop, Gospel, Soul/R&amp;B in major, plus Rock minor, Classic minor vamp, Cinematic/Epic, Andalusian and Dramatic in minor. The <strong>Chord Tone</strong> button shapes this accompaniment specifically, separate from the chord pads' own tone.</p>
   <ul class="guide">
     <li>Pick a progression and tap Play — it loops continuously</li>
     <li>Tap again to stop cleanly at the end of the current bar, never mid-chord</li>
     <li>Tap the BPM number to set the tempo</li>
   </ul>
-  <div class="tip"><p>This is a library of ready-made progressions to play along to — recording your own performance is what Melody Loops' loop recorder is for.</p></div>
 </div>
 
 <div class="section" id="drums">
@@ -159,7 +180,7 @@ footer a:hover{color:#666;}
 
 <div class="section" id="samples">
   <div class="section-head"><span class="icon">🔊</span><h2>Sample Pads</h2></div>
-  <p>Start with a blank grid of 8 or 12 pads. Fill each one with your own recording, an imported audio file, or a sound from the built-in library, then perform and loop with them like any other instrument.</p>
+  <p>Start with a blank grid of 8 or 12 pads. Fill each one with your own recording, an imported audio file, or a sound from the built-in library, then perform and loop with them alongside Melody Loops and Chords.</p>
   <h3>Adding a Sound</h3>
   <p>Hold any empty pad to open Add Sound, with three ways to fill it:</p>
   <ul class="guide">
@@ -173,16 +194,18 @@ footer a:hover{color:#666;}
   <h3>Move</h3>
   <p>Rearrange pads to suit your performance — enable Move, tap a pad to select it, then tap another to swap their positions.</p>
   <h3>Loop Recorder</h3>
-  <p>Eight independent loop slots — twice as many as Melody Loops' four — record your pad taps and play them back on a seamless cycle. A master Play/Stop button starts every recorded slot together, or queues a synchronized stop for everything currently playing.</p>
+  <p>Eight loop slots record your pad taps and play them back on a seamless cycle — the same 8 slots Melody Loops and Chords use too, not a separate set. Record a sample loop here and it plays alongside a chord loop or melody recorded on the other pages, all from the same shared recorder.</p>
   <ul class="guide">
     <li>Tap an empty slot to arm it — recording starts cleanly on the next bar</li>
     <li>Tap a stopped slot to queue playback, or a playing slot to queue a clean stop</li>
-    <li>Hold a stopped slot for Re-record or Clear</li>
+    <li>Hold any slot with something recorded for Re-record, Clear, or its own independent <strong>Volume</strong> slider</li>
     <li>Adjust Cycle length (1× or 2×) to control how many bars each recording captures</li>
+    <li>The master Play/Stop button starts every recorded slot together, or queues a synchronized stop for everything currently playing — across all three pages</li>
   </ul>
   <h3>Saving &amp; Loading Setups</h3>
+  <p>Save and Library cover everything in the shared recording environment at once — every loop across all three pages, every sample pad assignment, the current tone, key and drum pattern.</p>
   <ul class="guide">
-    <li><strong>New</strong> — clears every pad and loop, with a confirmation first</li>
+    <li><strong>New</strong> — clears every pad and loop across all three pages, with a confirmation first</li>
     <li><strong>Save</strong> — stores the current setup under a name; updates it in place next time, or branch off a new version with Save As</li>
     <li><strong>Library</strong> — browse, load, rename, duplicate or delete saved setups, sorted by name or date. Loading a setup asks for confirmation first, since it replaces everything currently on the grid</li>
   </ul>
@@ -213,4 +236,3 @@ footer a:hover{color:#666;}
 <footer><p>© 2026 Data Etude Studios &nbsp;·&nbsp; <a href="/pads-lab/guide">Full Guide</a> &nbsp;·&nbsp; <a href="/privacy">Privacy Policy</a></p></footer>
 </body>
 </html>
- 
