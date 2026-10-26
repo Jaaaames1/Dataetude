@@ -124,17 +124,18 @@ footer a:hover{color:#666;}
   <div class="legend">
     <div class="legend-item"><span class="legend-key">S</span> Semitone — 1 semitone (half step). E.g. E to F.</div>
     <div class="legend-item"><span class="legend-key">T</span> Tone — 2 semitones (whole step). E.g. C to D.</div>
+    <div class="legend-item"><span class="legend-key">m3</span> Minor third — 3 semitones. Used in the pentatonic scales and arpeggios.</div>
     <div class="legend-item"><span class="legend-key">A2</span> Augmented 2nd — 3 semitones. The distinctive &ldquo;exotic&rdquo; leap in Harmonic Minor.</div>
-    <div class="legend-item"><span class="legend-key">W</span> Whole step — same as T, used interchangeably.</div>
-    <div class="legend-item"><span class="legend-key">H</span> Half step — same as S, used interchangeably.</div>
-    <div class="legend-item"><span class="legend-key">A</span> Augmented step — same as A2, the 3-semitone gap.</div>
+    <div class="legend-item"><span class="legend-key">M3</span> Major third — 4 semitones. Used in major arpeggios.</div>
+    <div class="legend-item"><span class="legend-key">P4</span> Perfect fourth — 5 semitones. Completes the octave in arpeggios.</div>
   </div>
-  <p>The numbers shown in the Intervals row on the Info page are the raw semitone counts. T = 2, S = 1, A2 = 3.</p>
+  <p>The Intervals row on the Info page uses exactly these symbols for the current scale, for example T &ndash; T &ndash; S &ndash; T &ndash; T &ndash; T &ndash; S for a major scale.</p>
 </div>
 
 <div class="section" id="keys">
   <h2>The 12 Keys</h2>
   <p>Western music is built on 12 notes, each a semitone apart. Every scale, chord and arpeggio in Piano Scales Lab can be played starting from any of these 12 root notes.</p>
+  <p>Five of the keys sit on black notes, each with two names. The app uses the conventional one for each scale: D&#9837;, E&#9837;, F&#9839;, A&#9837; and B&#9837; for major, and C&#9839;, E&#9837;, F&#9839;, G&#9839; and B&#9837; for minor. So E&#9837; Minor (6 flats) is used rather than D&#9839; Minor (6 sharps), and F&#9839; Major (6 sharps) rather than G&#9837; Major.</p>
   <div class="key-grid">
     <div class="key-pill">C<span>Do</span></div>
     <div class="key-pill">C&#9839;/D&#9837;</div>
@@ -190,29 +191,29 @@ footer a:hover{color:#666;}
   <p>Pentatonic scales use five notes per octave rather than seven. They are widely used in classical exam syllabuses, folk music and pop. Because they avoid the more dissonant intervals, any note in the scale tends to sound good over the corresponding chord.</p>
   <h3>Major Pentatonic</h3>
   <p>The major scale with the 4th and 7th degrees removed. Bright and versatile.</p>
-  <div class="interval-row"><span class="interval">T</span><span class="interval">T</span><span class="interval">A</span><span class="interval">T</span><span class="interval">A</span></div>
+  <div class="interval-row"><span class="interval">T</span><span class="interval">T</span><span class="interval">m3</span><span class="interval">T</span><span class="interval">m3</span></div>
   <h3>Minor Pentatonic</h3>
   <p>The natural minor scale with the 2nd and 6th degrees removed.</p>
-  <div class="interval-row"><span class="interval">A</span><span class="interval">T</span><span class="interval">T</span><span class="interval">A</span><span class="interval">T</span></div>
+  <div class="interval-row"><span class="interval">m3</span><span class="interval">T</span><span class="interval">T</span><span class="interval">m3</span><span class="interval">T</span></div>
   <p>Both pentatonic scales are shown over one octave in the app, following standard ABRSM practice.</p>
-  <div class="tip"><p>The Relative button works for pentatonic scales &mdash; C Major Pentatonic and A Minor Pentatonic share the same five notes.</p></div>
+  <div class="tip"><p>The Relative and Parallel buttons work for pentatonic scales &mdash; C Major Pentatonic and A Minor Pentatonic share the same five notes.</p></div>
 </div>
 
 <div class="section" id="chromatic">
   <h2>Chromatic Scale</h2>
   <p>The chromatic scale includes all 12 semitones within an octave. Every note is a semitone apart. Because it uses every note equally, the chromatic scale has no key signature and no relative or parallel counterpart.</p>
   <p>Interval pattern: all semitones &mdash; S S S S S S S S S S S S</p>
-  <p>Fingering rule: finger 3 on every black key, finger 1 on most white keys, finger 2 used at E&ndash;F and B&ndash;C where two white keys sit adjacent with no black key between them.</p>
+  <p>Fingering rule: finger 3 on every black key and the thumb on white keys. Right hand: finger 2 plays the F after an E and the C after a B, where two white keys sit side by side. Left hand: finger 2 plays E and B. In the app you can play the chromatic scale over one or two octaves.</p>
 </div>
 
 <div class="section" id="arpeggios">
   <h2>Arpeggios</h2>
-  <p>An arpeggio is a chord played one note at a time. The app covers major and minor arpeggios over two octaves.</p>
+  <p>An arpeggio is a chord played one note at a time. The app covers major and minor arpeggios over one or two octaves &mdash; choose with the Octaves switch.</p>
   <p>Major arpeggio intervals (root, major 3rd, perfect 5th):</p>
-  <div class="interval-row"><span class="interval">4</span><span class="interval">3</span><span class="interval">5</span></div>
+  <div class="interval-row"><span class="interval">M3</span><span class="interval">m3</span><span class="interval">P4</span></div>
   <p>Minor arpeggio intervals (root, minor 3rd, perfect 5th):</p>
-  <div class="interval-row"><span class="interval">3</span><span class="interval">4</span><span class="interval">5</span></div>
-  <p>The numbers here are raw semitone counts: 4 = major third, 3 = minor third, 5 = perfect fourth (completing the octave).</p>
+  <div class="interval-row"><span class="interval">m3</span><span class="interval">M3</span><span class="interval">P4</span></div>
+  <p>Each step is the gap to the next chord note: M3 = major third (4 semitones), m3 = minor third (3 semitones), P4 = perfect fourth (5 semitones, back up to the root an octave higher).</p>
 </div>
 
 <div class="section" id="relative">
@@ -221,7 +222,7 @@ footer a:hover{color:#666;}
   <p>A major key and its relative minor share the same notes and key signature. C Major and A Natural Minor are relatives &mdash; both use only the white keys. The relative minor starts on the 6th degree of the major scale (9 semitones up, or 3 semitones down).</p>
   <h3>Parallel keys</h3>
   <p>Parallel keys share the same root note but have different notes. C Major and C Natural Minor are parallel &mdash; both start on C but use different scales.</p>
-  <div class="tip"><p>The Relative and Parallel buttons in the app work for all scale types including pentatonic. They can also be used to queue key changes during playback.</p></div>
+  <div class="tip"><p>The Relative and Parallel buttons in the app work for every scale type except Chromatic, including pentatonic. They can also be used to queue key changes during playback.</p></div>
 </div>
 
 <div class="section" id="key-signatures">
@@ -255,13 +256,16 @@ footer a:hover{color:#666;}
   <tr><td>5th</td><td>V</td><td>Major</td></tr>
   <tr><td>6th</td><td>vi</td><td>Minor</td></tr>
   <tr><td>7th</td><td>vii&#176;</td><td>Diminished</td></tr></table>
+  <p>In a natural minor key the triads are i, ii&#176;, III, iv, v, VI and VII: minor, diminished, major, minor, minor, major, major.</p>
   <h3>Seventh Chords</h3>
-  <p>Seventh chords add a fourth note a 7th interval above the root. The app includes four types:</p>
+  <p>Seventh chords add a fourth note a 7th interval above the root. The app includes five kinds:</p>
   <table><tr><th>Type</th><th>Symbol</th><th>Intervals</th><th>Character</th></tr>
   <tr><td>Major 7th</td><td>maj7</td><td>4 + 3 + 4</td><td>Warm, jazzy</td></tr>
   <tr><td>Dominant 7th</td><td>7</td><td>4 + 3 + 3</td><td>Bluesy, tense</td></tr>
   <tr><td>Minor 7th</td><td>m7</td><td>3 + 4 + 3</td><td>Mellow, soulful</td></tr>
+  <tr><td>Half-diminished 7th</td><td>&#248;7</td><td>3 + 3 + 4</td><td>Smooth, wistful</td></tr>
   <tr><td>Diminished 7th</td><td>&#176;7</td><td>3 + 3 + 3</td><td>Dark, dramatic</td></tr></table>
+  <p>In a major key the seventh chord on the 7th degree is half-diminished (vii&#248;7), and in a natural minor key the one on the 2nd degree is (ii&#248;7). The fully diminished &#176;7 is available as its own Dim 7 chord type.</p>
   <h3>Inversions</h3>
   <p>An inversion is a chord with a note other than the root at the bottom. Triads have root, 1st and 2nd inversions. Seventh chords have root, 1st, 2nd and 3rd inversions.</p>
 </div>

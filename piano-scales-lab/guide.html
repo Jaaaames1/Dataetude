@@ -102,19 +102,26 @@ footer a:hover{color:#666;}
   <div class="section-head"><span class="icon">🎹</span><h2>Scales</h2></div>
   <p>The Scales page shows fingering for every scale and arpeggio in all 12 keys, with interactive piano keyboards for both hands.</p>
   <h3>Choosing a Scale</h3>
-  <p>Tap any scale type at the top — Major, Nat Min, Harm, Melodic, Maj Arp, Min Arp, Maj Pent, Min Pent or Chromatic. Then tap a key from the grid to select your root note.</p>
+  <p>Tap any scale type at the top — Major, Nat Min, Harm Min, Melodic, Maj Arp, Min Arp, Maj Pent, Min Pent or Chromatic. Then tap a key from the grid to select your root note.</p>
   <h3>Scale Types</h3>
   <ul class="guide">
     <li><strong>Major</strong> — standard major scale</li>
     <li><strong>Nat Min</strong> — natural minor scale</li>
-    <li><strong>Harm</strong> — harmonic minor, raised 7th</li>
-    <li><strong>Melodic</strong> — melodic minor, separate ascending and descending views</li>
-    <li><strong>Maj Arp</strong> — major arpeggio over 2 octaves</li>
-    <li><strong>Min Arp</strong> — minor arpeggio over 2 octaves</li>
-    <li><strong>Maj Pent</strong> — major pentatonic, five notes per octave</li>
-    <li><strong>Min Pent</strong> — minor pentatonic, five notes per octave</li>
-    <li><strong>Chromatic</strong> — all 12 semitones over 2 octaves</li>
+    <li><strong>Harm Min</strong> — harmonic minor, raised 7th</li>
+    <li><strong>Melodic</strong> — melodic minor, with separate ascending and descending views (use the Asc and Desc buttons)</li>
+    <li><strong>Maj Arp</strong> — major arpeggio over 1 or 2 octaves</li>
+    <li><strong>Min Arp</strong> — minor arpeggio over 1 or 2 octaves</li>
+    <li><strong>Maj Pent</strong> — major pentatonic, five notes over 1 octave</li>
+    <li><strong>Min Pent</strong> — minor pentatonic, five notes over 1 octave</li>
+    <li><strong>Chromatic</strong> — all 12 semitones, over 1 or 2 octaves</li>
   </ul>
+  <h3>Octaves</h3>
+  <p>The Octaves switch sits between Contrary Motion and Scroll Sync. Tap it to choose <strong>1</strong> or <strong>2</strong> octaves — it glows green when set to 2. It works for Major, Nat Min, Harm Min, Melodic, Maj Arp, Min Arp and Chromatic. Pentatonic scales are always one octave, so the switch is hidden for them.</p>
+  <p>One-octave mode plays and shows the scale up and back down over a single octave, with the standard fingering for that shorter run. If you change Octaves while a scale is looping, the change waits until the end of the current scale and the switch shows a subtle amber waiting state — exactly like a key change. Your choice is remembered between sessions.</p>
+  <h3>Contrary Motion</h3>
+  <p>Switch on Contrary Motion to play the hands in opposite directions: both hands start on the same note and move away from each other — the right hand goes up while the left hand goes down. Switch it off for normal parallel motion. Changing it mid-loop waits for the end of the scale.</p>
+  <h3>Key Names and Spellings</h3>
+  <p>Each key button shows both names of a black-key pair, for example C&#9839;/D&#9837;, and the app names and spells every scale the way it is normally written. Major scales use D&#9837;, E&#9837;, F&#9839;, A&#9837; and B&#9837;; minor scales use C&#9839;, E&#9837;, F&#9839;, G&#9839; and B&#9837;. So the key shown as D&#9839;/E&#9837; is named E&#9837; Major or E&#9837; Minor, and A&#9839;/B&#9837; becomes B&#9837; Major or B&#9837; Minor. Notes are always spelled with each letter name once (G&#9839; harmonic minor correctly contains F double-sharp). The chromatic scale uses flats for F and the flat keys, and sharps for the others.</p>
   <h3>Relative and Parallel</h3>
   <p>The Relative and Parallel buttons jump you to the related scale instantly. From C Major, Relative takes you to A Natural Minor. Parallel takes you to C Minor. Not available for Chromatic.</p>
   <h3>Key Up</h3>
@@ -122,8 +129,9 @@ footer a:hover{color:#666;}
   <h3>Changing Key While Looping</h3>
   <ul class="guide">
     <li>Tap any <strong>tonic key</strong> — queues a key change at the end of the current run. The tapped key glows amber while waiting.</li>
-    <li>Tap a <strong>scale type</strong> (Major, Harm etc) — marks it as pending. Then tap a tonic key to queue that combination.</li>
+    <li>Tap a <strong>scale type</strong> (Major, Harm Min etc) — marks it as pending. Then tap a tonic key to queue that combination.</li>
     <li>Tap <strong>Relative or Parallel</strong> — queues the related scale change the same way.</li>
+    <li>Switch <strong>Octaves</strong> or <strong>Contrary Motion</strong> — also waits for the end of the scale, with the switch showing a subtle waiting state.</li>
   </ul>
   <div class="tip"><p>The currently playing key stays highlighted in its colour. The newly queued key glows dimly amber so you can see both at once.</p></div>
   <h3>Playback</h3>
@@ -132,24 +140,27 @@ footer a:hover{color:#666;}
     <li>Press the loop button to keep repeating</li>
     <li>Choose Both, RH or LH to hear one or both hands</li>
     <li>Tap the BPM number to type a specific tempo</li>
-    <li>Scroll Sync keeps both keyboards scrolled together</li>
+    <li>Press the −10, −5, +5, +10 buttons to nudge the tempo</li>
+    <li>Scroll Sync — Bound keeps both keyboards scrolled together; tap to switch to Unbound to scroll them independently</li>
   </ul>
   <div class="tip"><p>Tap any highlighted key on the keyboard to hear that individual note.</p></div>
   <h3>Tempo Trainer</h3>
   <p>Automatically increases the tempo as you practise.</p>
   <ul class="guide">
-    <li><strong>Start BPM</strong> — tempo training begins here. Hold + or − to scroll quickly.</li>
-    <li><strong>Target BPM</strong> — training ends when this is reached</li>
-    <li><strong>Increment BPM</strong> — how much the tempo increases each step</li>
-    <li><strong>Every N loops</strong> — how many loops to complete at each tempo before stepping up</li>
+    <li><strong>Start BPM</strong> — tempo training begins here (40–280). Hold + or − to scroll quickly.</li>
+    <li><strong>Target BPM</strong> — training ends when this is reached (up to 300)</li>
+    <li><strong>Increment BPM</strong> — how much the tempo increases each step (5–20)</li>
+    <li><strong>Every N loops</strong> — how many loops to complete at each tempo before stepping up (1–8)</li>
   </ul>
   <p>Press Start Trainer to begin. Once the target is reached, Goal reached! flashes and the scale keeps looping freely until you stop.</p>
   <h4>Metro Only</h4>
-  <p>Silences the piano and plays only metronome clicks. The keys still flash showing which note to play.</p>
+  <p>Metro only (silent keys) silences the piano and plays only metronome clicks. The keys still flash showing which note to play.</p>
   <h4>Count-in</h4>
-  <p>Adds a metronome count before the scale starts. Choose 1, 2 or 3 bars. Go! flashes green when the scale begins.</p>
+  <p>Adds a metronome count before the scale starts. Choose 1, 2 or 3 bars. Go! flashes green when the scale begins. To get a count-in on ordinary playback too, turn on Count-in before playback in Settings.</p>
   <h4>Training Info</h4>
   <p>A slim bar below the keyboards shows BPM, Time countdown, and Next Scale during a session — select any combination.</p>
+  <h4>Saving Trainer Presets</h4>
+  <p>Tap <strong>Save Preset</strong> at the bottom of the Tempo Trainer panel to store your current set-up under a name — start, target and increment BPM, loops per step, Metro only, count-in, Training Info choices and any Scale Cycle keys and options. Tap <strong>Load Preset</strong> to bring a saved set-up back with one tap, or to delete ones you no longer need.</p>
   <h3>Scale Cycle</h3>
   <p>Extends the Tempo Trainer to rotate through multiple keys automatically at each tempo step.</p>
   <h4>Setting up Scale Cycle</h4>
@@ -173,12 +184,29 @@ footer a:hover{color:#666;}
 <div class="section" id="chords">
   <div class="section-head"><span class="icon">🎵</span><h2>Chords</h2></div>
   <p>The Chords page shows every chord in the current key on a scrollable piano keyboard, with a library of progressions to loop.</p>
+  <h3>Chord Type</h3>
+  <ul class="guide">
+    <li><strong>Major</strong> — the seven diatonic triads of the major scale (I ii iii IV V vi vii&#176;)</li>
+    <li><strong>Nat Min</strong> — the seven diatonic triads of the natural minor scale (i ii&#176; III iv v VI VII)</li>
+    <li><strong>Maj 7</strong> — seventh chords built on the major scale (Imaj7 iim7 iiim7 IVmaj7 V7 vim7 vii&#248;7)</li>
+    <li><strong>Min 7</strong> — seventh chords built on the natural minor scale (im7 ii&#248;7 IIImaj7 ivm7 vm7 VImaj7 VII7)</li>
+    <li><strong>Dom 7</strong> — dominant seventh chord on every degree</li>
+    <li><strong>Dim 7</strong> — diminished seventh chord on every degree</li>
+  </ul>
+  <p>Dom 7 and Dim 7 do not show chord progressions — they are reference modes for exploring those chord types across all degrees.</p>
+  <p><strong>&#248;7</strong> is a half-diminished seventh (also written m7&#9837;5): a diminished triad with a minor seventh on top. It is the correct seventh chord on the 7th degree of the major scale and the 2nd degree of the minor scale. Chord notes are spelled for the key, so in B&#9837; major you will see B&#9837; D F, never A&#9839;.</p>
+  <h3>Chord Display and Inversions</h3>
+  <p>Tap any chord row to highlight its notes on the keyboard and hear it. Each chord shows its name, Roman numeral and note names, with inversion buttons — Root, 1st and 2nd for triads, plus 3rd for seventh chords.</p>
   <h3>Chord Progressions</h3>
+  <p>Below the chord list is a library of common progressions — Pop, Blues, Jazz, Classical and more — for Major, Nat Min, Maj 7 and Min 7. Minor modes get their own minor-key progressions.</p>
   <ul class="guide">
     <li>▶ plays the progression once</li>
     <li>↻ loops continuously — press again to play out the current bar then stop</li>
     <li>Tap the BPM number to set your tempo</li>
+    <li>Tap an individual chord to preview it</li>
   </ul>
+  <h3>Custom Patterns</h3>
+  <p>Tap <strong>+ Create Custom Pattern</strong> under the progression list to build your own. Give it a name, choose the number of chords, then tap a box and tap a chord from the current key to fill it. Press <strong>Demo</strong> to hear it, then <strong>Save</strong>. Your patterns appear in the list with the built-in ones, can be edited or deleted later, and are kept between sessions.</p>
   <h3>Key Changes While Looping</h3>
   <p>Press Key +3, Relative or Parallel to queue a key change. It fires at the end of the current loop with no interruption.</p>
   <div class="tip"><p>Relative cycles between a major key and its relative minor — great for practising both together in one session.</p></div>
@@ -190,6 +218,7 @@ footer a:hover{color:#666;}
   <ul class="guide">
     <li><strong>Tap a key</strong> — cycles the finger number 1 through 5</li>
     <li><strong>Input boxes</strong> — type directly into the numbered boxes below each keyboard</li>
+    <li>Choose the scale and key with the same buttons as the Scales page — the editor shows the same selection</li>
   </ul>
   <h3>Saving and Restoring</h3>
   <ul class="guide">
@@ -197,7 +226,7 @@ footer a:hover{color:#666;}
     <li>Restore this scale — resets just the current scale to its built-in default</li>
     <li>Restore ALL scales — resets every scale back to defaults</li>
   </ul>
-  <div class="tip"><p>For Melodic Minor, switch between ASC and DESC on the Scales page to edit ascending and descending fingerings separately.</p></div>
+  <div class="tip"><p>For Melodic Minor, switch between Asc and Desc to edit ascending and descending fingerings separately.</p></div>
 </div>
 <div class="section" id="metro">
   <div class="section-head"><span class="icon">🥁</span><h2>Metronome</h2></div>
@@ -209,7 +238,9 @@ footer a:hover{color:#666;}
     <li>Tap Tempo — tap repeatedly in time to set tempo by feel</li>
   </ul>
   <h3>Time Signatures</h3>
-  <p>Choose from 2/4, 3/4, 4/4 or 6/8. Or tap Custom to enter any time signature you need.</p>
+  <p>Choose from 2/4, 3/4, 4/4 or 6/8. Or tap Custom to enter any time signature you need. Turn on <strong>No Accent</strong> if you want every click to sound the same, with no emphasis on beat 1.</p>
+  <h3>Keep Playing</h3>
+  <p>The <strong>Keep Playing</strong> switch on the Metro page lets the metronome carry on while you move to another page. To keep it going with the screen off, turn on Keep playing in background in Settings.</p>
   <h3>Click Sounds</h3>
   <ul class="guide">
     <li><strong>Default</strong> — standard metronome click</li>
@@ -236,9 +267,12 @@ footer a:hover{color:#666;}
     <li><strong>Decay</strong> — how long the note rings after the peak</li>
     <li><strong>Modulation</strong> — vibrato depth combined with reverb</li>
     <li><strong>Detune</strong> — chorus effect via a second detuned voice</li>
+    <li><strong>Vibrato Rate</strong> — speed of the vibrato in Hz</li>
+    <li><strong>Sustain</strong> — from piano-style (fades away) to organ-style (holds)</li>
     <li><strong>Filter Q</strong> — resonance, from warm and flat to wailing</li>
     <li><strong>Stereo Width</strong> — spreads sound across the stereo field</li>
   </ul>
+  <p>Press Test to hear a C4 note while you adjust, and Restore Defaults to return to the Piano preset.</p>
 </div>
 <div class="section" id="settings">
   <div class="section-head"><span class="icon">⚙️</span><h2>Settings</h2></div>
@@ -252,14 +286,17 @@ footer a:hover{color:#666;}
   </ul>
   <h3>Display</h3>
   <ul class="guide">
+    <li><strong>Key Highlight Palette</strong> — six colour pairs for the left and right hand notes on the keyboards</li>
+    <li><strong>Key press vibration</strong> — a small vibration when you tap a key (off by default)</li>
     <li><strong>Show note names below keys</strong> — toggles C D E F G A B labels beneath every piano key</li>
     <li><strong>Dark piano keys</strong> — switches to a dark keyboard colour scheme</li>
     <li><strong>Bluetooth delay</strong> — delays keyboard visuals to compensate for Bluetooth latency. Start at 150ms and adjust until visuals sync with what you hear.</li>
   </ul>
   <h3>Playback</h3>
   <ul class="guide">
-    <li><strong>Keep playing when screen locks</strong> — keeps the metronome or drum loops running with the screen off</li>
-    <li><strong>Keep screen on during training</strong> — prevents screen sleep during a Tempo Trainer session</li>
+    <li><strong>Keep playing in background</strong> — if on, playback continues when the screen locks or you switch apps</li>
+    <li><strong>Keep screen on during training</strong> — the screen stays awake automatically during a Tempo Trainer session. The sun button in the top right turns screen-on on or off by hand at any time.</li>
+    <li><strong>Count-in before playback</strong> — clicks in a bar (or more) at the current BPM before a scale starts. Choose 1, 2 or 3 bars with Count-in bars.</li>
   </ul>
   <h3>Defaults</h3>
   <ul class="guide">
