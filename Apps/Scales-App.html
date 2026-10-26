@@ -2901,6 +2901,7 @@ function trTick(){
     if(TR.pendingOctaves!=null){S.octaves=TR.pendingOctaves;persist();}
     TR.pendingOctaves=null;TR._octOnly=false;TR._cfgApplied=true;
     if(UI.updateOctBtnUI)UI.updateOctBtnUI();
+    if(UI.stUpdateDuration)UI.stUpdateDuration();
     if(UI.updateContraryToggleUI)UI.updateContraryToggleUI();
     if(UI.contraryInp)UI.contraryInp.checked=S.lhContrary;
     var sem2=(TONICS.find(function(r){return r.label===S.tonic;})||TONICS[0]).semitone;
@@ -3049,6 +3050,7 @@ function trTick(){
     if(TR.pendingOctaves!=null){S.octaves=TR.pendingOctaves;persist();}
     TR.pendingOctaves=null;TR._octOnly=false;TR._cfgApplied=true;
     if(UI.updateOctBtnUI)UI.updateOctBtnUI();
+    if(UI.stUpdateDuration)UI.stUpdateDuration();
           if(UI.updateContraryToggleUI)UI.updateContraryToggleUI();
           if(UI.contraryInp)UI.contraryInp.checked=S.lhContrary;
           var sem2=(TONICS.find(function(r){return r.label===S.tonic;})||TONICS[0]).semitone;
@@ -6274,7 +6276,9 @@ function buildUI(){
 
   function stUpdateDuration(){
     // Scale type the session will actually play (Scale Cycle switches to its own type)
-    var estType=(ST.cycleMode&&ST.cycleKeys&&ST.cycleKeys.length>0)?ST.cycleScaleType:S.scaleType;
+    // While a type change is queued, S.scaleType already holds the target — the estimate must describe what is actually playing
+    var _playSt=(TR.active&&TR.loop&&TR.keyChangeQueued&&TR.keyChangeOrigScaleType)?TR.keyChangeOrigScaleType:S.scaleType;
+    var estType=(ST.cycleMode&&ST.cycleKeys&&ST.cycleKeys.length>0)?ST.cycleScaleType:_playSt;
     var start=ST.startBpm,target=ST.targetBpm,incr=ST.increment,loops=ST.everyLoops;
     if(start>=target||incr<=0){stDurationEl.textContent='';return;}
 
