@@ -552,6 +552,45 @@ function pcName(pc,tonicSemitone,isMinor){
   var table=isMinor?PREFERS_FLATS_MINOR:PREFERS_FLATS_MAJOR;
   return (table[tonicSemitone]?PC_FLAT:PC)[pc];
 }
+// ── KEY NAMING & NOTE SPELLING ────────────────────────────────────────────────
+// One place decides how a key is named and how its notes are spelt.
+// Major-type keys (Major, Major Arpeggio, Major Pentatonic, Chromatic) use
+// the usual major names; minor-type keys use the usual minor names, so
+// semitone 3 is E\u266d minor (6 flats), not D\u266f minor (which has 9 sharps).
+var KEY_MAJ=['C','D'+FL,'D','E'+FL,'E','F','F'+SH,'G','A'+FL,'A','B'+FL,'B'];
+var KEY_MIN=['C','C'+SH,'D','E'+FL,'E','F','F'+SH,'G','G'+SH,'A','B'+FL,'B'];
+function isMinorKeyType(st){return st.indexOf('Minor')>=0||st==='min7'||st==='dim7';}
+function keyRoot(sem,st){return (isMinorKeyType(st)?KEY_MIN:KEY_MAJ)[((sem%12)+12)%12];}
+function findTonic(n){
+  return TONICS.find(function(r){return r.label===n||r.label.split('/').indexOf(n)>=0;});
+}
+// Letter offsets (from the root letter) for each scale type
+var LETTER_OFFS={
+  'Major Arpeggio':[0,2,4],'Minor Arpeggio':[0,2,4],
+  'Major Pentatonic':[0,1,2,4,5],'Minor Pentatonic':[0,2,3,4,6]
+};
+function spellScale(sem,st,dir){
+  sem=((sem%12)+12)%12;
+  var LS={C:0,D:2,E:4,F:5,G:7,A:9,B:11},L=['C','D','E','F','G','A','B'];
+  var root=keyRoot(sem,st);
+  if(st==='Chromatic'){
+    var tbl=(root.indexOf(FL)>=0||sem===5)?PC_FLAT:PC,out=[]; // F chromatic uses flats (B♭, as in F major); F♯ keeps sharps
+    for(var c=0;c<12;c++)out.push(tbl[(sem+c)%12]);
+    return out;
+  }
+  var ivk=st==='Melodic Minor'?(dir==='DESC'?'Melodic Minor Desc':'Melodic Minor Asc'):st;
+  var iv=IV[ivk]||IV['Major'];
+  var offs=LETTER_OFFS[st];
+  var n=offs?offs.length:7;
+  var ri=L.indexOf(root.charAt(0)),cs=sem,res=[root];
+  for(var i=1;i<n;i++){
+    cs=(cs+iv[i-1])%12;
+    var nl=L[(ri+(offs?offs[i]:i))%7];
+    var d=(cs-LS[nl]+12)%12;
+    res.push(nl+(d===0?'':d===1?SH:d===11?FL:d===2?SH+SH:d===10?FL+FL:'?'));
+  }
+  return res;
+}
 var IV={'Major':[2,2,1,2,2,2,1],'Natural Minor':[2,1,2,2,1,2,2],'Harmonic Minor':[2,1,2,2,1,3,1],'Melodic Minor Asc':[2,1,2,2,2,2,1],'Melodic Minor Desc':[2,1,2,2,1,2,2],'Major Arpeggio':[4,3,5],'Minor Arpeggio':[3,4,5],'Chromatic':[1,1,1,1,1,1,1,1,1,1,1,1],'Major Pentatonic':[2,2,3,2,3],'Minor Pentatonic':[3,2,2,3,2]};
 
 // ── DEFAULT FINGERINGS ────────────────────────────────────────────────────────
@@ -600,23 +639,23 @@ var DEF={
 DEF['A'+SH+'/B'+FL+' Harmonic Minor'] = {lh:[2,1,3,2,1,4,3,2,1,3,2,1,4,3,2],rh:[4,1,2,3,1,2,3,4,1,2,3,1,2,3,4]};
 DEF['A'+SH+'/B'+FL+' Natural Minor'] = {lh:[2,1,3,2,1,4,3,2,1,3,2,1,4,3,2],rh:[2,1,2,3,1,2,3,4,1,2,3,1,2,3,4]};
 DEF['A'+SH+'/B'+FL+' Melodic Minor (Asc)'] = {lh:[2,1,3,2,1,4,3,2,1,3,2,1,4,3,2],rh:[2,1,2,3,1,2,3,4,1,2,3,1,2,3,4]};
-DEF['A'+SH+'/B'+FL+' Minor Arpeggio (2 oct.)'] = {lh:[3,2,1,3,2,1,3],rh:[3,2,2,1,3,2,1]};
+DEF['A'+SH+'/B'+FL+' Minor Arpeggio (2 oct.)'] = {lh:[3,2,1,3,2,1,3],rh:[2,3,1,2,3,1,2]};
 DEF['A'+FL+' Major'] = {lh:[3,2,1,4,3,2,1,3,2,1,4,3,2,1,2],rh:[2,3,1,2,3,1,2,3,4,1,2,3,1,2,3]};
-DEF['A'+FL+' Major Arpeggio (2 oct.)'] = {lh:[4,2,1,4,2,1,4],rh:[2,1,2,4,1,2,4]};
+DEF['A'+FL+' Major Arpeggio (2 oct.)'] = {lh:[2,1,4,2,1,4,2],rh:[2,1,2,4,1,2,4]};
 DEF['B'+FL+' Major'] = {lh:[3,2,1,4,3,2,1,3,2,1,4,3,2,1,2],rh:[2,1,2,3,1,2,3,4,1,2,3,1,2,3,4]};
-DEF['B'+FL+' Major Arpeggio (2 oct.)'] = {lh:[4,2,1,4,2,1,4],rh:[2,1,2,4,1,2,4]};
-DEF['C'+SH+'/D'+FL+' Major'] = {lh:[3,2,1,4,3,2,1,3,2,1,4,3,2,1,2],rh:[2,3,1,2,3,4,1,2,3,1,2,2,4,1,2]};
-DEF['C'+SH+' Major Arpeggio (2 oct.)'] = {lh:[4,2,1,4,2,1,4],rh:[2,1,2,4,1,2,4]};
+DEF['B'+FL+' Major Arpeggio (2 oct.)'] = {lh:[3,2,1,3,2,1,3],rh:[2,1,2,4,1,2,4]};
+DEF['C'+SH+'/D'+FL+' Major'] = {lh:[3,2,1,4,3,2,1,3,2,1,4,3,2,1,2],rh:[2,3,1,2,3,4,1,2,3,1,2,3,4,1,2]};
+DEF['C'+SH+' Major Arpeggio (2 oct.)'] = {lh:[2,1,4,2,1,4,2],rh:[2,1,2,4,1,2,4]};
 DEF['C'+SH+' Harmonic Minor'] = {lh:[3,2,1,4,3,2,1,3,2,1,4,3,2,1,2],rh:[2,3,1,2,3,1,2,3,4,1,2,3,1,2,3]};
 DEF['C'+SH+' Natural Minor'] = {lh:[3,2,1,4,3,2,1,3,2,1,4,3,2,1,2],rh:[2,3,1,2,3,1,2,3,4,1,2,3,1,2,3]};
 DEF['C'+SH+' Melodic Minor (Asc)'] = {lh:[3,2,1,4,3,2,1,3,2,1,4,3,2,1,2],rh:[2,3,1,2,3,4,1,2,3,1,2,3,4,1,3]};
-DEF['C'+SH+' Minor Arpeggio (2 oct.)'] = {lh:[4,2,1,4,2,1,4],rh:[2,1,2,4,1,2,4]};
+DEF['C'+SH+' Minor Arpeggio (2 oct.)'] = {lh:[2,1,4,2,1,4,2],rh:[2,1,2,4,1,2,4]};
 DEF['D'+SH+'/E'+FL+' Harmonic Minor'] = {lh:[2,1,4,3,2,1,3,2,1,4,3,2,1,3,2],rh:[3,1,2,3,4,1,2,3,1,2,3,4,1,2,3]};
 DEF['D'+SH+'/E'+FL+' Natural Minor'] = {lh:[2,1,4,3,2,1,3,2,1,4,3,2,1,3,2],rh:[2,1,2,3,4,1,2,3,1,2,3,4,1,2,3]};
 DEF['D'+SH+'/E'+FL+' Melodic Minor (Asc)'] = {lh:[2,1,4,3,2,1,3,2,1,4,3,2,1,3,2],rh:[2,1,2,3,4,1,2,3,1,2,3,4,1,2,3]};
-DEF['D'+SH+'/E'+FL+' Minor Arpeggio (2 oct.)'] = {lh:[4,2,1,4,2,1,4],rh:[2,1,2,4,1,2,4]};
+DEF['D'+SH+'/E'+FL+' Minor Arpeggio (2 oct.)'] = {lh:[5,3,2,1,3,2,1],rh:[1,2,3,1,2,3,5]};
 DEF['E'+FL+' Major'] = {lh:[3,2,1,4,3,2,1,3,2,1,4,3,2,1,2],rh:[2,1,2,3,4,1,2,3,1,2,3,4,1,2,3]};
-DEF['E'+FL+' Major Arpeggio (2 oct.)'] = {lh:[4,2,1,4,2,1,4],rh:[2,1,2,4,1,2,4]};
+DEF['E'+FL+' Major Arpeggio (2 oct.)'] = {lh:[2,1,4,2,1,4,2],rh:[2,1,2,4,1,2,4]};
 DEF['F Harmonic Minor'] = {lh:[5,4,3,2,1,3,2,1,4,3,2,1,3,2,1],rh:[1,2,3,4,1,2,3,1,2,3,4,1,2,3,4]};
 DEF['F Natural Minor'] = {lh:[5,4,3,2,1,3,2,1,4,3,2,1,3,2,1],rh:[1,2,3,4,1,2,3,1,2,3,4,1,2,3,4]};
 DEF['F'+SH+'/G'+FL+' Harmonic Minor'] = {lh:[4,3,2,1,3,2,1,4,3,2,1,3,2,1,2],rh:[2,3,1,2,3,1,2,3,4,1,2,3,1,2,3]};
@@ -624,17 +663,18 @@ DEF['F'+SH+'/G'+FL+' Major'] = {lh:[4,3,2,1,3,2,1,4,3,2,1,3,2,1,2],rh:[2,3,4,1,2
 DEF['F'+SH+' Major Arpeggio (2 oct.)'] = {lh:[5,3,2,1,3,2,1],rh:[1,2,3,1,2,3,5]};
 DEF['F'+SH+' Natural Minor'] = {lh:[4,3,2,1,3,2,1,4,3,2,1,3,2,1,4],rh:[2,3,1,2,3,1,2,3,4,1,2,3,1,2,3]};
 DEF['F'+SH+' Melodic Minor (Asc)'] = {lh:[4,3,2,1,3,2,1,4,3,2,1,3,2,1,4],rh:[2,3,1,2,3,4,1,2,3,1,2,3,4,1,3]};
-DEF['F'+SH+' Minor Arpeggio (2 oct.)'] = {lh:[3,1,4,2,1,4,2],rh:[2,1,2,4,1,2,4]};
+DEF['F'+SH+' Minor Arpeggio (2 oct.)'] = {lh:[2,1,4,2,1,4,2],rh:[2,1,2,4,1,2,4]};
 DEF['G'+SH+'/A'+FL+' Harmonic Minor'] = {lh:[3,2,1,4,3,2,1,3,2,1,4,3,2,1,2],rh:[2,3,1,2,3,1,2,3,4,1,2,3,1,2,3]};
 DEF['G'+SH+'/A'+FL+' Natural Minor'] = {lh:[3,2,1,3,2,1,4,3,2,1,3,2,1,4,3],rh:[2,3,1,2,3,1,2,3,4,1,2,3,1,2,3]};
 DEF['G'+SH+'/A'+FL+' Melodic Minor (Asc)'] = {lh:[3,2,1,4,3,2,1,3,2,1,4,3,2,1,3],rh:[3,4,1,2,3,1,2,3,4,1,2,3,1,2,3]};
-DEF['G'+SH+' Minor Arpeggio (2 oct.)'] = {lh:[4,2,1,4,2,1,4],rh:[2,1,2,4,1,2,4]};
+DEF['G'+SH+' Minor Arpeggio (2 oct.)'] = {lh:[2,1,4,2,1,4,2],rh:[2,1,2,4,1,2,4]};
 
 // Major Pentatonic fingering (one octave = 6 notes ascending, descending auto-mirrored)
 // Source: pianoscales.org/pentatonic.html
 (function(){
+  // C, A, B and B\u266d corrected against the pianolessonwithwarren.com chart and the pianostreet thread.
   var MPENT_RH=[
-    [1,2,1,2,3,5], // C(0)
+    [1,2,3,1,2,4], // C(0)
     [2,3,1,2,3,4], // C#/Db(1)
     [1,2,3,1,2,4], // D(2)
     [2,1,2,3,1,2], // D#/Eb(3)
@@ -643,9 +683,9 @@ DEF['G'+SH+' Minor Arpeggio (2 oct.)'] = {lh:[4,2,1,4,2,1,4],rh:[2,1,2,4,1,2,4]}
     [1,2,3,1,2,3], // F#/Gb(6)
     [1,2,3,1,2,4], // G(7)
     [2,3,1,2,1,2], // G#/Ab(8)
-    [1,2,3,1,2,1], // A(9)
-    [3,1,2,1,2,3], // A#/Bb(10)
-    [1,2,3,4,5,1], // B(11)
+    [1,2,3,1,2,3], // A(9)
+    [2,1,2,1,2,3], // A#/Bb(10)
+    [1,2,3,1,2,3], // B(11)
   ];
   var MPENT_LH=[
     [3,2,1,3,2,1], // C(0)
@@ -659,7 +699,7 @@ DEF['G'+SH+' Minor Arpeggio (2 oct.)'] = {lh:[4,2,1,4,2,1,4],rh:[2,1,2,4,1,2,4]}
     [3,2,1,2,1,3], // G#/Ab(8)
     [2,1,2,1,3,2], // A(9)
     [3,2,1,2,1,3], // A#/Bb(10)
-    [1,5,4,3,2,1], // B(11)
+    [3,2,1,3,2,1], // B(11)
   ];
   TONICS.forEach(function(t){
     var rh=MPENT_RH[t.semitone],lh=MPENT_LH[t.semitone];
@@ -763,18 +803,41 @@ function fkey(tl,st,dir){
   }
   return p+' '+st;
 }
-function gf(tl,st,dir){var k=fkey(tl,st,dir);return FING[k]||null;}
+// One-octave fingering is derived from the stored two-octave fingering, so
+// edits to the two-octave data carry through. Pentatonics are one octave already.
+//  - 7-note scales: first 8 notes; if the right hand's 8th note is the thumb
+//    (it would cross to start the next octave), use the next finger up instead.
+//  - Arpeggios: first 3 notes + the top-note finger (right hand); first 4 (left hand).
+//  - Chromatic: the two-octave fingering ended early (first 13 notes).
+function oneOctaveFing(e,st){
+  var rh=e.rh,lh=e.lh,r,l;
+  if(st==='Chromatic'){return {rh:rh.slice(0,13),lh:lh.slice(0,13)};}
+  if(st==='Major Arpeggio'||st==='Minor Arpeggio'){
+    return {rh:rh.slice(0,3).concat([rh[6]]),lh:lh.slice(0,4)};
+  }
+  r=rh.slice(0,8);l=lh.slice(0,8);
+  if(r[7]===1)r[7]=Math.min(5,r[6]+1);
+  return {rh:r,lh:l};
+}
+function gf(tl,st,dir){
+  var k=fkey(tl,st,dir),e=FING[k];
+  if(!e)return null;
+  if(S.octaves===1&&st!=='Major Pentatonic'&&st!=='Minor Pentatonic')return oneOctaveFing(e,st);
+  return e;
+}
 function mOf(pc,oc){return(oc+1)*12+pc;}
 function pcOf(m){return m%12;}
 function ocOf(m){return Math.floor(m/12)-1;}
 function isW(m){return[0,2,4,5,7,9,11].indexOf(pcOf(m))>=0;}
 
-function midis(sem,st,dir,rs,re){
+function midis(sem,st,dir,rs,re,oct){
   var key=st;
   if(st==='Melodic Minor')key=dir==='ASC'?'Melodic Minor Asc':'Melodic Minor Desc';
   var iv=IV[key]||IV['Major'];
   var isPent=st==='Major Pentatonic'||st==='Minor Pentatonic';
-  var loops=isPent?1:2;
+  // One octave when the Octaves setting is 1 (pentatonics are always one octave).
+  // The fingering editor passes oct=2 so it always works on the full two-octave data.
+  var loops=isPent?1:((oct===undefined?S.octaves:oct)===1?1:2);
   var span=iv.reduce(function(a,b){return a+b;},0)*loops;
   var so=2;
   for(var o=0;o<=8;o++){var s=mOf(sem,o);if(s>=rs&&s+span<=re){so=o;break;}}
@@ -783,29 +846,22 @@ function midis(sem,st,dir,rs,re){
   return res;
 }
 function relScale(sem,st){
-  if(st==='Major'||st==='Major Arpeggio'){
-    var r=TONICS.find(function(x){return x.semitone===(sem+9)%12;});
-    return r?r.label.split('/')[0]+' Natural Minor':'';
-  }
-  if(st==='Major Pentatonic'){
-    var r=TONICS.find(function(x){return x.semitone===(sem+9)%12;});
-    return r?r.label.split('/')[0]+' Minor Pentatonic':'';
-  }
-  if(st==='Minor Pentatonic'){
-    var r2=TONICS.find(function(x){return x.semitone===(sem+3)%12;});
-    return r2?r2.label.split('/')[0]+' Major Pentatonic':'';
-  }
-  if(st.indexOf('Minor')>=0){
-    var r2=TONICS.find(function(x){return x.semitone===(sem+3)%12;});
-    return r2?r2.label.split('/')[0]+' Major':'';
-  }
-  return '';
+  var map={'Major Arpeggio':[9,'Minor Arpeggio'],'Minor Arpeggio':[3,'Major Arpeggio'],
+    'Major':[9,'Natural Minor'],'Major Pentatonic':[9,'Minor Pentatonic'],
+    'Minor Pentatonic':[3,'Major Pentatonic']};
+  var m=map[st];
+  if(!m&&st.indexOf('Minor')>=0)m=[3,'Major'];
+  if(!m)return '';
+  var ns=(sem+m[0])%12;
+  return keyRoot(ns,m[1])+' '+m[1];
 }
 function parScale(tl,st){
-  var b=tl.split('/')[0];
-  if(st==='Major Pentatonic') return b+' Minor Pentatonic';
-  if(st==='Minor Pentatonic') return b+' Major Pentatonic';
-  return(st==='Major'||st==='Major Arpeggio')?b+' Natural Minor':b+' Major';
+  var r=findTonic(tl)||TONICS[0];
+  var t2={'Major Pentatonic':'Minor Pentatonic','Minor Pentatonic':'Major Pentatonic',
+    'Major Arpeggio':'Minor Arpeggio','Minor Arpeggio':'Major Arpeggio',
+    'Major':'Natural Minor'}[st];
+  if(!t2)t2=st.indexOf('Minor')>=0?'Major':'Natural Minor';
+  return keyRoot(r.semitone,t2)+' '+t2;
 }
 
 // ── CHORD ENGINE ──────────────────────────────────────────────────────────────
@@ -814,8 +870,8 @@ var CHORD_DEFS={
   'Major':        [{q:'maj',n:'I'},{q:'min',n:'ii'},{q:'min',n:'iii'},{q:'maj',n:'IV'},{q:'maj',n:'V'},{q:'min',n:'vi'},{q:'dim',n:'vii\u00B0'}],
   'Natural Minor':[{q:'min',n:'i'},{q:'dim',n:'ii\u00B0'},{q:'maj',n:'III'},{q:'min',n:'iv'},{q:'min',n:'v'},{q:'maj',n:'VI'},{q:'maj',n:'VII'}],
   'Harmonic Minor':[{q:'min',n:'i'},{q:'dim',n:'ii\u00B0'},{q:'aug',n:'III+'},{q:'min',n:'iv'},{q:'maj',n:'V'},{q:'maj',n:'VI'},{q:'dim',n:'vii\u00B0'}],
-  'maj7':         [{q:'maj7',n:'Imaj7'},{q:'min7',n:'iim7'},{q:'min7',n:'iiim7'},{q:'maj7',n:'IVmaj7'},{q:'dom7',n:'V7'},{q:'min7',n:'vim7'},{q:'dim7',n:'vii\u00B07'}],
-  'min7':         [{q:'min7',n:'im7'},{q:'dim7',n:'ii\u00B07'},{q:'maj7',n:'IIImaj7'},{q:'min7',n:'ivm7'},{q:'min7',n:'vm7'},{q:'maj7',n:'VImaj7'},{q:'dom7',n:'VII7'}],
+  'maj7':         [{q:'maj7',n:'Imaj7'},{q:'min7',n:'iim7'},{q:'min7',n:'iiim7'},{q:'maj7',n:'IVmaj7'},{q:'dom7',n:'V7'},{q:'min7',n:'vim7'},{q:'hdim7',n:'vii\u00F87'}],
+  'min7':         [{q:'min7',n:'im7'},{q:'hdim7',n:'ii\u00F87'},{q:'maj7',n:'IIImaj7'},{q:'min7',n:'ivm7'},{q:'min7',n:'vm7'},{q:'maj7',n:'VImaj7'},{q:'dom7',n:'VII7'}],
   'dom7':         [{q:'dom7',n:'I7'},{q:'dom7',n:'II7'},{q:'dom7',n:'III7'},{q:'dom7',n:'IV7'},{q:'dom7',n:'V7'},{q:'dom7',n:'VI7'},{q:'dom7',n:'VII7'}],
   'dim7':         [{q:'dim7',n:'i\u00B07'},{q:'dim7',n:'ii\u00B07'},{q:'dim7',n:'iii\u00B07'},{q:'dim7',n:'iv\u00B07'},{q:'dim7',n:'v\u00B07'},{q:'dim7',n:'vi\u00B07'},{q:'dim7',n:'vii\u00B07'}],
 };
@@ -830,30 +886,58 @@ var CHORD_MODES=[
 ];
 var SCALE_STEPS={'Major':[0,2,4,5,7,9,11],'Natural Minor':[0,2,3,5,7,8,10],'Harmonic Minor':[0,2,3,5,7,8,11],
   'maj7':[0,2,4,5,7,9,11],'min7':[0,2,3,5,7,8,10],'dom7':[0,2,4,5,7,9,11],'dim7':[0,2,3,5,7,8,10]};
-var TRIAD_SEMI={maj:[0,4,7],min:[0,3,7],dim:[0,3,6],aug:[0,4,8],maj7:[0,4,7,11],dom7:[0,4,7,10],min7:[0,3,7,10],dim7:[0,3,6,9]};
-var TRIAD_LABEL={maj:'',min:'m',dim:'\u00B0',aug:'+',maj7:'maj7',dom7:'7',min7:'m7',dim7:'\u00B07'};
+var TRIAD_SEMI={maj:[0,4,7],min:[0,3,7],dim:[0,3,6],aug:[0,4,8],maj7:[0,4,7,11],dom7:[0,4,7,10],min7:[0,3,7,10],dim7:[0,3,6,9],hdim7:[0,3,6,10]};
+var TRIAD_LABEL={maj:'',min:'m',dim:'\u00B0',aug:'+',maj7:'maj7',dom7:'7',min7:'m7',dim7:'\u00B07',hdim7:'\u00F87'};
 
+// Proper letter-based chord spelling: root comes from the spelt scale degree,
+// then every chord tone sits a third above the last (so C\u266d major is
+// C\u266d E\u266d G\u266d, not B E\u266d G\u266d, and E\u266f dim is E\u266f G\u266f B).
+function chordNotes(sem,stType,deg,q){
+  var LS={C:0,D:2,E:4,F:5,G:7,A:9,B:11},L=['C','D','E','F','G','A','B'];
+  var base=isMinorKeyType(stType)?'Natural Minor':'Major';
+  var steps=SCALE_STEPS[stType]||SCALE_STEPS['Major'];
+  var root=spellScale(sem,base)[deg];
+  var ri=L.indexOf(root.charAt(0)),rpc=(sem+steps[deg])%12;
+  var si=TRIAD_SEMI[q]||TRIAD_SEMI['maj'];
+  var out=si.map(function(x,i){
+    if(i===0)return root;
+    var nl=L[(ri+2*i)%7],d=((rpc+x)%12-LS[nl]+12)%12;
+    return nl+(d===0?'':d===1?SH:d===11?FL:d===2?SH+SH:d===10?FL+FL:'?');
+  });
+  // Triple accidentals are never written — respell the whole chord simply
+  // (e.g. C\u266d dim7 becomes B dim7).
+  if(out.join('').indexOf('?')>=0){
+    var tb=root.indexOf(FL)>=0?PC_FLAT:PC;
+    out=si.map(function(x){return tb[(rpc+x)%12];});
+  }
+  return out;
+}
 var PROGRESSIONS={
   'Major':[
     {genre:'Pop / Rock — the most used progression ever',        steps:[0,4,5,3]},
+    {genre:'Modern Pop — IV I vi V, uplifting',                   steps:[3,0,5,4]},
+    {genre:'Modern Pop — vi IV I V, darker feel',            steps:[5,3,0,4]},
     {genre:'Blues / Classical — I IV V turnaround',             steps:[0,3,4,0]},
     {genre:'50s / Doo-wop — timeless classic pop',              steps:[0,5,3,4]},
     {genre:'Jazz — ii V I, the fundamental jazz cadence',       steps:[1,4,0]},
     {genre:'Canon — Pachelbel\'s descending bass line',         steps:[0,4,5,2,3,0,3,4]},
     {genre:'Country / Folk — I IV I V',                         steps:[0,3,0,4]},
     {genre:'Anthem — big build, stadium feel',                  steps:[0,3,5,4]},
-    {genre:'Modern Pop — starts on vi, darker feel',            steps:[5,3,0,4]},
     {genre:'Gospel — I iii IV V',                               steps:[0,2,3,4]},
     {genre:'Soul / R&B — I vi ii V',                            steps:[0,5,1,4]},
+    {genre:'Rock & Roll — I V IV I, vintage vibes',              steps:[0,4,3,0]},
+    {genre:'Soulful — I IV ii V',                                steps:[0,3,1,4]},
+    {genre:'Dreamy — I iii vi IV',                                steps:[0,2,5,3]},
+    {genre:'Reflective — vi I vi V',                              steps:[5,0,5,4]},
   ],
   'Natural Minor':[
-    {genre:'Rock minor — Stairway, Smoke on Water feel',        steps:[0,6,5,6]},
+    {genre:'Rock minor — i VII VI VII',                          steps:[0,6,5,6]},
     {genre:'Classic minor vamp — i iv VII III',                 steps:[0,3,6,2]},
     {genre:'Cinematic / Epic — i VI III VII',                   steps:[0,5,2,6]},
-    {genre:'Andalusian — flamenco descending cadence',          steps:[0,6,5,4]},
+    {genre:'Andalusian-style descent — i VII VI v',           steps:[0,6,5,4]},
     {genre:'Dramatic — i VI VII i, film score tension',         steps:[0,5,6,0]},
-    {genre:'Hotel California — descending minor',               steps:[0,2,6,5]},
-    {genre:'Dark pop — i VII VI VII cycle',                     steps:[0,6,5,6]},
+    {genre:'Descending minor — i III VII VI',                   steps:[0,2,6,5]},
+    {genre:'Minor pop — i VI iv VII',                           steps:[0,5,3,6]},
     {genre:'Ballad — i III VII IV',                             steps:[0,2,6,3]},
     {genre:'Metal build — VI VII i',                            steps:[5,6,0]},
     {genre:'Classical minor — i iv v i, formal cadence',        steps:[0,3,4,0]},
@@ -901,7 +985,7 @@ function setChordCardInv(stType,di,val){
 }
 
 // ── APP STATE ─────────────────────────────────────────────────────────────────
-var S={tonic:'C',scaleType:'Major',melodicDir:'ASC',tab:'scales',search:'',lhContrary:false};
+var S={tonic:'C',scaleType:'Major',melodicDir:'ASC',tab:'scales',search:'',lhContrary:false,octaves:2};
 var CS={deg:0,inv:0,progIdx:-1,progStep:-1,selUid:'Major|0',q:'maj',chordMode:'Major'};
 var KBS={sync:true}; // keyboard scroll sync state
 var LS=41,LE=83,RS=53,RE=95,KS=48,KE=88; // KS/KE = chord keyboard range
@@ -921,26 +1005,30 @@ function curLS(){
   // shift. (Confirmed against standard piano pedagogy: contrary motion is
   // always defined as both hands starting on the same note, with no
   // pentatonic-specific exception — it's this shift that achieves that.)
-  var isPent=S.scaleType==='Major Pentatonic'||S.scaleType==='Minor Pentatonic';
+  var isPent=S.scaleType==='Major Pentatonic'||S.scaleType==='Minor Pentatonic'||S.octaves===1;
   return isPent?LS:LS_C;
 }
 function curLE(){
   if(!S.lhContrary)return LE;
-  var isPent=S.scaleType==='Major Pentatonic'||S.scaleType==='Minor Pentatonic';
+  var isPent=S.scaleType==='Major Pentatonic'||S.scaleType==='Minor Pentatonic'||S.octaves===1;
   return isPent?LE:LE_C;
 }
 function tRow(){return TONICS.find(function(r){return r.label===S.tonic;})||TONICS[0];}
+// Pentatonics are one octave only, so the Octaves button isn't shown for them.
+function syncOctaveBtn(){
+  if(UI.octGroup)UI.octGroup.style.display=(S.scaleType==='Major Pentatonic'||S.scaleType==='Minor Pentatonic')?'none':'flex';
+}
 function sName(){
-  var b=S.tonic.split('/')[0];
+  var b=keyRoot(tRow().semitone,S.scaleType);
   return S.scaleType==='Melodic Minor'?b+' Melodic Minor ('+(S.melodicDir==='ASC'?'Asc':'Desc')+')':b+' '+S.scaleType;
 }
 var FING_VERSION=7;
-function persist(){IDB.save({S:S,FING:FING,fver:FING_VERSION,settings:SETTINGS,synth:SYNTH,customProgs:CUSTOM_PROGS,builtinProgInv:BUILTIN_PROG_INVERSIONS,chordCardInv:CHORD_CARD_INV});}
+function persist(){IDB.save({S:S,FING:FING,fver:FING_VERSION,settings:SETTINGS,synth:SYNTH,customProgs:CUSTOM_PROGS,builtinProgInv:BUILTIN_PROG_INVERSIONS,progOrderV:2,chordCardInv:CHORD_CARD_INV});}
 
 // ── SETTINGS ──────────────────────────────────────────────────────────────────
 // Palettes: [name, lhHighlight, lhDark, rhHighlight, rhDark]
 // Colours inspired by original reference — soft, pastel washes
-var SETTINGS={theme:'dark',palette:0,tempo:120,haptic:false,playOnLock:false,trainerWakeLock:true,defaultMetroSound:'loud',
+var SETTINGS={theme:'dark',palette:0,tempo:120,haptic:false,playOnLock:false,trainerWakeLock:true,defaultMetroSound:'loud',playCountIn:false,playCountInBars:1,
   defaultKey:'C',defaultScaleType:'Major',showNoteNames:true,darkKeys:false,dismissedUpdateVersion:null};
 var PALETTES=[
   // name, LH hi, LH dk, RH hi, RH dk
@@ -2060,7 +2148,7 @@ function refreshTonicUI(){
 
 function buildProgSeqFresh(pg,invs){
   // Rebuild a progression sequence using the current S.tonic — used for key change
-  var stType=S.scaleType||'Major';
+  var stType=chordScaleType();
   var cd=CHORD_DEFS[stType]||CHORD_DEFS['Major'];
   var steps=SCALE_STEPS[stType]||SCALE_STEPS['Major'];
   var sem=tRow().semitone;
@@ -2132,7 +2220,7 @@ function cpTick(){
             var sp=jStr.indexOf(' ');
             if(sp>0){
               var jTonic=jStr.slice(0,sp);
-              var r2=TONICS.find(function(x){return x.label===jTonic||x.label.split('/')[0]===jTonic;});
+              var r2=findTonic(jTonic);
               if(r2)S.tonic=r2.label;
               var jType=STYPES.find(function(x){return jStr.indexOf(x)>=0;});
               if(jType)S.scaleType=jType;
@@ -2198,9 +2286,38 @@ function mtStop(){
   mtSetUI();
 }
 
-function mtClick(level){
+// Scroll-safe press-and-hold for the BPM nudge (+/-) buttons. A press only
+// counts when the finger lifts without having moved (so scrolling the page
+// from on top of a button does nothing); holding still for 400ms starts
+// auto-repeat. tap() = a single press, repeat() = each repeat step.
+function bindNudge(b,tap,repeat){
+  var sx=0,sy=0,down=false,held=false,delay=null,iv=null;
+  function clr(){clearTimeout(delay);clearInterval(iv);delay=null;iv=null;}
+  b.addEventListener('pointerdown',function(e){
+    down=true;held=false;sx=e.clientX;sy=e.clientY;clr();
+    delay=setTimeout(function(){
+      if(!down)return;
+      held=true;tap();
+      iv=setInterval(repeat,80);
+    },400);
+  });
+  b.addEventListener('pointermove',function(e){
+    if(down&&(Math.abs(e.clientX-sx)>8||Math.abs(e.clientY-sy)>8)){down=false;clr();}
+  });
+  b.addEventListener('pointerup',function(){
+    var was=down&&!held;down=false;clr();
+    if(was)tap();
+  });
+  ['pointercancel','pointerleave'].forEach(function(ev){
+    b.addEventListener(ev,function(){down=false;clr();});
+  });
+}
+
+function mtClick(level,when){
   var ac=getAC();if(ac.state==='suspended')ac.resume();
-  var t=ac.currentTime;
+  // 'when' = exact audio-clock time to sound at (used by the count-in so its
+  // clicks are sample-accurate instead of riding on setTimeout jitter)
+  var t=(typeof when==='number'&&when>0)?when:ac.currentTime;
   var accent=level===true&&!MT.noAccent;
   var soft=level==='soft'; // quiet subdivision tick — used by the count-in's
   // half-beat pulse, distinct from (and quieter than) the normal unaccented
@@ -2495,15 +2612,7 @@ function buildMetroPage(){
   [[-10,'\u221210'],[-5,'\u22125'],[+5,'+5'],[+10,'+10']].forEach(function(pair){
     var b=el('button',{cls:'metro-nudge-btn'},pair[1]);
     var step=pair[0];
-    var _delay,_interval;
-    b.addEventListener('pointerdown',function(e){
-      e.preventDefault();
-      syncBpm(snapNudgeBpm(MT.bpm,step,true));
-      _delay=setTimeout(function(){_interval=setInterval(function(){syncBpm(snapNudgeBpm(MT.bpm,step,false));},80);},400);
-    });
-    ['pointerup','pointerleave','pointercancel'].forEach(function(ev){
-      b.addEventListener(ev,function(){clearTimeout(_delay);clearInterval(_interval);});
-    });
+    bindNudge(b,function(){syncBpm(snapNudgeBpm(MT.bpm,step,true));},function(){syncBpm(snapNudgeBpm(MT.bpm,step,false));});
     nudgeRow.appendChild(b);
   });
   bpmSec.appendChild(nudgeRow);
@@ -2598,6 +2707,65 @@ function buildSeq(ms,reversed){
   return up.concat(dn);
 }
 
+// Melodic minor's full up+down note list (ascending form up, descending
+// form back down), shared by playback and the Trainer's duration maths.
+function melodicSeq(asc,desc,reversed){
+  var up=asc.slice();
+  var dn=desc.slice().reverse(); // top→root
+  if(reversed){
+    if(up.length&&up[0]===dn[dn.length-1])up=up.slice(1);
+    return dn.concat(up);
+  }
+  if(dn.length&&dn[0]===up[up.length-1])dn=dn.slice(1); // no repeated top
+  return up.concat(dn); // ends on root — single play lands correctly
+}
+
+// Number of note-gaps in one pass of the given scale type / key, computed
+// fresh from the scale itself. The Tempo Trainer's time estimate and
+// countdown must use this — NOT TR.rhSeq, which only holds whatever scale
+// was last played and so was stale after changing scale type.
+function trSeqLenFor(st,tonicLabel,oct){
+  var row=TONICS.find(function(r){return r.label===tonicLabel;})||tRow();
+  var sem=row.semitone,seq;
+  if(st==='Melodic Minor'){
+    seq=melodicSeq(midis(sem,st,'ASC',RS,RE,oct),midis(sem,st,'DESC',RS,RE,oct));
+  } else {
+    seq=buildSeq(midis(sem,st,S.melodicDir,RS,RE,oct));
+  }
+  return Math.max(1,seq.length-1);
+}
+
+// Total session time (ms) for a trainer schedule [{bpm,key}] — one source of
+// truth for both the "Estimated session" text and the live countdown.
+// cfgAt(i) (optional) gives {st,oct} per schedule entry, for sessions where the
+// scale type or octave count changed part-way through.
+function stTotalMsForSched(sched,st,cfgAt){
+  var cache={};
+  function lenOf(e,i){
+    var k=e.key||S.tonic,c=cfgAt?cfgAt(i):null;
+    var cst=c?c.st:st,coct=c?c.oct:undefined;
+    var ck=k+'|'+cst+'|'+coct;
+    if(cache[ck]===undefined)cache[ck]=trSeqLenFor(cst,k,coct);
+    return cache[ck];
+  }
+  var total=0,debt=0,i;
+  for(i=0;i<sched.length;i++){
+    var L=lenOf(sched[i],i),f=30000/sched[i].bpm;
+    total+=L*f;
+    debt+=L*(f-Math.round(f)); // Math.round() in trTick's setTimeout scheduling
+  }
+  for(i=1;i<sched.length;i++){
+    var prev=sched[i-1],cur=sched[i];
+    // BPM step boundary: one note-gap plays at the old tempo but is counted at the new
+    if(cur.bpm!==prev.bpm)total+=(30000/prev.bpm)-(30000/cur.bpm);
+    if(cur.key&&cur.key!==prev.key&&!ST.cycleSmooth){
+      total+=30000/cur.bpm;                       // extra root note at the new key's BPM
+      if(ST.cyclePause)total+=30000/prev.bpm;     // pause beat at the outgoing BPM
+    }
+  }
+  return total+debt;
+}
+
 function trClearTick(){
   if(TR.tickTimeout)clearTimeout(TR.tickTimeout);
   TR.tickTimeout=null;
@@ -2605,13 +2773,17 @@ function trClearTick(){
   TR.subTickTimeout=null;
   if(TR.flashTimeout)clearTimeout(TR.flashTimeout);
   TR.flashTimeout=null;
+  if(TR.btFlashTimeout)clearTimeout(TR.btFlashTimeout);
+  TR.btFlashTimeout=null;
 }
 
 function trStop(){
   var wasMelodic=TR.melodicAscLen>=0;
   TR.active=false;TR.pos=0;TR.melodicAscLen=-1;TR.displayDir=null;
-  TR.keyChangeQueued=false;TR._targetTonic=null;TR._pendingType=null;TR._pausePending=false;TR._tickExpected=null;TR.keyChangeOrigScaleType=null;TR.pendingContrary=null;
+  TR.keyChangeQueued=false;TR._targetTonic=null;TR._pendingType=null;TR._pausePending=false;TR._tickExpected=null;TR.keyChangeOrigScaleType=null;TR.pendingContrary=null;TR.pendingOctaves=null;TR._octOnly=false;
   if(UI.updateContraryToggleUI)UI.updateContraryToggleUI();
+  if(UI.updateOctBtnUI)UI.updateOctBtnUI();
+  if(_countInCancel)_countInCancel();
   if(_countInOv){_countInOv.remove();_countInOv=null;}
   trClearTick();
   if(TR.kbLH){TR.kbLH.flash(null);TR.kbLH.restoreScale();}
@@ -2667,7 +2839,7 @@ function trTick(){
       var _rm=midis(_sem,'Melodic Minor',dir,RS,RE);
       var _f=gf(S.tonic,'Melodic Minor',dir);
       var _lf=_f?_f.lh:[],_rf=_f?_f.rh:[];
-      var _name=S.tonic.split('/')[0]+' Melodic Minor ('+(dir==='ASC'?'Asc':'Desc')+')';
+      var _name=keyRoot(tRow().semitone,'Melodic Minor')+' Melodic Minor ('+(dir==='ASC'?'Asc':'Desc')+')';
       if(UI.lhKb){UI.lhKb.upd(_lm,_lf,lhHi(),lhDk());UI.lhKb.title.textContent='LEFT HAND \u2014 '+_name;}
       if(UI.rhKb){UI.rhKb.upd(_rm,_rf,rhHi(),rhDk());UI.rhKb.title.textContent='RIGHT HAND \u2014 '+_name;}
       if(UI.melBtns){
@@ -2714,7 +2886,7 @@ function trTick(){
       // title text (built from that same string) looked correct while
       // the keyboard's semitone lookup silently fell back to TONICS[0]
       // (C) and highlighted the wrong scale entirely.
-      var _tgtR=TONICS.find(function(r){return r.label===TR._targetTonic||r.label.split('/')[0]===TR._targetTonic;});
+      var _tgtR=findTonic(TR._targetTonic);
       S.tonic=_tgtR?_tgtR.label:TR._targetTonic;
       TR._targetTonic=null;
     } else {
@@ -2726,6 +2898,9 @@ function trTick(){
     }
     if(TR.pendingContrary!=null){S.lhContrary=TR.pendingContrary;persist();}
     TR.pendingContrary=null;
+    if(TR.pendingOctaves!=null){S.octaves=TR.pendingOctaves;persist();}
+    TR.pendingOctaves=null;TR._octOnly=false;TR._cfgApplied=true;
+    if(UI.updateOctBtnUI)UI.updateOctBtnUI();
     if(UI.updateContraryToggleUI)UI.updateContraryToggleUI();
     if(UI.contraryInp)UI.contraryInp.checked=S.lhContrary;
     var sem2=(TONICS.find(function(r){return r.label===S.tonic;})||TONICS[0]).semitone;
@@ -2748,8 +2923,8 @@ function trTick(){
     if(UI.lhKb&&UI.rebuildLhKeyboardDom&&(UI.lhKb.sM!==curLS()||UI.lhKb.eM!==curLE())){
       UI.rebuildLhKeyboardDom();
     }
-    if(UI.lhKb){UI.lhKb.upd(midis(sem2,S.scaleType,dir3,curLS(),curLE()),f3?f3.lh:[],lhHi(),lhDk());UI.lhKb.title.textContent='LEFT HAND \u2014 '+S.tonic.split('/')[0]+' '+S.scaleType;}
-    if(UI.rhKb){UI.rhKb.upd(midis(sem2,S.scaleType,dir3,RS,RE),f3?f3.rh:[],rhHi(),rhDk());UI.rhKb.title.textContent='RIGHT HAND \u2014 '+S.tonic.split('/')[0]+' '+S.scaleType;}
+    if(UI.lhKb){UI.lhKb.upd(midis(sem2,S.scaleType,dir3,curLS(),curLE()),f3?f3.lh:[],lhHi(),lhDk());UI.lhKb.title.textContent='LEFT HAND \u2014 '+sName();}
+    if(UI.rhKb){UI.rhKb.upd(midis(sem2,S.scaleType,dir3,RS,RE),f3?f3.rh:[],rhHi(),rhDk());UI.rhKb.title.textContent='RIGHT HAND \u2014 '+sName();}
     if(UI.updateScaleKcBtn)UI.updateScaleKcBtn();
     refreshScaleHeader();
     if(UI.melWrap)UI.melWrap.style.display=(S.scaleType==='Melodic Minor'&&S.tab!=='chords')?'flex':'none';
@@ -2785,25 +2960,71 @@ function trTick(){
     if(lhNote!==null)playNote(lhNote,ac.currentTime+0.01,dur,0.4);
   }
 
+  // Flash on/off pulse, unified into one code path regardless of Bluetooth
+  // delay. Both stale timers get cancelled at the start of every tick, and
+  // the "off" pulse is scheduled relative to when the flash *actually*
+  // turns on (inside its own callback) rather than added to the tick-time
+  // delay — that avoids the two delays compounding into something longer
+  // than the gap between notes, which was silently swallowing the "off"
+  // (and therefore the visible pulse) at higher tempos with a delay set.
   var btDelay=SETTINGS.btDelay||0;
-  if(btDelay>0){
-    setTimeout(function(){
-      if(TR.kbRH&&rhNote!==null)TR.kbRH.flash(rhNote);
-      else if(TR.kbRH)TR.kbRH.flash(null);
-      if(TR.kbLH&&lhNote!==null)TR.kbLH.flash(lhNote);
-      else if(TR.kbLH)TR.kbLH.flash(null);
-    },btDelay);
-  } else {
+  // The delay itself can only ever be as long as the tempo actually allows
+  // — a constant visual lag longer than the gap between notes is physically
+  // unsustainable in real time (you fall further behind with every note,
+  // forever). At 200 BPM the gap between notes is 150ms; a 200ms delay is
+  // simply impossible to honour there without every flash getting
+  // cancelled by the next note before it can fire, which is the actual
+  // root cause of it going fully invisible at higher tempos regardless of
+  // the exact number — capping this is what makes it work at every
+  // BPM/delay combination rather than needing separate fixes per case.
+  btDelay=Math.min(btDelay,step*0.55);
+  var _flashTickAt=Date.now();
+  if(TR.btFlashTimeout)clearTimeout(TR.btFlashTimeout);
+  if(TR.flashTimeout)clearTimeout(TR.flashTimeout);
+  TR.btFlashTimeout=setTimeout(function(){
+    TR.btFlashTimeout=null;
     if(TR.kbRH&&rhNote!==null)TR.kbRH.flash(rhNote);
     else if(TR.kbRH)TR.kbRH.flash(null);
     if(TR.kbLH&&lhNote!==null)TR.kbLH.flash(lhNote);
     else if(TR.kbLH)TR.kbLH.flash(null);
-  }
-
-  TR.flashTimeout=setTimeout(function(){
-    if(TR.kbRH)TR.kbRH.flash(null);
-    if(TR.kbLH)TR.kbLH.flash(null);
-  },step*0.78);
+    // Use the REAL elapsed time since the tick, not the nominal btDelay —
+    // ordinary execution overhead (everything trTick does before this
+    // callback even gets scheduled, plus setTimeout's own imprecision)
+    // reliably pushes the actual on-time later than the nominal delay by
+    // tens of ms, which alone can eat most or all of the margin left
+    // before the next note. Computing the pulse from what actually
+    // happened, not what was supposed to happen, keeps this correct
+    // regardless of how much overhead any given device/tick adds.
+    //
+    // When there's only a sliver of margin left (high tempo + a large
+    // delay together), don't force a same-sized "off" gap into that
+    // sliver anyway — that just produces a barely-visible flash. Skip
+    // scheduling an explicit "off" in that case and let the highlight
+    // simply stay lit until the next note's own "on" call overwrites it,
+    // which gives the longest possible visible time instead of an
+    // artificially tiny one.
+    // The keys themselves already fade in/out over 120ms via CSS (see
+    // .wkey/.bkey's transition) — that's what makes the no-delay case look
+    // smooth rather than an instant on/off snap. But if the "off" pulse
+    // fires sooner than that 120ms fade can finish, the fade-in gets cut
+    // short and reversed before the key ever reaches full brightness —
+    // producing a dim, muted, "flashy" flash rather than a crisp one, even
+    // though the flash is technically visible now. That's very likely
+    // what's actually being seen here at 60ms, which was nowhere near
+    // enough room for the CSS transition to complete. Require enough
+    // margin for the full fade-in plus a brief hold before scheduling an
+    // explicit off at all.
+    var realElapsed=Date.now()-_flashTickAt;
+    var remaining=step-realElapsed;
+    if(remaining>155){
+      var pulseDur=Math.min(remaining-15,180);
+      TR.flashTimeout=setTimeout(function(){
+        TR.flashTimeout=null;
+        if(TR.kbRH)TR.kbRH.flash(null);
+        if(TR.kbLH)TR.kbLH.flash(null);
+      },pulseDur);
+    }
+  },btDelay);
 
   if(isLast){
     TR.tickTimeout=setTimeout(function(){
@@ -2815,7 +3036,7 @@ function trTick(){
           if(TR._targetTonic){
             // Same resolution fix as the immediate-skip path above — see
             // that comment for the full explanation.
-            var _tgtR2=TONICS.find(function(r){return r.label===TR._targetTonic||r.label.split('/')[0]===TR._targetTonic;});
+            var _tgtR2=findTonic(TR._targetTonic);
             S.tonic=_tgtR2?_tgtR2.label:TR._targetTonic;TR._targetTonic=null;
           } else {
             var curSem=(TONICS.find(function(r){return r.label===S.tonic;})||TONICS[0]).semitone;
@@ -2825,6 +3046,9 @@ function trTick(){
           }
           if(TR.pendingContrary!=null){S.lhContrary=TR.pendingContrary;persist();}
           TR.pendingContrary=null;
+    if(TR.pendingOctaves!=null){S.octaves=TR.pendingOctaves;persist();}
+    TR.pendingOctaves=null;TR._octOnly=false;TR._cfgApplied=true;
+    if(UI.updateOctBtnUI)UI.updateOctBtnUI();
           if(UI.updateContraryToggleUI)UI.updateContraryToggleUI();
           if(UI.contraryInp)UI.contraryInp.checked=S.lhContrary;
           var sem2=(TONICS.find(function(r){return r.label===S.tonic;})||TONICS[0]).semitone;
@@ -2847,11 +3071,12 @@ function trTick(){
           if(UI.lhKb&&UI.rebuildLhKeyboardDom&&(UI.lhKb.sM!==curLS()||UI.lhKb.eM!==curLE())){
             UI.rebuildLhKeyboardDom();
           }
-          if(UI.lhKb){UI.lhKb.upd(midis(sem2,S.scaleType,dir3,curLS(),curLE()),f3?f3.lh:[],lhHi(),lhDk());UI.lhKb.title.textContent='LEFT HAND \u2014 '+S.tonic.split('/')[0]+' '+S.scaleType;}
-          if(UI.rhKb){UI.rhKb.upd(midis(sem2,S.scaleType,dir3,RS,RE),f3?f3.rh:[],rhHi(),rhDk());UI.rhKb.title.textContent='RIGHT HAND \u2014 '+S.tonic.split('/')[0]+' '+S.scaleType;}
+          if(UI.lhKb){UI.lhKb.upd(midis(sem2,S.scaleType,dir3,curLS(),curLE()),f3?f3.lh:[],lhHi(),lhDk());UI.lhKb.title.textContent='LEFT HAND \u2014 '+sName();}
+          if(UI.rhKb){UI.rhKb.upd(midis(sem2,S.scaleType,dir3,RS,RE),f3?f3.rh:[],rhHi(),rhDk());UI.rhKb.title.textContent='RIGHT HAND \u2014 '+sName();}
           if(UI.updateScaleKcBtn)UI.updateScaleKcBtn();
           refreshScaleHeader();
           if(UI.melWrap)UI.melWrap.style.display=(S.scaleType==='Melodic Minor'&&S.tab!=='chords')?'flex':'none';
+          if(window.ST&&ST.active&&ST._schedule&&UI.stOnLoopEnd)UI.stOnLoopEnd();
         } else {
           TR.pos=1;
           TR.displayDir=null;
@@ -2868,10 +3093,16 @@ function trTick(){
   }
 }
 
+// True when the only thing waiting for the end of the scale is an Octaves change
+// (it rides the same queue as a key change, but shouldn't light up the key buttons).
+function octOnlyQueue(){
+  return !!(TR.active&&TR.loop&&TR.keyChangeQueued&&TR._octOnly&&TR.pendingOctaves!=null&&
+    TR._targetTonic===S.tonic&&TR.keyChangeOrigScaleType==null&&!TR._pendingType&&TR.pendingContrary==null);
+}
 function updateTonicBtnStates(){
   if(!UI.tonicBtns)return;
   var pendingTarget=null;
-  if(TR.active&&TR.loop&&TR.keyChangeQueued&&TR._targetTonic){
+  if(TR.active&&TR.loop&&TR.keyChangeQueued&&TR._targetTonic&&!octOnlyQueue()){
     pendingTarget=TR._targetTonic;
   } else if(CP.active&&CP.loop&&CP.keyChangeQueued&&CP.targetTonic){
     pendingTarget=CP.targetTonic;
@@ -2972,12 +3203,12 @@ function updateTonicBtnStates(){
 }
 
 function refreshScaleHeader(){
+  syncOctaveBtn();
   var row=tRow(),color=row.color,name=sName();
   if(UI.title){UI.title.textContent=name;UI.title.style.color=color;}
   if(UI.notes){
     UI.notes.innerHTML='';
-    var ns=midis(row.semitone,S.scaleType,S.melodicDir,RS,RE);
-    ns.map(function(m){return PC[m%12];}).forEach(function(n,i){
+    spellScale(row.semitone,S.scaleType,S.melodicDir).slice(0,7).forEach(function(n,i){
       UI.notes.appendChild(el('span',{style:{fontSize:'0.6rem',fontFamily:JF,color:(i===0?color:'#555'),fontWeight:(i===0?'700':'400')}},n));
     });
   }
@@ -3007,11 +3238,19 @@ function trPlay(lhMs,rhMs,kbLH,kbRH){
 }
 
 var _countInOv=null; // global ref so trStop can clear it
+var _countInCancel=null; // cancels a count-in that is still running
+var _countInPlain=false; // true when the count-in belongs to normal playback (not the Tempo Trainer)
 
-function trCountIn(callback){
-  var beats=4*(window.ST&&window.ST.countInBars||1);
-  var stepMs=Math.round(60000/SETTINGS.tempo); // one real beat at stated BPM
-  var count=0;
+// Count-in. Every click is scheduled on the audio clock (a short look-ahead
+// pump keeps just ahead of "now"), instead of a chain of setTimeouts. The
+// old chain could fire its first clicks late/bunched while the audio system
+// was still waking up, so the count-in started fast and then settled.
+function trCountIn(callback,bars,plain){
+  if(_countInCancel)_countInCancel();
+  var beats=4*(bars||(window.ST&&window.ST.countInBars)||1);
+  var stepS=60/SETTINGS.tempo; // one real beat at stated BPM
+  var cancelled=false,pumpT=null;
+  _countInPlain=!!plain;
 
   // Overlay
   var ov=el('div',{style:{position:'fixed',inset:'0',zIndex:'9999',
@@ -3023,49 +3262,86 @@ function trCountIn(callback){
     transition:'opacity 0.1s'}});
   ov.appendChild(num);document.body.appendChild(ov);
 
-  // Resume audio context — prevents rushed first beats on context wakeup
-  var ac2=getAC();
-  if(ac2.state==='suspended')ac2.resume();
-
-  function tick(){
-    count++;
-    mtClick(count%4===1);
-    num.textContent=String((count-1)%4+1);
-    num.style.opacity='0.95';
-    setTimeout(function(){num.style.opacity='0.3';},stepMs*0.4);
-    if(count<beats){
-      // Quiet subdivision click exactly halfway to the next count-in beat.
-      // The actual scale plays at double the stated BPM (two notes per
-      // beat), so this gives the ear something to lock onto at that same
-      // rate during the count-in, without changing the "1, 2, 3, 4" pace
-      // or sound of the count-in itself.
-      TR.subTickTimeout=setTimeout(function(){mtClick('soft');},Math.round(stepMs/2));
-      TR.tickTimeout=setTimeout(tick,stepMs);
-    } else {
-      // Same half-beat subdivision click as between the other beats,
-      // so the gap after the final count-in beat doesn't suddenly feel
-      // silent/longer than the gaps before it.
-      TR.subTickTimeout=setTimeout(function(){mtClick('soft');},Math.round(stepMs/2));
-      TR.tickTimeout=setTimeout(function(){
-        ov.remove();_countInOv=null;
-        // Show Go! overlay on first beat
-        var goOv=el('div',{style:{position:'fixed',inset:'0',zIndex:'9999',
-          display:'flex',alignItems:'center',justifyContent:'center',
-          pointerEvents:'none'}});
-        var goNum=el('div',{style:{fontFamily:JF,fontSize:'5rem',fontWeight:'900',
-          color:'var(--active-color)',opacity:'1',textShadow:'0 4px 24px rgba(90,170,130,0.5)',
-          transition:'opacity 0.4s'}});
-        goNum.textContent='Go!';
-        goOv.appendChild(goNum);document.body.appendChild(goOv);
-        callback();
-        setTimeout(function(){goNum.style.opacity='0';},300);
-        setTimeout(function(){goOv.remove();},800);
-      },stepMs);
-    }
+  function finish(){
+    cancelled=true;
+    if(pumpT){clearTimeout(pumpT);pumpT=null;}
+    _countInCancel=null;_countInPlain=false;
   }
-  // Pre-delay: enough to wake audio context but never more than half a beat
-  var preDelay=Math.min(150,Math.round(stepMs*0.25));
-  TR.tickTimeout=setTimeout(tick,preDelay);
+  _countInCancel=function(){
+    finish();
+    if(ov.parentNode)ov.remove();
+    if(_countInOv===ov)_countInOv=null;
+    setTransportUI();
+  };
+  if(plain&&UI.trBtns){UI.trBtns.play.textContent='\u23F9';UI.trBtns.play.className='tr-btn active';}
+
+  function begin(){
+    if(cancelled)return;
+    var ac=getAC();
+    var t0=ac.currentTime+0.15; // short lead so the first click can't be late
+    var ev=[];
+    for(var i=0;i<beats;i++){
+      ev.push({t:t0+i*stepS,soft:false,accent:i%4===0,num:i%4+1});
+      // Quiet half-beat click: the scale plays two notes per beat, so this
+      // gives the ear that same rate during the count-in (also after beat 4).
+      ev.push({t:t0+i*stepS+stepS/2,soft:true});
+    }
+    var goT=t0+beats*stepS,ai=0,vi=0;
+    function go(){
+      if(cancelled)return;
+      ov.remove();_countInOv=null;
+      finish();
+      var goOv=el('div',{style:{position:'fixed',inset:'0',zIndex:'9999',
+        display:'flex',alignItems:'center',justifyContent:'center',
+        pointerEvents:'none'}});
+      var goNum=el('div',{style:{fontFamily:JF,fontSize:'5rem',fontWeight:'900',
+        color:'var(--active-color)',opacity:'1',textShadow:'0 4px 24px rgba(90,170,130,0.5)',
+        transition:'opacity 0.4s'}});
+      goNum.textContent='Go!';
+      goOv.appendChild(goNum);document.body.appendChild(goOv);
+      callback();
+      setTimeout(function(){goNum.style.opacity='0';},300);
+      setTimeout(function(){goOv.remove();},800);
+    }
+    function pump(){
+      pumpT=null;
+      if(cancelled)return;
+      var now=ac.currentTime;
+      while(ai<ev.length&&ev[ai].t<now+0.1){
+        var e=ev[ai++];
+        mtClick(e.soft?'soft':e.accent,Math.max(e.t,now));
+      }
+      while(vi<ev.length&&ev[vi].t<=now){
+        var v=ev[vi++];
+        if(!v.soft){
+          num.textContent=String(v.num);
+          num.style.opacity='0.95';
+          setTimeout(function(){num.style.opacity='0.3';},Math.round(stepS*400));
+        }
+      }
+      var left=goT-now;
+      if(left<0.03){pumpT=setTimeout(go,Math.max(0,Math.round(left*1000)));return;}
+      pumpT=setTimeout(pump,15);
+    }
+    pump();
+  }
+
+  // Wait for the audio system to genuinely be running before timing anything
+  var ac0=getAC();
+  if(ac0.state==='suspended'&&ac0.resume){
+    var rp=ac0.resume();
+    if(rp&&rp.then)rp.then(begin,begin);else begin();
+  } else begin();
+}
+
+// Normal (non-trainer) playback entry point: optional count-in from Settings
+function trStartWithCountIn(){
+  if(_countInOv)return;
+  if(SETTINGS.playCountIn){
+    trCountIn(function(){trPlayCurrent();},SETTINGS.playCountInBars||1,true);
+  } else {
+    trPlayCurrent();
+  }
 }
 
 function trPlayCurrent(){
@@ -3080,17 +3356,6 @@ function trPlayCurrent(){
     var lhDesc=midis(sem,'Melodic Minor','DESC',curLS(),curLE());
     var rhAsc=midis(sem,'Melodic Minor','ASC',RS,RE);
     var rhDesc=midis(sem,'Melodic Minor','DESC',RS,RE);
-
-    function melodicSeq(asc,desc,reversed){
-      var up=asc.slice();
-      var dn=desc.slice().reverse(); // top→root
-      if(reversed){
-        if(up.length&&up[0]===dn[dn.length-1])up=up.slice(1);
-        return dn.concat(up);
-      }
-      if(dn.length&&dn[0]===up[up.length-1])dn=dn.slice(1); // no repeated top
-      return up.concat(dn); // ends on root — single play lands correctly
-    }
 
     TR.rhSeq=melodicSeq(rhAsc,rhDesc);
     TR.lhSeq=melodicSeq(lhAsc,lhDesc,S.lhContrary);
@@ -3450,7 +3715,7 @@ function buildEditorPanel(){
     var row=hand==="rh"?FE.rh:FE.lh;
     var sem=tRow().semitone,st=S.scaleType;
     var dir=st==="Melodic Minor"?"ASC":(S.melodicDir||"ASC");
-    var ms=midis(sem,st,dir,hand==="rh"?RS:LS,hand==="rh"?RE:LE);
+    var ms=midis(sem,st,dir,hand==="rh"?RS:LS,hand==="rh"?RE:LE,2);
     var pos=ms.indexOf(midi);
     if(pos<0||pos>=arr.length)return;
     arr[pos]=val;
@@ -3494,7 +3759,7 @@ function buildEditorPanel(){
       var arr=hand==="rh"?FE.draft.rh:FE.draft.lh;
       var sem=tRow().semitone,st=S.scaleType;
       var dir=st==="Melodic Minor"?"ASC":(S.melodicDir||"ASC");
-      var ms=midis(sem,st,dir,hand==="rh"?RS:LS,hand==="rh"?RE:LE);
+      var ms=midis(sem,st,dir,hand==="rh"?RS:LS,hand==="rh"?RE:LE,2);
       var pos=ms.indexOf(midi);
       if(pos<0||pos>=arr.length)return;
       applyFinger(hand,midi,(arr[pos]%5)+1);
@@ -3534,7 +3799,7 @@ function buildEditorPanel(){
           var kb=hand==='rh'?FE.rhKb:FE.lhKb;
           var sem=tRow().semitone,st=S.scaleType;
           var dir=st==='Melodic Minor'?'ASC':(S.melodicDir||'ASC');
-          var ms=midis(sem,st,dir,hand==='rh'?RS:LS,hand==='rh'?RE:LE);
+          var ms=midis(sem,st,dir,hand==='rh'?RS:LS,hand==='rh'?RE:LE,2);
           kb.upd(ms,arr,hand==='rh'?rhHi():lhHi(),hand==='rh'?rhDk():lhDk());
         });
         var cell=el('div',{style:{display:'flex',flexDirection:'column',alignItems:'center'}});
@@ -3589,7 +3854,9 @@ function loadEditorScale(key,force){
   var src=FING[key]||DEF[key];
   FE.draft={lh:src.lh.slice(),rh:src.rh.slice()};
   FE.dirty=false;
-  FE.title.textContent=key;
+  var _sp=key.indexOf(' ');
+  var _dispKey=keyRoot(tRow().semitone,key.slice(_sp+1))+key.slice(_sp);
+  FE.title.textContent=_dispKey;
   updateFEStatus();
   var isArp=key.indexOf('Arpeggio')>=0,isChrom=key.indexOf('Chromatic')>=0,isPent=key.indexOf('Pentatonic')>=0;
   var len=isArp?7:isChrom?25:isPent?6:15;
@@ -3622,10 +3889,10 @@ function loadEditorScale(key,force){
     var sem=tRow().semitone;
     var st=S.scaleType;
     var dir=st==='Melodic Minor'?'ASC':(S.melodicDir||'ASC');
-    FE.rhKb.upd(midis(sem,st,dir,RS,RE),FE.draft.rh,rhHi(),rhDk());
-    FE.lhKb.upd(midis(sem,st,dir,LS,LE),FE.draft.lh,lhHi(),lhDk());
-    FE.rhKb.title.textContent='RIGHT HAND \u2014 '+key+' (tap key to cycle finger)';
-    FE.lhKb.title.textContent='LEFT HAND \u2014 '+key+' (tap key to cycle finger)';
+    FE.rhKb.upd(midis(sem,st,dir,RS,RE,2),FE.draft.rh,rhHi(),rhDk());
+    FE.lhKb.upd(midis(sem,st,dir,LS,LE,2),FE.draft.lh,lhHi(),lhDk());
+    FE.rhKb.title.textContent='RIGHT HAND \u2014 '+_dispKey+' (tap key to cycle finger)';
+    FE.lhKb.title.textContent='LEFT HAND \u2014 '+_dispKey+' (tap key to cycle finger)';
   }
 }
 
@@ -3908,6 +4175,48 @@ function buildSettingsSheet(){
   twlTogWrap.appendChild(el('span',{cls:'tog-slider'}));
   twlRow.appendChild(twlTogWrap);
   lockSec.appendChild(twlRow);
+
+  // Count-in before normal scale playback (mirrors the Tempo Trainer's)
+  var pciRow=el('div',{cls:'sett-row'});
+  pciRow.appendChild(el('div',{},[
+    el('div',{cls:'sett-name'},'Count-in before playback'),
+    el('div',{cls:'sett-note'},'Clicks in a bar (or more) at the current BPM before the scale starts')
+  ]));
+  var pciTogWrap=el('label',{cls:'tog-wrap'});
+  var pciTogInp=el('input',{type:'checkbox'});
+  pciTogInp.checked=!!SETTINGS.playCountIn;
+  pciTogWrap.appendChild(pciTogInp);
+  pciTogWrap.appendChild(el('span',{cls:'tog-slider'}));
+  pciRow.appendChild(pciTogWrap);
+  lockSec.appendChild(pciRow);
+
+  var pciBarsRow=el('div',{cls:'sett-row',style:{display:SETTINGS.playCountIn?'flex':'none'}});
+  pciBarsRow.appendChild(el('div',{},[el('div',{cls:'sett-name'},'Count-in bars')]));
+  var pciBarsCtrl=el('div',{style:{display:'flex',gap:'4px'}});
+  function pciPaint(){
+    pciBarsCtrl.querySelectorAll('button').forEach(function(btn,i){
+      var on=(i+1)===SETTINGS.playCountInBars;
+      btn.style.background=on?'var(--active-bg)':'var(--ov-bg)';
+      btn.style.color=on?'var(--active-color)':'#666';
+      btn.style.border=on?'1px solid var(--active-border)':'1px solid var(--ov-border)';
+    });
+  }
+  [1,2,3].forEach(function(n){
+    var b=el('button',{style:{padding:'4px 10px',borderRadius:'6px',fontFamily:JF,
+      fontSize:'0.6rem',cursor:'pointer'}},n+' bar'+(n>1?'s':''));
+    b.addEventListener('click',function(){
+      SETTINGS.playCountInBars=n;pciPaint();persist();
+    });
+    pciBarsCtrl.appendChild(b);
+  });
+  pciBarsRow.appendChild(pciBarsCtrl);
+  lockSec.appendChild(pciBarsRow);
+  pciPaint();
+  pciTogInp.addEventListener('change',function(){
+    SETTINGS.playCountIn=pciTogInp.checked;
+    pciBarsRow.style.display=SETTINGS.playCountIn?'flex':'none';
+    persist();
+  });
   lockSec.appendChild(btRow);
   body.appendChild(lockSec);
 
@@ -3920,7 +4229,7 @@ function buildSettingsSheet(){
   defKeyRow.appendChild(el('div',{cls:'sett-name',style:{marginBottom:'8px'}},'Default Key'));
   var keyGrid=el('div',{style:{display:'grid',gridTemplateColumns:'repeat(6,1fr)',gap:'5px'}});
   TONICS.forEach(function(t){
-    var short=t.label.split('/')[0];
+    var short=t.label;
     var btn=el('button',{style:{padding:'6px 2px',borderRadius:'8px',fontFamily:JF,fontSize:'0.58rem',
       textAlign:'center',cursor:'pointer',
       background:SETTINGS.defaultKey===t.label?t.color:'var(--ov-bg)',
@@ -4031,7 +4340,7 @@ function buildSettingsSheet(){
     aBox.appendChild(el('div',{style:{fontFamily:JF,fontSize:'0.9rem',fontWeight:'700',
       color:'var(--text)',letterSpacing:'0.06em',marginBottom:'4px'}},'Piano Scales Lab'));
     aBox.appendChild(el('div',{style:{fontFamily:JF,fontSize:'0.6rem',
-      color:'var(--sub)',marginBottom:'4px'}},'Version 0.9.0'));
+      color:'var(--sub)',marginBottom:'4px'}},'Version 1.1.4'));
     aBox.appendChild(el('div',{style:{fontFamily:JF,fontSize:'0.62rem',
       color:'var(--sub)',marginBottom:'20px',lineHeight:'1.5'}},'Piano scales, arpeggios and practice tools for every level'));
 
@@ -4429,10 +4738,14 @@ function buildChordPage(){
   UI.progSection=el('div');
   var progHdr=el('div',{style:{display:'flex',alignItems:'center',gap:'8px',marginTop:'14px',marginBottom:'0'}});
   progHdr.appendChild(el('div',{cls:'prog-label',style:{flex:'1',marginTop:'0'}},'Common Chord Progressions'));
-  // BPM control for progressions only — independent of scales BPM
-  progHdr.appendChild(el('span',{style:{fontSize:'0.52rem',color:'var(--sub)',fontFamily:JF}},'BPM'));
-  UI.cpBpmSlider=el('input',{type:'range',min:'40',max:'200',value:String(CP.tempo),style:{width:'60px',accentColor:rhDk()}});
-  UI.cpBpmVal=el('span',{style:{fontSize:'0.55rem',color:'var(--sub)',fontFamily:JF,minWidth:'36px',cursor:'pointer',userSelect:'none'}},CP.tempo+' BPM');
+  // BPM control for progressions only — independent of scales BPM. Same
+  // colours as the Scales page slider; small -10 -5 +5 +10 buttons sit
+  // directly underneath it.
+  var cpBpmBox=el('div',{style:{display:'flex',flexDirection:'column',gap:'3px',flexShrink:'0'}});
+  var cpBpmWrap=el('div',{cls:'bpm-wrap',style:{display:'flex',alignItems:'center',gap:'4px'}});
+  cpBpmWrap.appendChild(el('span',{style:{fontSize:'0.52rem',color:'var(--sub)',fontFamily:JF}},'BPM'));
+  UI.cpBpmSlider=el('input',{type:'range',min:'40',max:'200',value:String(CP.tempo)});
+  UI.cpBpmVal=el('div',{cls:'bpm-val',style:{cursor:'pointer',userSelect:'none',minWidth:'36px'}},CP.tempo+' BPM');
   UI.cpBpmSlider.addEventListener('input',function(){
     CP.tempo=parseInt(UI.cpBpmSlider.value,10);
     UI.cpBpmVal.textContent=CP.tempo+' BPM';
@@ -4456,8 +4769,24 @@ function buildChordPage(){
     });
     inp.addEventListener('blur',commit);
   });
-  progHdr.appendChild(UI.cpBpmSlider);
-  progHdr.appendChild(UI.cpBpmVal);
+  cpBpmWrap.appendChild(UI.cpBpmSlider);cpBpmWrap.appendChild(UI.cpBpmVal);
+  cpBpmBox.appendChild(cpBpmWrap);
+  var cpNudgeRow=el('div',{style:{display:'flex',gap:'2px'}});
+  [[-10,'\u221210'],[-5,'\u22125'],[+5,'+5'],[+10,'+10']].forEach(function(pair){
+    var b=el('button',{cls:'metro-nudge-btn',style:{flex:'1',padding:'2px 0',fontSize:'0.5rem',borderRadius:'6px'}},pair[1]);
+    var step=pair[0],abs=Math.abs(step);
+    function setCp(v){
+      v=Math.round(Math.max(40,Math.min(200,v)));
+      CP.tempo=v;UI.cpBpmSlider.value=v;UI.cpBpmVal.textContent=v+' BPM';
+    }
+    bindNudge(b,function(){
+      var cur=CP.tempo;
+      setCp(step>0?Math.ceil((cur+0.001)/abs)*abs:Math.floor((cur-0.001)/abs)*abs);
+    },function(){setCp(CP.tempo+step);});
+    cpNudgeRow.appendChild(b);
+  });
+  cpBpmBox.appendChild(cpNudgeRow);
+  progHdr.appendChild(cpBpmBox);
   UI.progSection.appendChild(progHdr);
   UI.progSection.appendChild(el('div',{style:{fontSize:'0.6rem',color:'var(--sub)',fontFamily:JF,marginBottom:'6px',marginTop:'4px',lineHeight:'1.5'}},'Tap \u25B6 to play a progression. Tap individual chords to preview them.'));
   UI.progList=el('div',{cls:'prog-list'});
@@ -4544,11 +4873,11 @@ function refreshChordPage(){
     var isMinorCtx=(stType==='Natural Minor'||stType==='min7'||stType==='dim7');
     cd.forEach(function(c,di){
       var rootPc=(sem+steps[di])%12;
-      var rootName=pcName(rootPc,sem,isMinorCtx);
+      var rootNotes=chordNotes(sem,stType,di,c.q);
+      var rootName=rootNotes[0];
       var qual=TRIAD_LABEL[c.q]||'';
       var chordName=rootName+qual;
       var si=TRIAD_SEMI[c.q]||[0,4,7];
-      var rootNotes=si.map(function(s){return pcName((rootPc+s)%12,sem,isMinorCtx);});
       var invCount=si.length;
       var invLabels=invCount===4?['Root','1st','2nd','3rd']:['Root','1st','2nd'];
       var uid=CS.chordMode+'|'+di;
@@ -4744,7 +5073,7 @@ function refreshChordPage(){
       }});
       span.setAttribute('data-si',si);
       span.appendChild(el('span',{style:{fontSize:'0.68rem',fontWeight:'700'}},numeral));
-      span.appendChild(el('span',{style:{fontSize:'0.5rem',fontWeight:'400',opacity:'0.7'}},pcName(rootPc,sem,stType==='Natural Minor'||stType==='min7'||stType==='dim7')+qual));
+      span.appendChild(el('span',{style:{fontSize:'0.5rem',fontWeight:'400',opacity:'0.7'}},chordNotes(sem,stType,di,(cd[di]||cd[0]).q)[0]+qual));
       span.addEventListener('click',function(e){
         e.stopPropagation();
         CS.progIdx=pi;CS.progStep=si;
@@ -4804,7 +5133,7 @@ function refreshChordPage(){
   function renderProgressions(){
     UI.progList.innerHTML='';
     UI.progPlayBtns={};
-    var progs=PROGRESSIONS[stType]||PROGRESSIONS['Major'];
+    var progs=PROGRESSIONS[stType]||(isMinorKeyType(stType)?PROGRESSIONS['Natural Minor']:PROGRESSIONS['Major']);
     progs.forEach(function(pg,pi){
       UI.progList.appendChild(buildProgRow(pg,pi,false));
     });
@@ -4843,6 +5172,7 @@ function refreshChordPage(){
     var armedSlot=-1;
     var highlightedDegree=-1;
     var demoPollTimer=null;
+    var playingSlot=-1; // slot box currently sounding during Demo
 
     var overlay=el('div',{style:{position:'fixed',inset:'0',zIndex:'9999',
       background:'rgba(0,0,0,0.75)',display:'flex',alignItems:'center',justifyContent:'center',padding:'20px'}});
@@ -4924,13 +5254,16 @@ function refreshChordPage(){
       draftSteps.forEach(function(deg,idx){
         var filled=deg!==null;
         var armed=armedSlot===idx;
+        var playing=playingSlot===idx&&filled;
         var numeral=filled?(cd[deg]||{n:'?'}).n:'?';
         var slotBtn=el('button',{style:{
           width:'40px',height:'36px',borderRadius:'8px',cursor:'pointer',
           fontFamily:JF,fontSize:'0.7rem',fontWeight:'700',
-          border:'1px solid '+(armed?'#7aa2f7':(filled?'rgba(120,200,120,0.5)':'var(--ov-border)')),
-          background:armed?'rgba(122,162,247,0.2)':(filled?'rgba(120,200,120,0.2)':'var(--ov-bg)'),
-          color:filled?'#7ac87a':'var(--sub)'
+          border:'1px solid '+(armed?'#7aa2f7':(playing?'rgba(120,200,120,0.95)':(filled?'rgba(120,200,120,0.5)':'var(--ov-border)'))),
+          background:armed?'rgba(122,162,247,0.2)':(playing?'rgba(120,200,120,0.42)':(filled?'rgba(120,200,120,0.2)':'var(--ov-bg)')),
+          color:filled?'#7ac87a':'var(--sub)',
+          boxShadow:playing?'0 0 8px rgba(120,200,120,0.55)':'none',
+          transition:'background .12s,box-shadow .12s,border-color .12s'
         }},numeral);
         slotBtn.addEventListener('click',function(){
           armedSlot=(armedSlot===idx?-1:idx);
@@ -4955,7 +5288,7 @@ function refreshChordPage(){
           color:isHi?hcC:'var(--sub)',display:'flex',flexDirection:'column',alignItems:'center',gap:'1px'
         }});
         btn.appendChild(el('span',{style:{fontSize:'0.68rem'}},c.n));
-        btn.appendChild(el('span',{style:{fontSize:'0.5rem',fontWeight:'400',opacity:'0.7'}},pcName(rootPc,sem,stType==='Natural Minor'||stType==='min7'||stType==='dim7')+qual));
+        btn.appendChild(el('span',{style:{fontSize:'0.5rem',fontWeight:'400',opacity:'0.7'}},chordNotes(sem,stType,di,(cd[di]||cd[0]).q)[0]+qual));
         btn.addEventListener('click',function(){
           if(armedSlot>=0){
             draftSteps[armedSlot]=di;
@@ -4982,17 +5315,27 @@ function refreshChordPage(){
       if(filledDegrees.length===0)return;
       CP.loop=false;
       var seq=filledDegrees.map(function(di){return getChordMidis(di,0);});
+      // Slot-box index of each chord actually played (empty boxes are skipped)
+      var filledSlots=[];
+      draftSteps.forEach(function(d,ix){if(d!==null)filledSlots.push(ix);});
       cpPlay(-999,seq,UI.chKb,null);
       if(demoPollTimer)clearInterval(demoPollTimer);
       demoPollTimer=setInterval(function(){
         if(CP.active&&CP.progIdx===-999){
           var curDeg=filledDegrees[CS.progStep];
+          var curSlot=filledSlots[CS.progStep];
+          var changed=false;
           if(curDeg!==undefined&&curDeg!==highlightedDegree){
             highlightedDegree=curDeg;
             renderChordPicker();
           }
+          if(curSlot!==undefined&&curSlot!==playingSlot){
+            playingSlot=curSlot;changed=true;
+          }
+          if(changed)renderSlots();
         } else {
           clearInterval(demoPollTimer);demoPollTimer=null;
+          if(playingSlot!==-1){playingSlot=-1;renderSlots();}
         }
       },100);
     });
@@ -5141,7 +5484,7 @@ function refreshChordPage(){
   // chord-quality override applied within the current scale — so those
   // still correctly show the underlying scale name.
   var chordHeadingName=(CS.chordMode==='Major'||CS.chordMode==='Natural Minor')?
-    (S.tonic.split('/')[0]+' '+CS.chordMode):sName();
+    (keyRoot(tRow().semitone,CS.chordMode)+' '+CS.chordMode):sName();
   UI.chKb.title.textContent=chordHeadingName+' \u2014 Chords';
   // Hide progressions for Dom7 and Dim7 — they don't have meaningful diatonic progressions
   var hideProgs=CS.chordMode==='dom7'||CS.chordMode==='dim7';
@@ -5364,7 +5707,7 @@ function buildUI(){
   var scaleKcBtn=el("button",{style:{flex:"1",padding:"7px 4px",borderRadius:"8px",background:"rgba(160,100,240,.07)",border:"1px solid var(--kc-border)",color:"#b070e8",fontFamily:JF,fontSize:"0.55rem",letterSpacing:"0.04em",textAlign:"center",lineHeight:"1.3"}});
   function updateScaleKcBtn(){
     scaleKcBtn.innerHTML="";
-    var isQueued=(TR.active&&TR.loop&&TR.keyChangeQueued)||(CP.active&&CP.loop&&CP.keyChangeQueued);
+    var isQueued=(TR.active&&TR.loop&&TR.keyChangeQueued&&!octOnlyQueue())||(CP.active&&CP.loop&&CP.keyChangeQueued);
     scaleKcBtn.style.color=isQueued?"#ffcc44":"#b070e8";
     scaleKcBtn.style.borderColor=isQueued?"rgba(255,200,60,0.4)":"var(--kc-border)";
     scaleKcBtn.appendChild(el("div",{style:{fontSize:"0.42rem",letterSpacing:"0.08em",marginBottom:"1px",color:isQueued?"rgba(255,200,60,0.6)":"rgba(160,100,240,0.5)"}},"KEY"));
@@ -5374,8 +5717,18 @@ function buildUI(){
   UI.updateScaleKcBtn=updateScaleKcBtn;
   scaleKcBtn.onclick=function(){
     if(TR.active&&TR.loop){
-      TR.keyChangeQueued=!TR.keyChangeQueued;
+      if(octOnlyQueue()){
+        // Octaves is waiting quietly in the same queue — add the +3 on top of it
+        TR._targetTonic=null;TR._octOnly=false;
+      } else {
+        TR.keyChangeQueued=!TR.keyChangeQueued;
+        if(!TR.keyChangeQueued&&TR.pendingOctaves!=null){
+          // +3 switched off, but the octave change is still waiting
+          TR.keyChangeQueued=true;TR._targetTonic=S.tonic;TR._octOnly=true;
+        }
+      }
       updateScaleKcBtn();
+      updateTonicBtnStates();
     } else if(CP.active&&CP.loop){
       CP.keyChangeQueued=!CP.keyChangeQueued;
       updateScaleKcBtn();
@@ -5572,7 +5925,7 @@ function buildUI(){
   var syncRow=el('div',{style:{display:'flex',justifyContent:'space-between',padding:'4px 0 2px',alignItems:'center',gap:'6px'}});
 
   var contraryGroup=el('div',{style:{display:'flex',alignItems:'center',gap:'6px'}});
-  contraryGroup.appendChild(el('span',{style:{fontSize:'0.5rem',color:'var(--sub)',fontFamily:JF,letterSpacing:'0.06em'}},'CONTRARY MOTION'));
+  contraryGroup.appendChild(el('span',{style:{fontSize:'0.5rem',color:'var(--sub)',fontFamily:JF,letterSpacing:'0.04em',whiteSpace:'nowrap'}},'CONTRARY MOTION'));
   var contraryTogWrap=el('label',{cls:'tog-wrap-sm'});
   var contraryInp=el('input',{type:'checkbox'});
   var contraryTogSlider=el('span',{cls:'tog-slider-sm'});
@@ -5622,8 +5975,56 @@ function buildUI(){
   contraryGroup.appendChild(contraryTogWrap);
   syncRow.appendChild(contraryGroup);
 
+  // Octaves: 1 or 2. Selector only for now — playback doesn't use it yet.
+  var octGroup=el('div',{style:{display:'flex',alignItems:'center',gap:'6px'}});
+  octGroup.appendChild(el('span',{style:{fontSize:'0.5rem',color:'var(--sub)',fontFamily:JF,letterSpacing:'0.04em',whiteSpace:'nowrap'}},'OCTAVES'));
+  function octLabel(){return String(S.octaves);}
+  UI.octBtn=el('button',{cls:'kb-sync-btn',style:{whiteSpace:'nowrap'}},'');
+  // Shows the chosen octave count; amber while a change is waiting for the end
+  // of the scale (same behaviour as the Contrary Motion switch).
+  function updateOctBtnUI(){
+    var pend=TR.pendingOctaves!=null;
+    var shown=pend?TR.pendingOctaves:S.octaves;
+    UI.octBtn.textContent=String(shown);
+    UI.octBtn.className='kb-sync-btn'+(shown===2&&!pend?' active':'');
+    UI.octBtn.style.background=pend?'rgba(255,180,0,0.07)':'';
+    UI.octBtn.style.color=pend?'#aa8822':'';
+    UI.octBtn.style.border=pend?'1px solid rgba(255,180,0,0.15)':'';
+    UI.octBtn.style.boxShadow='none';
+  }
+  UI.updateOctBtnUI=updateOctBtnUI;
+  UI.octBtn.onclick=function(){
+    if(TR.active&&TR.loop){
+      var cur=TR.pendingOctaves!=null?TR.pendingOctaves:S.octaves;
+      var target=cur===2?1:2;
+      if(target===S.octaves){
+        TR.pendingOctaves=null; // flicked back to what's already playing — cancel
+        if(TR._octOnly){TR._octOnly=false;TR.keyChangeQueued=false;TR._targetTonic=null;} // nothing else was waiting
+        if(UI.updateScaleKcBtn)UI.updateScaleKcBtn();
+        updateTonicBtnStates();
+      } else {
+        TR.pendingOctaves=target;
+        // Piggyback on the same end-of-scale machinery as Contrary Motion, but
+        // without lighting up the key / +3 buttons.
+        if(!TR.keyChangeQueued){TR._octOnly=true;}
+        TR.keyChangeQueued=true;
+        if(!TR._targetTonic)TR._targetTonic=S.tonic;
+      }
+      updateOctBtnUI();
+    } else {
+      S.octaves=S.octaves===2?1:2;
+      persist();
+      updateOctBtnUI();
+      rebuildLhKeyboard();
+    }
+  };
+  updateOctBtnUI();
+  octGroup.appendChild(UI.octBtn);
+  UI.octGroup=octGroup;
+  syncRow.appendChild(octGroup);
+
   var syncGroup=el('div',{style:{display:'flex',alignItems:'center',gap:'6px'}});
-  syncGroup.appendChild(el('span',{style:{fontSize:'0.5rem',color:'var(--sub)',fontFamily:JF,letterSpacing:'0.06em'}},'SCROLL SYNC'));
+  syncGroup.appendChild(el('span',{style:{fontSize:'0.5rem',color:'var(--sub)',fontFamily:JF,letterSpacing:'0.04em',whiteSpace:'nowrap'}},'SCROLL SYNC'));
   UI.syncBtn=el('button',{cls:'kb-sync-btn'+(KBS.sync?' active':'')},KBS.sync?'Bound':'Unbound');
   UI.syncBtn.onclick=function(){
     KBS.sync=!KBS.sync;
@@ -5662,8 +6063,10 @@ function buildUI(){
         var stStat=document.querySelector('.st-status');
         if(stStat)stStat.style.display='none';
       }
+    } else if(_countInOv&&_countInPlain){
+      trStop(); // press during the count-in cancels it
     } else {
-      trPlayCurrent();
+      trStartWithCountIn();
     }
   };
   UI.trBtns.play=tPlay;transRow1.appendChild(tPlay);
@@ -5673,7 +6076,7 @@ function buildUI(){
   tLoop.title='Loop';
   tLoop.onclick=function(){
     TR.loop=!TR.loop;
-    if(TR.loop&&!TR.active)trPlayCurrent();
+    if(TR.loop&&!TR.active)trStartWithCountIn();
     setTransportUI();
   };
   UI.trBtns.loop=tLoop;transRow1.appendChild(tLoop);
@@ -5738,21 +6141,15 @@ function buildUI(){
     var b=el('button',{cls:'metro-nudge-btn',style:{flex:'1',padding:'4px 0'}},pair[1]);
     var step=pair[0];
     var abs=Math.abs(step);
-    var _delay,_interval;
-    b.addEventListener('pointerdown',function(e){
-      e.preventDefault();
+    bindNudge(b,function(){
       // First press: snap to nearest multiple in direction
       var cur=SETTINGS.tempo;
       var snapped=step>0?Math.ceil((cur+0.001)/abs)*abs:Math.floor((cur-0.001)/abs)*abs;
       var v=Math.round(Math.max(40,Math.min(300,snapped)));
       SETTINGS.tempo=v;UI.bpmSlider.value=v;UI.bpmVal.textContent=v+' BPM';persist();
-      _delay=setTimeout(function(){_interval=setInterval(function(){
-        var v2=Math.round(Math.max(40,Math.min(300,SETTINGS.tempo+step)));
-        SETTINGS.tempo=v2;UI.bpmSlider.value=v2;UI.bpmVal.textContent=v2+' BPM';persist();
-      },80);},400);
-    });
-    ['pointerup','pointerleave','pointercancel'].forEach(function(ev){
-      b.addEventListener(ev,function(){clearTimeout(_delay);clearInterval(_interval);});
+    },function(){
+      var v2=Math.round(Math.max(40,Math.min(300,SETTINGS.tempo+step)));
+      SETTINGS.tempo=v2;UI.bpmSlider.value=v2;UI.bpmVal.textContent=v2+' BPM';persist();
     });
     nudgeRow.appendChild(b);
   });
@@ -5876,17 +6273,8 @@ function buildUI(){
   stPanel.appendChild(stDurationEl);
 
   function stUpdateDuration(){
-    var seqLen;
-    if(TR.rhSeq&&TR.rhSeq.length>1){
-      seqLen=TR.rhSeq.length-1;
-    } else if(TR.lhSeq&&TR.lhSeq.length>1){
-      seqLen=TR.lhSeq.length-1;
-    } else {
-      var isArp=S.scaleType==='Major Arpeggio'||S.scaleType==='Minor Arpeggio';
-      var isChrom=S.scaleType==='Chromatic';
-      var isPent=S.scaleType==='Major Pentatonic'||S.scaleType==='Minor Pentatonic';
-      seqLen=isArp?12:isChrom?48:isPent?20:28;
-    }
+    // Scale type the session will actually play (Scale Cycle switches to its own type)
+    var estType=(ST.cycleMode&&ST.cycleKeys&&ST.cycleKeys.length>0)?ST.cycleScaleType:S.scaleType;
     var start=ST.startBpm,target=ST.targetBpm,incr=ST.increment,loops=ST.everyLoops;
     if(start>=target||incr<=0){stDurationEl.textContent='';return;}
 
@@ -5928,35 +6316,7 @@ function buildUI(){
       }
     }
 
-    // Same correction logic as _sessionTotalMs
-    var totalMs2=estSched.reduce(function(acc,e){return acc+seqLen*(30000/e.bpm);},0);
-    // Per-transition BPM rounding correction
-    for(var ei0=1;ei0<estSched.length;ei0++){
-      if(estSched[ei0].bpm!==estSched[ei0-1].bpm){
-        totalMs2+=(30000/estSched[ei0-1].bpm)-(30000/estSched[ei0].bpm);
-      }
-    }
-    // Math.round tick scheduling debt correction — matches _sessionTotalMs
-    var roundingDebt2=estSched.reduce(function(acc,e){
-      var floatStep=30000/e.bpm;
-      return acc+seqLen*(floatStep-Math.round(floatStep));
-    },0);
-    totalMs2+=roundingDebt2;
-    if(keyCount>1&&!ST.cycleSmooth){
-      for(var ei=1;ei<estSched.length;ei++){
-        if(estSched[ei].key&&estSched[ei].key!==estSched[ei-1].key){
-          totalMs2+=30000/estSched[ei].bpm; // extra root at new key's BPM
-        }
-      }
-    }
-    if(keyCount>1&&!ST.cycleSmooth&&ST.cyclePause){
-      for(var ei2=1;ei2<estSched.length;ei2++){
-        if(estSched[ei2].key&&estSched[ei2].key!==estSched[ei2-1].key){
-          totalMs2+=30000/estSched[ei2-1].bpm; // pause beat at outgoing BPM
-        }
-      }
-    }
-
+    var totalMs2=stTotalMsForSched(estSched,estType);
     var totalSec=Math.round(totalMs2/1000);
     var mins=Math.floor(totalSec/60);
     var secs=totalSec%60;
@@ -6239,49 +6599,13 @@ function buildUI(){
       ST._schedule=sched;
       ST._schedIdx=0; // current position in schedule
 
-      // Calculate exact total session ms
-      var isArpST=S.scaleType==='Major Arpeggio'||S.scaleType==='Minor Arpeggio';
-      var isChromST=S.scaleType==='Chromatic';
-      var isPentST=S.scaleType==='Major Pentatonic'||S.scaleType==='Minor Pentatonic';
-      var seqLen=TR.rhSeq&&TR.rhSeq.length>1?TR.rhSeq.length-1:(TR.lhSeq&&TR.lhSeq.length>1?TR.lhSeq.length-1:(isArpST?12:isChromST?48:isPentST?20:28));
-      var totalMs=sched.reduce(function(acc,e){return acc+seqLen*(30000/e.bpm);},0);
-      // Per-transition BPM rounding correction: at each BPM step boundary, one note-gap
-      // plays at the old (slower) tempo but gets counted at the new (faster) tempo.
-      // Add back the difference to close that gap.
-      for(var si1=1;si1<sched.length;si1++){
-        if(sched[si1].bpm!==sched[si1-1].bpm){
-          totalMs+=(30000/sched[si1-1].bpm)-(30000/sched[si1].bpm);
-        }
-      }
-      // Full scale: TR.pos=0 means new key plays from root — one extra note per key change
-      // (at the NEW key's BPM). Both pause and no-pause variants need this.
-      // Smooth: no correction needed — skip-last/play-first is same total time as base.
-      if(!ST.cycleSmooth){
-        for(var si2=1;si2<sched.length;si2++){
-          if(sched[si2].key&&sched[si2].key!==sched[si2-1].key){
-            totalMs+=30000/sched[si2].bpm; // extra root note at NEW key's BPM
-          }
-        }
-      }
-      // Full scale + pause: add one beat click per key change (at outgoing BPM)
-      if(!ST.cycleSmooth&&ST.cyclePause){
-        for(var si3=1;si3<sched.length;si3++){
-          if(sched[si3].key&&sched[si3].key!==sched[si3-1].key){
-            totalMs+=30000/sched[si3-1].bpm; // pause beat at outgoing key's BPM
-          }
-        }
-      }
-      ST._sessionTotalMs=totalMs;
-      // Compensate for Math.round() truncation in trTick setTimeout scheduling.
-      // Each tick fires at Math.round(30000/bpm) ms but the formula uses the float.
-      // The difference accumulates over seqLen ticks per loop entry.
-      // Add back the total rounding deficit so the countdown matches real playback.
-      var roundingDebt=sched.reduce(function(acc,e){
-        var floatStep=30000/e.bpm;
-        var roundStep=Math.round(floatStep);
-        return acc+seqLen*(floatStep-roundStep);
-      },0);
-      ST._sessionTotalMs+=roundingDebt;
+      // Calculate exact total session ms from the scale that will actually play
+      // (computed fresh — not from whatever scale happened to be played last)
+      var _schedType=(sortedKeys&&sortedKeys.length>0)?ST.cycleScaleType:S.scaleType;
+      ST._schedIsCycle=!!(sortedKeys&&sortedKeys.length>0);
+      ST._cfgLog=sched.map(function(){return {st:_schedType,oct:S.octaves};});
+      TR._cfgApplied=false;
+      ST._sessionTotalMs=stTotalMsForSched(sched,_schedType,function(i){return ST._cfgLog[i];});
       ST._sessionStartMs=null;
 
       // Apply first entry
@@ -6297,6 +6621,10 @@ function buildUI(){
       stStatus.textContent=first.bpm+' BPM \u2192 '+ST.targetBpm+' BPM';
       TR.loop=true;setTransportUI();
 
+      // A scale may still be playing (e.g. after a previous session reached its
+      // goal and kept looping). Cut it so the new session starts cleanly from
+      // the count-in, exactly as it would from silence.
+      if(TR.active)trStop();
       if(!TR.active){
         var _startFn=function(){
           update(); // rebuild keyboards for first key
@@ -6644,6 +6972,16 @@ function buildUI(){
       return;
     }
 
+    // A queued change (scale type / octaves) just took effect for the loop that
+    // is starting now, so every remaining loop has a different length. Rebuild
+    // the session total exactly: loops already played keep their old lengths,
+    // the rest use the new scale. The countdown (total - elapsed) stays exact.
+    if(TR._cfgApplied&&ST._cfgLog){
+      TR._cfgApplied=false;
+      var _newSt=ST._schedIsCycle?ST.cycleScaleType:S.scaleType;
+      for(var _ci=ST._schedIdx;_ci<ST._cfgLog.length;_ci++)ST._cfgLog[_ci]={st:_newSt,oct:S.octaves};
+      ST._sessionTotalMs=stTotalMsForSched(ST._schedule,_newSt,function(i){return ST._cfgLog[i];});
+    }
     // Apply next schedule entry
     var entry=ST._schedule[ST._schedIdx];
     var bpmChanged=entry.bpm!==SETTINGS.tempo;
@@ -6684,8 +7022,8 @@ function buildUI(){
         if(UI.lhKb&&UI.rebuildLhKeyboardDom&&(UI.lhKb.sM!==curLS()||UI.lhKb.eM!==curLE())){
           UI.rebuildLhKeyboardDom();
         }
-        if(UI.lhKb){UI.lhKb.upd(midis(sem4,S.scaleType,dir4,curLS(),curLE()),f4?f4.lh:[],lhHi(),lhDk());UI.lhKb.title.textContent='LEFT HAND \u2014 '+S.tonic.split('/')[0]+' '+S.scaleType;}
-        if(UI.rhKb){UI.rhKb.upd(midis(sem4,S.scaleType,dir4,RS,RE),f4?f4.rh:[],rhHi(),rhDk());UI.rhKb.title.textContent='RIGHT HAND \u2014 '+S.tonic.split('/')[0]+' '+S.scaleType;}
+        if(UI.lhKb){UI.lhKb.upd(midis(sem4,S.scaleType,dir4,curLS(),curLE()),f4?f4.lh:[],lhHi(),lhDk());UI.lhKb.title.textContent='LEFT HAND \u2014 '+sName();}
+        if(UI.rhKb){UI.rhKb.upd(midis(sem4,S.scaleType,dir4,RS,RE),f4?f4.rh:[],rhHi(),rhDk());UI.rhKb.title.textContent='RIGHT HAND \u2014 '+sName();}
         refreshScaleHeader();updateTonicBtnStates();
         if(UI.melWrap)UI.melWrap.style.display=(S.scaleType==='Melodic Minor'&&S.tab!=='chords')?'flex':'none';
       };
@@ -7190,7 +7528,7 @@ function jump(ns){
   if(!ns)return;
   var sp=ns.indexOf(' ');if(sp<0)return;
   var tonic=ns.slice(0,sp),rest=ns.slice(sp+1);
-  var r=TONICS.find(function(x){return x.label===tonic||x.label.split('/')[0]===tonic;});
+  var r=findTonic(tonic);
   if(r)S.tonic=r.label;
   var t=STYPES.slice().sort(function(a,b){return b.length-a.length;}).find(function(x){return rest.indexOf(x)>=0;});
   if(t)S.scaleType=t;
@@ -7236,40 +7574,19 @@ function update(){
   var _hdrOnChords=(S.tab==='chords'&&CHORD_MODE_DISPLAY.hasOwnProperty(CS.chordMode));
   var _hdrScaleType=_hdrOnChords?CHORD_MODE_SPELLING_BASE[CS.chordMode]:S.scaleType;
   var _hdrSem=sem;
-  var _hdrName=_hdrOnChords?(S.tonic.split('/')[0]+' '+CHORD_MODE_DISPLAY[CS.chordMode]):name;
+  var _hdrName=_hdrOnChords?(keyRoot(sem,CHORD_MODE_SPELLING_BASE[CS.chordMode])+' '+CHORD_MODE_DISPLAY[CS.chordMode]):name;
 
   if(UI.title){UI.title.textContent=_hdrName;UI.title.style.color=color;}
   if(UI.notes){
     UI.notes.innerHTML='';
     // Use correct enharmonic spelling (same logic as Info page Notes row).
     // Isolated entirely to this display element — no other functionality affected.
-    var _LSEMI={C:0,D:2,E:4,F:5,G:7,A:9,B:11};
-    var _LETS=['C','D','E','F','G','A','B'];
-    var _TROOTS_MAJ={0:{l:'C',a:''},1:{l:'D',a:FL},2:{l:'D',a:''},3:{l:'E',a:FL},4:{l:'E',a:''},5:{l:'F',a:''},6:{l:'F',a:SH},7:{l:'G',a:''},8:{l:'A',a:FL},9:{l:'A',a:''},10:{l:'B',a:FL},11:{l:'B',a:''}};
-    var _TROOTS_MIN={0:{l:'C',a:''},1:{l:'C',a:SH},2:{l:'D',a:''},3:{l:'D',a:SH},4:{l:'E',a:''},5:{l:'F',a:''},6:{l:'F',a:SH},7:{l:'G',a:''},8:{l:'G',a:SH},9:{l:'A',a:''},10:{l:'A',a:SH},11:{l:'B',a:''}};
-    var _isMin=_hdrScaleType.indexOf('Minor')>=0||_hdrScaleType.indexOf('Arpeggio')>=0;
-    var _re=(_isMin?_TROOTS_MIN:_TROOTS_MAJ)[_hdrSem];
-    var _ivk=_hdrScaleType==='Melodic Minor'?(S.melodicDir==='ASC'?'Melodic Minor Asc':'Melodic Minor Desc'):_hdrScaleType;
-    var _iv=IV[_ivk]||IV['Major'];
-    var _spelled=[];
-    if(_re){
-      var _ri=_LETS.indexOf(_re.l);
-      _spelled.push(_re.l+_re.a);
-      var _cs=_hdrSem;
-      for(var _i=0;_i<_iv.length-1;_i++){
-        _cs=(_cs+_iv[_i])%12;
-        var _nl=_LETS[(_ri+_i+1)%7];
-        var _d=(_cs-_LSEMI[_nl]+12)%12;
-        _spelled.push(_nl+(_d===0?'':_d===1?SH:_d===11?FL:_d===2?SH+SH:_d===10?FL+FL:''));
-      }
-    } else {
-      // Fallback to PC names if root not found
-      lm.slice(0,8).forEach(function(m){var n=PC[pcOf(m)];if(!_spelled.length||n!==_spelled[_spelled.length-1])_spelled.push(n);});
-    }
+    var _spelled=spellScale(_hdrSem,_hdrScaleType,S.melodicDir);
     _spelled.slice(0,7).forEach(function(n,i){
       UI.notes.appendChild(el('span',{style:{fontSize:'0.6rem',fontFamily:JF,color:(i===0?color:'#555'),fontWeight:(i===0?'700':'400')}},n));
     });
   }
+  syncOctaveBtn();
   if(UI.scaleTypeLabel)UI.scaleTypeLabel.textContent=S.tab==='chords'?'Chord Type':'Scale Type';
   var CHORD_STYPES=['Major','Natural Minor'];
   if(UI.typeBtns)STYPES.forEach(function(t){
@@ -7383,83 +7700,17 @@ function update(){
     // ── Enharmonic note spelling for Info page Notes row ──────────────────────
     // Each scale degree must use a different letter (correct music theory spelling).
     // This function is ONLY used for the Info page display — nothing else is affected.
-    var LETTER_SEMI2={C:0,D:2,E:4,F:5,G:7,A:9,B:11};
-    var LETTERS2=['C','D','E','F','G','A','B'];
-    // For each tonic semitone, choose whether to spell from a sharp or flat root.
-    // Flat roots: D♭(1), E♭(3), A♭(8), B♭(10) and their enharmonic equivalents.
-    var TONIC_ROOTS={
-      0:{l:'C',a:''},  1:{l:'D',a:FL}, 2:{l:'D',a:''},  3:{l:'E',a:FL},
-      4:{l:'E',a:''},  5:{l:'F',a:''},  6:{l:'F',a:SH},  7:{l:'G',a:''},
-      8:{l:'A',a:FL},  9:{l:'A',a:''},  10:{l:'B',a:FL}, 11:{l:'B',a:''}
-    };
-    // For F# major use F# root, for Gb use Gb — app tonic labels help us choose:
-    // The TONICS semitone 6 tonic label is F♯/G♭ — we use F♯ spelling (sharps key)
-    // Semitone 1 label is C♯/D♭ — we use D♭ spelling (flats key) for minor but
-    // C♯ is used in the app for C♯ minor contexts. Use flat for major (Db major),
-    // sharp for minor (C# minor). Determine from scale type:
-    var TONIC_ROOTS_MINOR={
-      0:{l:'C',a:''},  1:{l:'C',a:SH}, 2:{l:'D',a:''},  3:{l:'D',a:SH},
-      4:{l:'E',a:''},  5:{l:'F',a:''},  6:{l:'F',a:SH},  7:{l:'G',a:''},
-      8:{l:'G',a:SH},  9:{l:'A',a:''},  10:{l:'A',a:SH}, 11:{l:'B',a:''}
-    };
-    var isMinorType=S.scaleType.indexOf('Minor')>=0||S.scaleType.indexOf('Arpeggio')>=0;
-    var rootEntry=(isMinorType?TONIC_ROOTS_MINOR:TONIC_ROOTS)[sem];
-    function spellScaleNotes(rootEntry,intervals){
-      var rootLetter=rootEntry.l,rootAcc=rootEntry.a;
-      var rootIdx=LETTERS2.indexOf(rootLetter);
-      var result=[rootLetter+rootAcc];
-      var currentSemi=sem;
-      for(var ii=0;ii<intervals.length-1;ii++){
-        currentSemi=(currentSemi+intervals[ii])%12;
-        var nextIdx=(rootIdx+ii+1)%7;
-        var nextLetter=LETTERS2[nextIdx];
-        var naturalSemi=LETTER_SEMI2[nextLetter];
-        var diff=(currentSemi-naturalSemi+12)%12;
-        var name;
-        if(diff===0)name=nextLetter;
-        else if(diff===1)name=nextLetter+SH;
-        else if(diff===11)name=nextLetter+FL;
-        else if(diff===2)name=nextLetter+SH+SH; // double sharp (rare)
-        else if(diff===10)name=nextLetter+FL+FL; // double flat (rare)
-        else name=nextLetter; // fallback
-        result.push(name);
-      }
-      return result;
-    }
-    var ivKey2=S.scaleType;
-    if(S.scaleType==='Melodic Minor')ivKey2=S.melodicDir==='ASC'?'Melodic Minor Asc':'Melodic Minor Desc';
-    var ivArr2=IV[ivKey2]||IV['Major'];
-    var spelledNotes;
-    if(S.scaleType==='Chromatic'){
-      var CHROM_NAMES=['C','C'+SH,'D','D'+SH,'E','F','F'+SH,'G','G'+SH,'A','A'+SH,'B'];
-      spelledNotes=[];
-      for(var ci=0;ci<12;ci++)spelledNotes.push(CHROM_NAMES[(sem+ci)%12]);
-    } else if(S.scaleType==='Major Pentatonic'||S.scaleType==='Minor Pentatonic'){
-      // Use simple PC names — pentatonic skips degrees so diatonic spelling breaks
-      var PENT_NAMES_SH=['C','C'+SH,'D','D'+SH,'E','F','F'+SH,'G','G'+SH,'A','A'+SH,'B'];
-      var PENT_NAMES_FL=['C','D'+FL,'D','E'+FL,'E','F','G'+FL,'G','A'+FL,'A','B'+FL,'B'];
-      // Use flat names for flat-side keys
-      var useFlatPent=(sem===1||sem===3||sem===5||sem===8||sem===10);
-      var pNames=useFlatPent?PENT_NAMES_FL:PENT_NAMES_SH;
-      spelledNotes=[];
-      var pSem=sem;
-      spelledNotes.push(pNames[pSem%12]);
-      for(var pi=0;pi<ivArr2.length;pi++){
-        pSem+=ivArr2[pi];
-        spelledNotes.push(pNames[pSem%12]);
-      }
-    } else {
-      spelledNotes=rootEntry?spellScaleNotes(rootEntry,ivArr2):[];
-    }
+    var spelledNotes=spellScale(sem,S.scaleType,S.melodicDir);
     UI.facts['Notes'].textContent=spelledNotes.join(' ');
     // Interval name map
     var INAMES={1:'S',2:'T',3:'A2',4:'M3',5:'P4'};
-    function intervalName(st){return INAMES[st]||st+'st';}
+    // A 3-semitone step is an augmented 2nd only in harmonic minor; in arpeggios and pentatonics it is a minor 3rd.
+    function intervalName(st){if(st===3&&S.scaleType!=='Harmonic Minor')return 'm3';return INAMES[st]||st+'st';}
     var ivKey=S.scaleType;
     if(S.scaleType==='Melodic Minor')ivKey=S.melodicDir==='ASC'?'Melodic Minor Asc':'Melodic Minor Desc';
     var ivArr=IV[ivKey]||IV['Major'];
     UI.facts['Intervals'].textContent=ivArr.map(intervalName).join(' \u2013 ');
-    UI.facts['Root'].textContent=PC[pcOf(lm[0])];
+    UI.facts['Root'].textContent=keyRoot(sem,S.scaleType);
     UI.facts['Type'].textContent=S.scaleType;
     // Key signature — based on major key (relative minor shares the same)
     var KEY_SIG={
@@ -7485,14 +7736,17 @@ function update(){
       majorSem=(sem+3)%12;
     }
     var keySigText;
-    if(majorSem===6){
-      keySigText='F\u266f / G\u266d \u2014 6 sharps or 6 flats';
+    if(majorSem===6&&S.scaleType.indexOf('Minor')>=0){
+      keySigText='G\u266d \u2014 6 flats (B\u266d E\u266d A\u266d D\u266d G\u266d C\u266d)';
+    } else if(majorSem===6){
+      keySigText='F\u266f \u2014 6 sharps (F\u266f C\u266f G\u266f D\u266f A\u266f E\u266f)';
     } else {
       keySigText=KEY_SIG[majorSem]||'';
     }
+    if(S.scaleType==='Chromatic')keySigText='\u2014';
     UI.facts['Key Sig'].textContent=keySigText;
     // Draw key signature staff
-    var isFlat6=S.tonic.indexOf('G')>=0&&S.tonic.indexOf('\u266d')>=0;
+    var isFlat6=S.scaleType.indexOf('Minor')>=0&&sem===3;
     var isChromatic=S.scaleType==='Chromatic';
     if(UI.keySigBox)UI.keySigBox.style.display='';
     if(isChromatic){
@@ -7503,8 +7757,8 @@ function update(){
     }
     UI.facts['Relative'].textContent=rel||'\u2014';
     UI.facts['Parallel'].textContent=par;
-    UI.facts['LH range'].textContent=PC[pcOf(lm[0])]+ocOf(lm[0])+' \u2013 '+PC[pcOf(lm[lm.length-1])]+ocOf(lm[lm.length-1]);
-    UI.facts['RH range'].textContent=PC[pcOf(rm[0])]+ocOf(rm[0])+' \u2013 '+PC[pcOf(rm[rm.length-1])]+ocOf(rm[rm.length-1]);
+    UI.facts['LH range'].textContent=keyRoot(sem,S.scaleType)+ocOf(lm[0])+' \u2013 '+keyRoot(sem,S.scaleType)+ocOf(lm[lm.length-1]);
+    UI.facts['RH range'].textContent=keyRoot(sem,S.scaleType)+ocOf(rm[0])+' \u2013 '+keyRoot(sem,S.scaleType)+ocOf(rm[rm.length-1]);
   }
 
   // BPM controls sync
@@ -7603,6 +7857,7 @@ IDB.load(function(saved){
       if(s.tonic&&TONICS.find(function(r){return r.label===s.tonic;}))S.tonic=s.tonic;
       if(s.scaleType&&STYPES.indexOf(s.scaleType)>=0)S.scaleType=s.scaleType;
       if(s.melodicDir==='ASC'||s.melodicDir==='DESC')S.melodicDir=s.melodicDir;
+      if(s.octaves===1||s.octaves===2)S.octaves=s.octaves;
       if(s.tab&&['scales','chords','info','editor','metro'].indexOf(s.tab)>=0)S.tab=s.tab;
       if(typeof s.lhContrary==='boolean')S.lhContrary=s.lhContrary;
     }
@@ -7622,6 +7877,8 @@ IDB.load(function(saved){
       if(typeof sv.haptic==='boolean')SETTINGS.haptic=sv.haptic;
       if(typeof sv.playOnLock==='boolean')SETTINGS.playOnLock=sv.playOnLock;
       if(typeof sv.trainerWakeLock==='boolean')SETTINGS.trainerWakeLock=sv.trainerWakeLock;
+      if(typeof sv.playCountIn==='boolean')SETTINGS.playCountIn=sv.playCountIn;
+      if(sv.playCountInBars===1||sv.playCountInBars===2||sv.playCountInBars===3)SETTINGS.playCountInBars=sv.playCountInBars;
       if(typeof sv.defaultMetroSound==='string')SETTINGS.defaultMetroSound=sv.defaultMetroSound;
       if(sv.defaultKey&&TONICS.find(function(r){return r.label===sv.defaultKey;}))SETTINGS.defaultKey=sv.defaultKey;
       if(sv.defaultScaleType&&STYPES.indexOf(sv.defaultScaleType)>=0)SETTINGS.defaultScaleType=sv.defaultScaleType;
@@ -7630,7 +7887,32 @@ IDB.load(function(saved){
       if(typeof sv.btDelay==='number')SETTINGS.btDelay=sv.btDelay;
       if(typeof sv.dismissedUpdateVersion==='number')SETTINGS.dismissedUpdateVersion=sv.dismissedUpdateVersion;
     }
-    if(fingValid)FING=saved.FING;
+    if(fingValid){
+      FING=saved.FING;
+      // One-off default corrections: bring a saved entry up to date only if it
+      // still holds the OLD default (so anything the user edited is left alone).
+      [{k:'C'+SH+' Minor Arpeggio (2 oct.)',hand:'lh',from:[4,2,1,4,2,1,4],to:[2,1,4,2,1,4,2]},
+       {k:'G'+SH+' Minor Arpeggio (2 oct.)',hand:'lh',from:[4,2,1,4,2,1,4],to:[2,1,4,2,1,4,2]},
+       {k:'A'+FL+' Major Arpeggio (2 oct.)',hand:'lh',from:[4,2,1,4,2,1,4],to:[2,1,4,2,1,4,2]},
+       {k:'C'+SH+' Major Arpeggio (2 oct.)',hand:'lh',from:[4,2,1,4,2,1,4],to:[2,1,4,2,1,4,2]},
+       {k:'F'+SH+' Minor Arpeggio (2 oct.)',hand:'lh',from:[3,1,4,2,1,4,2],to:[2,1,4,2,1,4,2]},
+       {k:'E'+FL+' Major Arpeggio (2 oct.)',hand:'lh',from:[4,2,1,4,2,1,4],to:[2,1,4,2,1,4,2]},
+       {k:'B'+FL+' Major Arpeggio (2 oct.)',hand:'lh',from:[4,2,1,4,2,1,4],to:[3,2,1,3,2,1,3]},
+       {k:'D'+SH+'/E'+FL+' Minor Arpeggio (2 oct.)',hand:'lh',from:[4,2,1,4,2,1,4],to:[5,3,2,1,3,2,1]},
+       {k:'D'+SH+'/E'+FL+' Minor Arpeggio (2 oct.)',hand:'rh',from:[2,1,2,4,1,2,4],to:[1,2,3,1,2,3,5]},
+       {k:'A'+SH+'/B'+FL+' Minor Arpeggio (2 oct.)',hand:'rh',from:[3,2,2,1,3,2,1],to:[2,3,1,2,3,1,2]},
+       {k:'C'+SH+'/D'+FL+' Major',hand:'rh',from:[2,3,1,2,3,4,1,2,3,1,2,2,4,1,2],to:[2,3,1,2,3,4,1,2,3,1,2,3,4,1,2]},
+       {k:'C Major Pentatonic',hand:'rh',from:[1, 2, 1, 2, 3, 5, 3, 2, 1, 2, 1],to:[1, 2, 3, 1, 2, 4, 2, 1, 3, 2, 1]},
+       {k:'A Major Pentatonic',hand:'rh',from:[1, 2, 3, 1, 2, 1, 2, 1, 3, 2, 1],to:[1, 2, 3, 1, 2, 3, 2, 1, 3, 2, 1]},
+       {k:'B Major Pentatonic',hand:'rh',from:[1, 2, 3, 4, 5, 1, 5, 4, 3, 2, 1],to:[1, 2, 3, 1, 2, 3, 2, 1, 3, 2, 1]},
+       {k:'B Major Pentatonic',hand:'lh',from:[1, 5, 4, 3, 2, 1, 2, 3, 4, 5, 1],to:[3, 2, 1, 3, 2, 1, 2, 3, 1, 2, 3]},
+       {k:'A'+SH+'/B'+FL+' Major Pentatonic',hand:'rh',from:[3, 1, 2, 1, 2, 3, 2, 1, 2, 1, 3],to:[2, 1, 2, 1, 2, 3, 2, 1, 2, 1, 2]}].forEach(function(pt){
+        var e=FING[pt.k];
+        if(e&&Array.isArray(e[pt.hand])&&e[pt.hand].join(',')===pt.from.join(',')){
+          e[pt.hand]=pt.to.slice();
+        }
+      });
+    }
     if(Array.isArray(saved.customProgs)){
       CUSTOM_PROGS=saved.customProgs.filter(function(p){
         return p&&typeof p.genre==='string'&&Array.isArray(p.steps)&&p.steps.length>0&&
@@ -7663,6 +7945,17 @@ IDB.load(function(saved){
         });
         if(Object.keys(cleanByProg).length>0)cleanBI[stKey]=cleanByProg;
       });
+      // Major progressions were reordered (progOrderV 2) — move any saved
+      // per-progression inversions to their new positions.
+      if(saved.progOrderV!==2&&cleanBI['Major']){
+        var _om=[0,14,7,1,2,3,4,5,6,8,9,10,11,12,13],_mp={},_remap={};
+        _om.forEach(function(oldIdx,newIdx){_mp[oldIdx]=newIdx;});
+        Object.keys(cleanBI['Major']).forEach(function(k){
+          var ni=_mp[parseInt(k,10)];
+          _remap[ni===undefined?k:ni]=cleanBI['Major'][k];
+        });
+        cleanBI['Major']=_remap;
+      }
       BUILTIN_PROG_INVERSIONS=cleanBI;
     }
     if(saved.chordCardInv&&typeof saved.chordCardInv==='object'){
