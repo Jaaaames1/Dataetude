@@ -4952,7 +4952,7 @@ function mkCircle(size){
     var t=document.createElementNS(NS,'text');
     t.setAttribute('x',x);t.setAttribute('y',y);t.setAttribute('text-anchor','middle');t.setAttribute('dominant-baseline','central');
     t.setAttribute('font-size',size);t.setAttribute('font-weight',weight||'400');t.setAttribute('fill',fill);
-    t.setAttribute('font-family','inherit');t.style.pointerEvents='none';t.textContent=s;return t;
+    t.style.fontFamily=JF;t.style.pointerEvents='none';t.textContent=s;return t; // app font; 'inherit' picked up the page's serif default
   }
   COF_POS.forEach(function(sem,i){
     var a1=i*30-15,a2=i*30+15,mid=i*30;
