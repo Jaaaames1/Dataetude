@@ -5998,6 +5998,7 @@ function buildUI(){
   var cofBtn=el('button',{style:{background:'transparent',border:'none',color:'var(--sub)',fontFamily:JF,fontSize:'0.52rem',
     letterSpacing:'0.08em',cursor:'pointer',padding:'2px 0 2px 8px',textDecoration:'underline',textUnderlineOffset:'3px'}},'\u25D4 Circle of fifths');
   cofBtn.addEventListener('click',showCircleOverlay);
+  UI.cofBtn=cofBtn; // only shown on the Scales page
   keyHdr.appendChild(cofBtn);
   tw.appendChild(keyHdr);
   var tg=el('div',{cls:'tg'});
@@ -7989,6 +7990,7 @@ function update(){
   }
   syncOctaveBtn();
   if(UI.scaleTypeLabel)UI.scaleTypeLabel.textContent=S.tab==='chords'?'Chord Type':'Scale Type';
+  if(UI.cofBtn)UI.cofBtn.style.display=S.tab==='scales'?'':'none';
   var CHORD_STYPES=['Major','Natural Minor'];
   if(UI.typeBtns)STYPES.forEach(function(t){
     var b=UI.typeBtns[t],a=S.scaleType===t;
