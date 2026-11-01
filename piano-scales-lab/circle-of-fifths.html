@@ -156,36 +156,29 @@ function buttons(){
   return row;
 }
 function keyboard(){
-  // One octave, tonic to tonic, so the scale visibly begins and ends on its own root.
-  var tonicM=60+st.sem,endM=tonicM+12,base=tonicM;if([1,3,6,8,10].indexOf(base%12)>=0)base-=1;
-  if([1,3,6,8,10].indexOf(endM%12)>=0)endM+=1;
-  var whites=[],blacks=[],wi=0;
-  for(var m=base;m<=endM;m++){var pc=m%12;if([1,3,6,8,10].indexOf(pc)>=0)blacks.push({m:m,after:wi-1});else{whites.push({m:m,wi:wi});wi++;}}
+  // Fixed C4-C6 keyboard; only one octave of the scale (tonic up to the note below the next tonic) is highlighted.
+  var LO=60,HIM=84,whites=[],blacks=[],wi=0,tonicM=60+st.sem;
   var scale=(st.minor?MIN:MAJ).map(function(o){return (st.sem+o)%12;});
+  function on(m){return m>=tonicM&&m<=tonicM+11&&scale.indexOf(m%12)>=0;}
+  for(var m=LO;m<=HIM;m++){var pc=m%12;if([1,3,6,8,10].indexOf(pc)>=0)blacks.push({m:m,after:wi-1});else{whites.push({m:m,wi:wi});wi++;}}
   var ww=100/whites.length,bw=ww*0.62;
   var wrap=mk('div',{style:'background:#18181f;border-radius:10px;padding:10px 6px 6px;'});
-  var box=mk('div',{style:'position:relative;height:100px;'});
-  function deg(mm){if(mm<tonicM||mm>tonicM+12)return 0;var i=scale.indexOf(mm%12);return i<0?0:(mm===tonicM+12?1:i+1);}
-  whites.forEach(function(w){var d=deg(w.m),on=d>0;
-    var k=mk('div',{style:'position:absolute;top:0;left:'+(w.wi*ww)+'%;width:calc('+ww+'% - 1px);height:100%;box-sizing:border-box;border-radius:0 0 4px 4px;z-index:1;'+
-      (on?'background:linear-gradient(180deg,'+HI+' 0%,'+HI+' 65%,'+DK+'55 100%);border:1px solid '+DK+'88;box-shadow:inset 0 -3px 0 '+DK+';':
-       'background:linear-gradient(180deg,#f5f5f5 0%,#e0e0e0 100%);border:1px solid #aaa;box-shadow:inset 0 -2px 4px rgba(0,0,0,.1);')});
-    if(on)k.appendChild(mk('div',{style:'position:absolute;bottom:7px;left:0;right:0;text-align:center;font-size:0.7rem;font-weight:700;color:#4a3a00;'},String(d)));
-    box.appendChild(k);});
-  blacks.forEach(function(k){var d=deg(k.m),on=d>0;
-    var e=mk('div',{style:'position:absolute;top:0;left:'+((k.after+1)*ww-bw/2)+'%;width:'+bw+'%;height:60%;border-radius:0 0 3px 3px;z-index:2;box-shadow:0 3px 7px rgba(0,0,0,.7);'+
-      (on?'background:linear-gradient(180deg,'+DK+' 0%,'+DK+' 55%,#6a540e 100%);':'background:linear-gradient(180deg,#2a2a2a 0%,#111 100%);')});
-    if(on)e.appendChild(mk('div',{style:'position:absolute;bottom:4px;left:0;right:0;text-align:center;font-size:0.6rem;font-weight:700;color:#fff;'},String(d)));
-    box.appendChild(e);});
+  var box=mk('div',{style:'position:relative;height:96px;'});
+  whites.forEach(function(w){var o=on(w.m);
+    box.appendChild(mk('div',{style:'position:absolute;top:0;left:'+(w.wi*ww)+'%;width:calc('+ww+'% - 1px);height:100%;box-sizing:border-box;border-radius:0 0 4px 4px;z-index:1;'+
+      (o?'background:linear-gradient(180deg,'+HI+' 0%,'+HI+' 65%,'+DK+'55 100%);border:1px solid '+DK+'88;box-shadow:inset 0 -3px 0 '+DK+';':'background:linear-gradient(180deg,#f5f5f5 0%,#e0e0e0 100%);border:1px solid #aaa;box-shadow:inset 0 -2px 4px rgba(0,0,0,.1);')}));});
+  blacks.forEach(function(k){var o=on(k.m);
+    box.appendChild(mk('div',{style:'position:absolute;top:0;left:'+((k.after+1)*ww-bw/2)+'%;width:'+bw+'%;height:60%;border-radius:0 0 3px 3px;z-index:2;box-shadow:0 3px 7px rgba(0,0,0,.7);'+
+      (o?'background:linear-gradient(180deg,'+DK+' 0%,'+DK+' 55%,#6a540e 100%);':'background:linear-gradient(180deg,#2a2a2a 0%,#111 100%);')}));});
   wrap.appendChild(box);
   var lr=mk('div',{style:'position:relative;height:14px;margin-top:3px;'});
   var L={0:'C',2:'D',4:'E',5:'F',7:'G',9:'A',11:'B'};
-  whites.forEach(function(w){var on=deg(w.m)>0;
-    lr.appendChild(mk('div',{style:'position:absolute;left:'+(w.wi*ww)+'%;width:'+ww+'%;text-align:center;font-size:0.5rem;white-space:nowrap;overflow:hidden;color:'+(on?'#a08830':'#3a3a3a')+';'+(on?'font-weight:700;':'')},L[w.m%12]+(Math.floor(w.m/12)-1)));});
+  whites.forEach(function(w){var o=on(w.m);
+    lr.appendChild(mk('div',{style:'position:absolute;left:'+(w.wi*ww)+'%;width:'+ww+'%;text-align:center;font-size:0.5rem;white-space:nowrap;overflow:hidden;color:'+(o?DK:'#3a3a3a')+';'+(o?'font-weight:700;':'')},L[w.m%12]+(Math.floor(w.m/12)-1)));});
   wrap.appendChild(lr);return wrap;
 }
 function render(){root.innerHTML='';root.appendChild(circle());root.appendChild(buttons());root.appendChild(keyboard());
-  root.appendChild(mk('p',{style:'text-align:center;font-size:0.76rem;color:rgba(232,232,232,0.35);margin:10px 0 0;'},'Try it: tap any key on the circle, or use the buttons. The numbers show the notes of the scale, 1 to 7, then back to 1.'));}
+  root.appendChild(mk('p',{style:'text-align:center;font-size:0.76rem;color:rgba(232,232,232,0.35);margin:10px 0 0;'},'Try it: tap any key on the circle, or use the buttons. The highlighted keys are one octave of the scale.'));}
 render();
 })();
 </script>
