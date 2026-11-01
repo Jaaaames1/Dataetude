@@ -76,6 +76,7 @@ footer a:hover{color:#666;}
 
 
   </style>
+<style>.page-header{padding-bottom:18px !important;} main{padding-top:14px !important;}</style>
 </head>
 <body>
 <nav>
@@ -90,8 +91,95 @@ footer a:hover{color:#666;}
 </div>
 <main>
 
-<h2>What it shows</h2>
-<img src="/piano-scales-lab/screenshots/circle-of-fifths.svg" alt="The circle of fifths in Piano Scales Lab with C major selected" style="display:block;width:100%;max-width:400px;margin:0 auto 22px;border-radius:20px;">
+<div id="cof-demo" style="max-width:440px;margin:0 auto 26px;"></div>
+<script>
+(function(){
+var SH='♯',FL='♭';
+var KEY_MAJ=['C','D'+FL,'D','E'+FL,'E','F','F'+SH,'G','A'+FL,'A','B'+FL,'B'];
+var KEY_MIN=['C','C'+SH,'D','E'+FL,'E','F','F'+SH,'G','G'+SH,'A','B'+FL,'B'];
+var POS=[0,7,2,9,4,11,6,1,8,3,10,5];
+var SIG=['0','1'+SH,'2'+SH,'3'+SH,'4'+SH,'5'+SH,'6'+SH+'/6'+FL,'5'+FL,'4'+FL,'3'+FL,'2'+FL,'1'+FL];
+var COLORS=['#5b9bd5','#47b4bb','#5aaa82','#d4a017','#d47a3a','#c75c8e','#7a5dc7','#5572d4','#6a9b50','#c7547a','#b09a20','#4a7fa0'];
+var HI='#dfd090',DK='#7a6010';
+var MAJ=[0,2,4,5,7,9,11],MIN=[0,2,3,5,7,8,10];
+var st={sem:0,minor:false};
+var NS='http://www.w3.org/2000/svg';
+var root=document.getElementById('cof-demo');
+function nm(sem,minor){if(!minor&&sem===6)return 'F'+SH+'/G'+FL;return (minor?KEY_MIN:KEY_MAJ)[((sem%12)+12)%12]+(minor?'m':'');}
+function mk(tag,attrs,text){var e=document.createElement(tag);for(var k in attrs){if(k==='style')e.style.cssText=attrs[k];else e.setAttribute(k,attrs[k]);}if(text)e.textContent=text;return e;}
+function circle(){
+  var svg=document.createElementNS(NS,'svg');svg.setAttribute('viewBox','0 0 300 300');
+  svg.setAttribute('style','display:block;width:100%;max-width:420px;margin:0 auto;user-select:none;-webkit-tap-highlight-color:transparent;');
+  var bg=document.createElementNS(NS,'rect');bg.setAttribute('width',300);bg.setAttribute('height',300);bg.setAttribute('rx',20);bg.setAttribute('fill','#0a0a0f');svg.appendChild(bg);
+  var cx=150,cy=150,R1=146,R2=102,R3=64;
+  var isMin=st.minor,majSem=isMin?(st.sem+3)%12:st.sem,minSem=(majSem+9)%12,color=COLORS[st.sem];
+  var selIdx=POS.indexOf(majSem);
+  function pt(r,deg){var a=(deg-90)*Math.PI/180;return [cx+r*Math.cos(a),cy+r*Math.sin(a)];}
+  function seg(r1,r2,a1,a2){var p1=pt(r2,a1),p2=pt(r2,a2),p3=pt(r1,a2),p4=pt(r1,a1);
+    return 'M'+p1[0]+' '+p1[1]+' A'+r2+' '+r2+' 0 0 1 '+p2[0]+' '+p2[1]+' L'+p3[0]+' '+p3[1]+' A'+r1+' '+r1+' 0 0 0 '+p4[0]+' '+p4[1]+' Z';}
+  function txt(x,y,t,size,fill,w){var e=document.createElementNS(NS,'text');e.setAttribute('x',x);e.setAttribute('y',y);e.setAttribute('text-anchor','middle');e.setAttribute('dominant-baseline','central');e.setAttribute('font-size',size);e.setAttribute('font-weight',w||'400');e.setAttribute('fill',fill);e.setAttribute('font-family','-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,sans-serif');e.style.pointerEvents='none';e.textContent=t;return e;}
+  POS.forEach(function(sem,i){
+    var a1=i*30-15,a2=i*30+15,mid=i*30,isSel=(i===selIdx);
+    var po=document.createElementNS(NS,'path');po.setAttribute('d',seg(R2+1,R1,a1,a2));
+    var selO=isSel&&!isMin,tintO=isSel&&isMin;
+    po.setAttribute('fill',selO?color:(tintO?color+'33':'rgba(255,255,255,0.04)'));po.setAttribute('stroke','rgba(255,255,255,0.07)');po.setAttribute('stroke-width','1');po.style.cursor='pointer';
+    po.addEventListener('click',function(){st={sem:sem,minor:false};render();});svg.appendChild(po);
+    var lp=pt((R1+R2)/2+4,mid),sp=pt((R1+R2)/2-13,mid),n=nm(sem,false);
+    svg.appendChild(txt(lp[0],lp[1],n,n.length>2?12:17,selO?'#fff':'#ddd','700'));
+    svg.appendChild(txt(sp[0],sp[1],SIG[i],9,selO?'#ffffffcc':'#777','400'));
+    var pi=document.createElementNS(NS,'path');pi.setAttribute('d',seg(R3,R2-1,a1,a2));
+    var selI=isSel&&isMin,tintI=isSel&&!isMin;
+    pi.setAttribute('fill',selI?color:(tintI?color+'33':'rgba(255,255,255,0.05)'));pi.setAttribute('stroke','rgba(255,255,255,0.07)');pi.setAttribute('stroke-width','1');pi.style.cursor='pointer';
+    var mins=(sem+9)%12;pi.addEventListener('click',function(){st={sem:mins,minor:true};render();});svg.appendChild(pi);
+    var ip=pt((R2+R3)/2,mid),mn=nm(mins,true);
+    svg.appendChild(txt(ip[0],ip[1],mn,mn.length>2?11:13,selI?'#fff':'#777',selI?'700':'400'));
+  });
+  var keyName=isMin?nm(minSem,true).replace('m','')+' minor':nm(majSem,false).split('/')[0]+' major';
+  var sg=SIG[selIdx];
+  var cnt=sg==='0'?'no sharps or flats':(sg.indexOf('/')>=0?'6 sharps or flats':sg.replace(SH,' sharp'+(sg[0]==='1'?'':'s')).replace(FL,' flat'+(sg[0]==='1'?'':'s')));
+  svg.appendChild(txt(cx,cy-14,keyName,17,'#ddd','700'));
+  svg.appendChild(txt(cx,cy+6,cnt,9.5,'#777'));
+  svg.appendChild(txt(cx,cy+22,isMin?'relative: '+nm(majSem,false).split('/')[0]+' major':'relative: '+nm(minSem,true),9.5,'#777'));
+  return svg;
+}
+function buttons(){
+  var row=mk('div',{style:'display:flex;gap:6px;margin:12px 0 10px;'});
+  var base='padding:7px 4px;border-radius:8px;text-align:center;line-height:1.3;cursor:pointer;font:inherit;font-size:0.72rem;letter-spacing:0.04em;';
+  var relName=st.minor?nm((st.sem+3)%12,false).split('/')[0]+' Major':KEY_MIN[(st.sem+9)%12]+' Natural Minor';
+  var parName=st.minor?KEY_MAJ[st.sem]+' Major':KEY_MIN[st.sem]+' Natural Minor';
+  function btn(flex,bg,bd,col,label,labCol,val,fn){
+    var b=mk('button',{style:'flex:'+flex+';'+base+'background:'+bg+';border:1px solid '+bd+';color:'+col+';'});
+    var l=mk('div',{style:'font-size:0.52rem;letter-spacing:0.12em;margin-bottom:1px;color:'+labCol+';'},label);b.appendChild(l);b.appendChild(document.createTextNode(val));b.addEventListener('click',fn);return b;}
+  row.appendChild(btn(2,'rgba(240,196,60,.07)','rgba(240,196,60,.2)','#c8a840','RELATIVE','#665a20',relName,function(){if(st.minor){st={sem:(st.sem+3)%12,minor:false};}else{st={sem:(st.sem+9)%12,minor:true};}render();}));
+  row.appendChild(btn(2,'rgba(80,140,240,.07)','rgba(80,140,240,.2)','#6090d8','PARALLEL','#304870',parName,function(){st={sem:st.sem,minor:!st.minor};render();}));
+  row.appendChild(btn(1,'rgba(160,100,240,.07)','rgba(160,100,240,.2)','#b070e8','KEY','rgba(160,100,240,.5)','⬆+3',function(){st={sem:(st.sem+3)%12,minor:st.minor};render();}));
+  return row;
+}
+function keyboard(){
+  var LO=60,HIM=84,whites=[],blacks=[],wi=0;
+  var scale=(st.minor?MIN:MAJ).map(function(o){return (st.sem+o)%12;});
+  for(var m=LO;m<=HIM;m++){var pc=m%12;if([1,3,6,8,10].indexOf(pc)>=0)blacks.push({m:m,after:wi-1});else{whites.push({m:m,wi:wi});wi++;}}
+  var ww=100/whites.length,bw=ww*0.62;
+  var wrap=mk('div',{style:'background:#18181f;border-radius:10px;padding:10px 6px 6px;'});
+  var box=mk('div',{style:'position:relative;height:96px;'});
+  whites.forEach(function(w){var on=scale.indexOf(w.m%12)>=0;
+    box.appendChild(mk('div',{style:'position:absolute;top:0;left:'+(w.wi*ww)+'%;width:calc('+ww+'% - 1px);height:100%;box-sizing:border-box;border-radius:0 0 4px 4px;z-index:1;'+
+      (on?'background:linear-gradient(180deg,'+HI+' 0%,'+HI+' 65%,'+DK+'55 100%);border:1px solid '+DK+'88;box-shadow:inset 0 -3px 0 '+DK+';':'background:linear-gradient(180deg,#f5f5f5 0%,#e0e0e0 100%);border:1px solid #aaa;box-shadow:inset 0 -2px 4px rgba(0,0,0,.1);')}));});
+  blacks.forEach(function(k){var on=scale.indexOf(k.m%12)>=0;
+    box.appendChild(mk('div',{style:'position:absolute;top:0;left:'+((k.after+1)*ww-bw/2)+'%;width:'+bw+'%;height:60%;border-radius:0 0 3px 3px;z-index:2;box-shadow:0 3px 7px rgba(0,0,0,.7);'+
+      (on?'background:linear-gradient(180deg,'+DK+' 0%,'+DK+' 55%,#6a540e 100%);':'background:linear-gradient(180deg,#2a2a2a 0%,#111 100%);')}));});
+  wrap.appendChild(box);
+  var lr=mk('div',{style:'position:relative;height:14px;margin-top:3px;'});
+  var L={0:'C',2:'D',4:'E',5:'F',7:'G',9:'A',11:'B'};
+  whites.forEach(function(w){var on=scale.indexOf(w.m%12)>=0;
+    lr.appendChild(mk('div',{style:'position:absolute;left:'+(w.wi*ww)+'%;width:'+ww+'%;text-align:center;font-size:0.5rem;white-space:nowrap;overflow:hidden;color:'+(on?DK:'#3a3a3a')+';'+(on?'font-weight:700;':'')},L[w.m%12]+(Math.floor(w.m/12)-1)));});
+  wrap.appendChild(lr);return wrap;
+}
+function render(){root.innerHTML='';root.appendChild(circle());root.appendChild(buttons());root.appendChild(keyboard());
+  root.appendChild(mk('p',{style:'text-align:center;font-size:0.76rem;color:rgba(232,232,232,0.35);margin:10px 0 0;'},'Try it: tap any key on the circle, or use the buttons.'));}
+render();
+})();
+</script>
 <p>The circle arranges all 12 keys in the order of fifths. The <strong>outer ring</strong> shows the major keys and the <strong>inner ring</strong> shows each major key's relative minor (the minor key that shares the same notes). Under each major key is its key signature, the number of sharps or flats.</p>
 <ul class="guide">
   <li><strong>Moving clockwise</strong> adds one sharp each step (C, G, D, A, E, B)</li>
