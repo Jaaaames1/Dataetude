@@ -5029,10 +5029,11 @@ function showCircleOverlay(){
     window.removeEventListener('resize',onResize);UI.cofOverlayRefresh=null;popModalHistory(closeFn);
     moved.slice().reverse().forEach(function(m){if(m.ph.parentNode)m.ph.parentNode.insertBefore(m.node,m.ph);m.ph.remove();});
     if(UI.relRow)UI.relRow.style.padding=rpPad;
-    if(UI.rhKb)UI.rhKb.title.style.display=rhTitleDisp;
+    if(UI.rhKb){UI.rhKb.title.style.display=rhTitleDisp;if(origRhUpd){UI.rhKb.upd=origRhUpd;}}
     if(UI.handStack)UI.handStack.style.display='';
     if(UI.handSepAfter)UI.handSepAfter.style.display='';
     TR.handMode=prevHand;setTransportUI();
+    if(origRhUpd)update(); // redraw the full scale on the main keyboard
     if(UI.updateScaleKcBtn)UI.updateScaleKcBtn();
     overlay.style.transform='translateX(100%)';setTimeout(function(){overlay.remove();},290);
   };
@@ -5045,7 +5046,19 @@ function showCircleOverlay(){
   var side=el('div',{style:{display:'flex',flexDirection:'column',minWidth:'0',width:'100%',maxWidth:'520px'}});
   body.appendChild(circleHold);body.appendChild(side);
   if(UI.relRow){adopt(UI.relRow,side);UI.relRow.style.padding='10px 0 4px';}
-  if(UI.rhKb){adopt(UI.rhKb.wrap,side);UI.rhKb.title.style.display='none';UI.rhKb.wrap.style.marginTop='8px';}
+  var origRhUpd=null;
+  if(UI.rhKb){adopt(UI.rhKb.wrap,side);UI.rhKb.title.style.display='none';UI.rhKb.wrap.style.marginTop='8px';
+    // Light up just one octave of the scale here (first note up to the note before the next tonic) so the key is easy to read.
+    origRhUpd=UI.rhKb.upd;
+    UI.rhKb.upd=function(sm,fa,hw,dk){
+      if(sm&&sm.length){
+        var lo=Math.min.apply(null,sm),sm2=[],fa2=[];
+        for(var i=0;i<sm.length;i++){if(sm[i]>=lo&&sm[i]<lo+12){sm2.push(sm[i]);if(fa&&fa[i]!=null)fa2[sm2.length-1]=fa[i];}}
+        sm=sm2;fa=fa2;
+      }
+      return origRhUpd.call(this,sm,fa,hw,dk);
+    };
+  }
   if(UI.transBar){adopt(UI.transBar,side);}
   side.appendChild(mkHelpLink('circle-of-fifths'));
   var land=false;
@@ -5062,6 +5075,7 @@ function showCircleOverlay(){
     circleHold.innerHTML='';circleHold.appendChild(mkCircle(size));
   }
   layout();renderCircle();
+  if(origRhUpd)update(); // apply the one-octave view straight away
   UI.cofOverlayRefresh=renderCircle;
   window.addEventListener('resize',onResize);
   document.body.appendChild(overlay);pushModalHistory(closeFn);
