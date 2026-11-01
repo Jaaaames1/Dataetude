@@ -135,11 +135,24 @@ function circle(){
     svg.appendChild(txt(ip[0],ip[1],mn,mn.length>2?11:13,selI?'#fff':'#777',selI?'700':'400'));
   });
   var keyName=isMin?nm(minSem,true).replace('m','')+' minor':nm(majSem,false).split('/')[0]+' major';
-  var sg=SIG[selIdx];
-  var cnt=sg==='0'?'no sharps or flats':(sg.indexOf('/')>=0?'6 sharps or flats':sg.replace(SH,' sharp'+(sg[0]==='1'?'':'s')).replace(FL,' flat'+(sg[0]==='1'?'':'s')));
-  svg.appendChild(txt(cx,cy-14,keyName,17,'#ddd','700'));
-  svg.appendChild(txt(cx,cy+6,cnt,9.5,'#777'));
-  svg.appendChild(txt(cx,cy+22,isMin?'relative: '+nm(majSem,false).split('/')[0]+' major':'relative: '+nm(minSem,true),9.5,'#777'));
+  svg.appendChild(txt(cx,cy-38,keyName,15,'#ddd','700'));
+  // Mini key-signature staff inside the centre circle
+  var SHARP_STEP={F:8,C:5,G:9,D:6,A:3,E:7,B:4},FLAT_STEP={B:4,E:7,A:3,D:6,G:2,C:5,F:1};
+  var SHARP_ORDER=['F','C','G','D','A','E','B'],FLAT_ORDER=['B','E','A','D','G','C','F'];
+  var MAP={0:['',0],7:['s',1],2:['s',2],9:['s',3],4:['s',4],11:['s',5],6:['s',6],1:['f',5],8:['f',4],3:['f',3],10:['f',2],5:['f',1]};
+  var ks=MAP[majSem],type=ks[0],count=ks[1];
+  if(majSem===6&&isMin)type='f'; // E-flat minor is written with 6 flats
+  var K=0.5,g=document.createElementNS(NS,'g');
+  g.setAttribute('transform','translate('+(cx-115*K)+','+(cy+3-56*K)+') scale('+K+')');
+  function yOf(n){return 88-n*8;}
+  [0,2,4,6,8].forEach(function(n){var l=document.createElementNS(NS,'line');l.setAttribute('x1',10);l.setAttribute('x2',220);l.setAttribute('y1',yOf(n));l.setAttribute('y2',yOf(n));l.setAttribute('stroke','rgba(200,200,200,0.55)');l.setAttribute('stroke-width','1.6');g.appendChild(l);});
+  var cl=document.createElementNS(NS,'text');cl.setAttribute('x',22);cl.setAttribute('y',yOf(4)+18);cl.setAttribute('font-size','48');cl.setAttribute('fill','#ddd');cl.style.pointerEvents='none';cl.textContent='\u{1D11E}';g.appendChild(cl);
+  var order=type==='s'?SHARP_ORDER:FLAT_ORDER,map=type==='s'?SHARP_STEP:FLAT_STEP,glyph=type==='s'?'♯':'♭';
+  for(var i=0;i<count;i++){var step=map[order[i]],a=document.createElementNS(NS,'text');a.setAttribute('x',70+i*15);a.setAttribute('text-anchor','middle');a.setAttribute('fill','#ddd');a.style.pointerEvents='none';
+    if(type==='f'){a.setAttribute('y',yOf(step)+5);a.setAttribute('font-size','22');}else{a.setAttribute('y',yOf(step));a.setAttribute('dominant-baseline','middle');a.setAttribute('font-size','20');}
+    a.textContent=glyph;g.appendChild(a);}
+  svg.appendChild(g);
+  svg.appendChild(txt(cx,cy+42,isMin?'relative: '+(majSem===6?'G'+FL:nm(majSem,false).split('/')[0])+' major':'relative: '+nm(minSem,true),9.5,'#777'));
   return svg;
 }
 function buttons(){
@@ -154,26 +167,6 @@ function buttons(){
   row.appendChild(btn(2,'rgba(80,140,240,.07)','rgba(80,140,240,.2)','#6090d8','PARALLEL','#304870',parName,function(){st={sem:st.sem,minor:!st.minor};render();}));
   row.appendChild(btn(1,'rgba(160,100,240,.07)','rgba(160,100,240,.2)','#b070e8','KEY','rgba(160,100,240,.5)','⬆+3',function(){st={sem:(st.sem+3)%12,minor:st.minor};render();}));
   return row;
-}
-function staff(){
-  var majSem=st.minor?(st.sem+3)%12:st.sem;
-  var SHARP_STEP={F:8,C:5,G:9,D:6,A:3,E:7,B:4},FLAT_STEP={B:4,E:7,A:3,D:6,G:2,C:5,F:1};
-  var SHARP_ORDER=['F','C','G','D','A','E','B'],FLAT_ORDER=['B','E','A','D','G','C','F'];
-  var MAP={0:['',0],7:['s',1],2:['s',2],9:['s',3],4:['s',4],11:['s',5],6:['s',6],1:['f',5],8:['f',4],3:['f',3],10:['f',2],5:['f',1]};
-  var k=MAP[majSem];var type=k[0],count=k[1];
-  if(majSem===6&&st.minor)type='f'; // E-flat minor is written with 6 flats
-  var wrap=mk('div',{style:'background:#18181f;border-radius:10px;padding:10px 12px 6px;margin-bottom:10px;'});
-  wrap.appendChild(mk('div',{style:'font-size:0.62rem;letter-spacing:0.12em;color:#777;text-transform:uppercase;margin-bottom:2px;'},'Key signature'));
-  wrap.appendChild(mk('div',{style:'font-size:0.82rem;color:#ddd;margin-bottom:2px;'},count===0?'No sharps or flats':count+(type==='s'?' sharp':' flat')+(count>1?'s':'')));
-  var HALF=8,BOTTOM=88,L=10,R=220;function yOf(n){return BOTTOM-n*HALF;}
-  var svg=document.createElementNS(NS,'svg');svg.setAttribute('viewBox','0 0 240 100');svg.setAttribute('style','display:block;width:100%;max-width:340px;height:auto;margin:0 auto;');
-  [0,2,4,6,8].forEach(function(n){var l=document.createElementNS(NS,'line');l.setAttribute('x1',L);l.setAttribute('x2',R);l.setAttribute('y1',yOf(n));l.setAttribute('y2',yOf(n));l.setAttribute('stroke','rgba(200,200,200,0.5)');l.setAttribute('stroke-width','1.2');svg.appendChild(l);});
-  var cl=document.createElementNS(NS,'text');cl.setAttribute('x',22);cl.setAttribute('y',yOf(4)+18);cl.setAttribute('font-size','48');cl.setAttribute('fill','#ddd');cl.textContent='\u{1D11E}';svg.appendChild(cl);
-  var order=type==='s'?SHARP_ORDER:FLAT_ORDER,map=type==='s'?SHARP_STEP:FLAT_STEP,glyph=type==='s'?'♯':'♭';
-  for(var i=0;i<count;i++){var step=map[order[i]],a=document.createElementNS(NS,'text');a.setAttribute('x',70+i*15);a.setAttribute('text-anchor','middle');a.setAttribute('fill','#ddd');
-    if(type==='f'){a.setAttribute('y',yOf(step)+5);a.setAttribute('font-size','22');}else{a.setAttribute('y',yOf(step));a.setAttribute('dominant-baseline','middle');a.setAttribute('font-size','20');}
-    a.textContent=glyph;svg.appendChild(a);}
-  wrap.appendChild(svg);return wrap;
 }
 function keyboard(){
   // Fixed C4-C6 keyboard; only one octave of the scale (tonic up to the note below the next tonic) is highlighted.
@@ -197,7 +190,7 @@ function keyboard(){
     lr.appendChild(mk('div',{style:'position:absolute;left:'+(w.wi*ww)+'%;width:'+ww+'%;text-align:center;font-size:0.5rem;white-space:nowrap;overflow:hidden;color:'+(o?DK:'#3a3a3a')+';'+(o?'font-weight:700;':'')},L[w.m%12]+(Math.floor(w.m/12)-1)));});
   wrap.appendChild(lr);return wrap;
 }
-function render(){root.innerHTML='';root.appendChild(circle());root.appendChild(buttons());root.appendChild(staff());root.appendChild(keyboard());
+function render(){root.innerHTML='';root.appendChild(circle());root.appendChild(buttons());root.appendChild(keyboard());
   root.appendChild(mk('p',{style:'text-align:center;font-size:0.76rem;color:rgba(232,232,232,0.35);margin:10px 0 0;'},'Try it: tap any key on the circle, or use the buttons. The highlighted keys are one octave of the scale.'));}
 render();
 })();
