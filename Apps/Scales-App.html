@@ -940,7 +940,7 @@ var PROGRESSIONS={
     {genre:'Dramatic — i VI VII i, film score tension',         steps:[0,5,6,0]},
     {genre:'Descending minor — i III VII VI',                   steps:[0,2,6,5]},
     {genre:'Minor pop — i VI iv VII',                           steps:[0,5,3,6]},
-    {genre:'Ballad — i III VII IV',                             steps:[0,2,6,3]},
+    {genre:'Ballad — i III VII iv',                             steps:[0,2,6,3]},
     {genre:'Metal build — VI VII i',                            steps:[5,6,0]},
     {genre:'Classical minor — i iv v i, formal cadence',        steps:[0,3,4,0]},
   ],
@@ -2173,6 +2173,7 @@ function buildProgSeqFresh(pg,invs){
     var mids=si.map(function(s){return rootMidi+s;});
     var inv=(invs&&invs[idx])||0;
     for(var i=0;i<inv;i++){mids[0]+=12;mids.sort(function(a,b){return a-b;});}
+    while(mids[mids.length-1]>KE)mids=mids.map(function(x){return x-12;}); // a high inversion must still fit on the keyboard
     return mids;
   });
 }
@@ -4753,6 +4754,7 @@ var ALLC_GINV=0; // global inversion choice, kept for the session
 function showAllChordsOverlay(){
   if(window._allChordsOpen)return; // already open (e.g. double tap)
   window._allChordsOpen=true;
+  if(UI.stopAllPlayback)UI.stopAllPlayback(); // a running progression stops when this screen opens
   var mode=CS.chordMode||'Major';
   var defs,q,si,invLabels;
   function setModeVars(){
@@ -5261,6 +5263,7 @@ function refreshChordPage(){
     var mids=si.map(function(s){return rootMidi+s;});
     inv=inv||0;
     for(var i=0;i<inv;i++){mids[0]+=12;mids.sort(function(a,b){return a-b;});}
+    while(mids[mids.length-1]>KE)mids=mids.map(function(x){return x-12;}); // a high inversion must still fit on the keyboard
     return mids;
   }
 
@@ -6123,9 +6126,10 @@ function buildUI(){
   function updateScaleKcBtn(){
     scaleKcBtn.innerHTML="";
     var isQueued=(TR.active&&TR.loop&&TR.keyChangeQueued&&!octOnlyQueue())||(CP.active&&CP.loop&&CP.keyChangeQueued);
-    scaleKcBtn.style.color=isQueued?"#ffcc44":"#b070e8";
-    scaleKcBtn.style.borderColor=isQueued?"rgba(255,200,60,0.4)":"var(--kc-border)";
-    scaleKcBtn.appendChild(el("div",{style:{fontSize:"0.42rem",letterSpacing:"0.08em",marginBottom:"1px",color:isQueued?"rgba(255,200,60,0.6)":"rgba(160,100,240,0.5)"}},"KEY"));
+    var _lt=SETTINGS.theme==='light'; // the pale amber is unreadable on a light background
+    scaleKcBtn.style.color=isQueued?(_lt?"#8a5f00":"#ffcc44"):"#b070e8";
+    scaleKcBtn.style.borderColor=isQueued?(_lt?"rgba(160,110,0,0.55)":"rgba(255,200,60,0.4)"):"var(--kc-border)";
+    scaleKcBtn.appendChild(el("div",{style:{fontSize:"0.42rem",letterSpacing:"0.08em",marginBottom:"1px",color:isQueued?(_lt?"rgba(138,95,0,0.75)":"rgba(255,200,60,0.6)"):"rgba(160,100,240,0.5)"}},"KEY"));
     var _pk=isQueued?pendingKeyInfo():null;
     scaleKcBtn.appendChild(document.createTextNode(isQueued?"⏳ "+((_pk&&!_pk.plus3)?cofKeyName(_pk.sem,_pk.minor).split('/')[0]:"+3"):"⬆+3"));
     if(UI.cofOverlayRefresh)UI.cofOverlayRefresh();
@@ -6465,7 +6469,9 @@ function buildUI(){
   UI.trBtns={};
   // Stops whatever is playing (scale loop, chord progression, tempo trainer) exactly as the main Play/Stop button would.
   UI.stopAllPlayback=function(){
-    if(TR.active&&UI.trPlayBtn&&UI.trPlayBtn.onclick)UI.trPlayBtn.onclick();
+    if(UI.stGoBtn&&window.ST&&(ST.active||UI.stGoBtn.textContent==='\u25A0 Stop Trainer')){UI.stGoBtn.click();} // Tempo Trainer, including its count-in
+    else if(TR.active&&UI.trPlayBtn&&UI.trPlayBtn.onclick)UI.trPlayBtn.onclick();
+    else if(_countInOv)trStop(); // a count-in that has not started playing yet
     if(typeof CP!=='undefined'&&CP.active&&typeof cpStop==='function')cpStop();
   };
 
