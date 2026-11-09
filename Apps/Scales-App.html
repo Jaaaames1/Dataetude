@@ -2884,7 +2884,7 @@ function trTick(){
   if(isLast&&TR.keyChangeQueued&&TR.loop){
     if(TR.kbRH)TR.kbRH.flash(null);
     if(TR.kbLH)TR.kbLH.flash(null);
-    TR.keyChangeQueued=false;
+    TR.keyChangeQueued=false;TR.keyChangeOrigScaleType=null; // the staged change is now the playing one
     if(TR._targetTonic){
       // Resolve against TONICS the same way jump() does — TR._targetTonic
       // may be a truncated sharp-only label like "D♯" (from relScale's
@@ -3041,7 +3041,7 @@ function trTick(){
       if(TR.loop){
         if(TR.keyChangeQueued){
           // Key change: apply now, start new key from root (pos=0)
-          TR.keyChangeQueued=false;
+          TR.keyChangeQueued=false;TR.keyChangeOrigScaleType=null;
           if(TR._targetTonic){
             // Same resolution fix as the immediate-skip path above — see
             // that comment for the full explanation.
@@ -6142,6 +6142,9 @@ function buildUI(){
         // Octaves is waiting quietly in the same queue — add the +3 on top of it
         TR._targetTonic=null;TR._octOnly=false;
       } else {
+        // +3 replaces any key picked earlier: put back the scale type that picking staged, and forget the picked key
+        if(TR.keyChangeQueued&&TR.keyChangeOrigScaleType!=null){S.scaleType=TR.keyChangeOrigScaleType;}
+        TR.keyChangeOrigScaleType=null;TR._targetTonic=null;TR._pendingType=null;
         TR.keyChangeQueued=!TR.keyChangeQueued;
         if(!TR.keyChangeQueued&&TR.pendingOctaves!=null){
           // +3 switched off, but the octave change is still waiting
