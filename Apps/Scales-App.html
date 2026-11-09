@@ -4963,7 +4963,9 @@ function mkCircle(size){
   svg.style.flexShrink='0';svg.style.userSelect='none';svg.style.webkitTapHighlightColor='transparent';
   var cx=150,cy=150,R1=146,R2=102,R3=64;
   var curSem=(findTonic(S.tonic)||TONICS[0]).semitone;
-  var isMin=isMinorKeyType(S.scaleType)&&S.scaleType!=='Chromatic';
+  // While a key change is waiting, S.scaleType already holds the target's type; the circle must keep showing what is still playing.
+  var shownType=(TR.active&&TR.loop&&TR.keyChangeQueued&&TR.keyChangeOrigScaleType!=null)?TR.keyChangeOrigScaleType:S.scaleType;
+  var isMin=isMinorKeyType(shownType)&&shownType!=='Chromatic';
   var majSem=isMin?(curSem+3)%12:curSem, minSem=(majSem+9)%12;
   var color=(findTonic(S.tonic)||TONICS[0]).color;
   var selIdx=COF_POS.indexOf(majSem);
