@@ -1025,7 +1025,7 @@ function sName(){
   return S.scaleType==='Melodic Minor'?b+' Melodic Minor ('+(S.melodicDir==='ASC'?'Asc':'Desc')+')':b+' '+S.scaleType;
 }
 var FING_VERSION=7;
-function persist(){IDB.save({S:S,FING:FING,fver:FING_VERSION,settings:SETTINGS,synth:SYNTH,customProgs:CUSTOM_PROGS,builtinProgInv:BUILTIN_PROG_INVERSIONS,progOrderV:2,chordCardInv:CHORD_CARD_INV});}
+function persist(){var _pS=(window.UI&&UI.cofSavedOct!=null)?Object.assign({},S,{octaves:UI.cofSavedOct}):S;IDB.save({S:_pS,FING:FING,fver:FING_VERSION,settings:SETTINGS,synth:SYNTH,customProgs:CUSTOM_PROGS,builtinProgInv:BUILTIN_PROG_INVERSIONS,progOrderV:2,chordCardInv:CHORD_CARD_INV});}
 
 // ── SETTINGS ──────────────────────────────────────────────────────────────────
 // Palettes: [name, lhHighlight, lhDark, rhHighlight, rhDark]
@@ -2183,6 +2183,7 @@ function cpStop(){
   if(CP.kbRef)CP.kbRef.upd([],[],rhHi(),rhDk());
   if(typeof refreshProgStepUI==='function')refreshProgStepUI();
   if(UI.updateScaleKcBtn)UI.updateScaleKcBtn();
+  updateTonicBtnStates();
   cpSetUI();
 }
 
@@ -2781,10 +2782,14 @@ function trClearTick(){
 
 function trStop(){
   var wasMelodic=TR.melodicAscLen>=0;
+  // A key change that was still waiting is abandoned, so a scale type staged with it goes back too.
+  if(TR.keyChangeQueued&&TR.keyChangeOrigScaleType!=null)S.scaleType=TR.keyChangeOrigScaleType;
   TR.active=false;TR.pos=0;TR.melodicAscLen=-1;TR.displayDir=null;
   TR.keyChangeQueued=false;TR._targetTonic=null;TR._pendingType=null;TR._pausePending=false;TR._tickExpected=null;TR.keyChangeOrigScaleType=null;TR.pendingContrary=null;TR.pendingOctaves=null;TR._octOnly=false;
   if(UI.updateContraryToggleUI)UI.updateContraryToggleUI();
   if(UI.updateOctBtnUI)UI.updateOctBtnUI();
+  if(UI.updateScaleKcBtn)UI.updateScaleKcBtn();
+  updateTonicBtnStates();
   if(_countInCancel)_countInCancel();
   if(_countInOv){_countInOv.remove();_countInOv=null;}
   trClearTick();
@@ -3103,7 +3108,25 @@ function octOnlyQueue(){
   return !!(TR.active&&TR.loop&&TR.keyChangeQueued&&TR._octOnly&&TR.pendingOctaves!=null&&
     TR._targetTonic===S.tonic&&TR.keyChangeOrigScaleType==null&&!TR._pendingType&&TR.pendingContrary==null);
 }
+// The key change waiting for the end of the loop, or null: {sem, minor, plus3} (plus3 = the +3 button, not a chosen key).
+function pendingKeyInfo(){
+  var cur=findTonic(S.tonic)||TONICS[0],minorNow=isMinorKeyType(S.scaleType)&&S.scaleType!=='Chromatic';
+  if(TR.active&&TR.loop&&TR.keyChangeQueued&&!octOnlyQueue()){
+    if(TR._targetTonic){var t=findTonic(TR._targetTonic);if(t)return {sem:t.semitone,minor:minorNow,plus3:false};}
+    return {sem:(cur.semitone+3)%12,minor:minorNow,plus3:true};
+  }
+  if(CP.active&&CP.loop&&CP.keyChangeQueued){
+    if(CP.targetTonic){var t2=findTonic(CP.targetTonic);if(t2)return {sem:t2.semitone,minor:minorNow,plus3:false};}
+    if(CP.targetJump){
+      var pr=String(CP.targetJump).split(' '),t3=findTonic(pr[0]);
+      if(t3)return {sem:t3.semitone,minor:isMinorKeyType(pr.slice(1).join(' ')),plus3:false};
+    }
+    return {sem:(cur.semitone+3)%12,minor:minorNow,plus3:true};
+  }
+  return null;
+}
 function updateTonicBtnStates(){
+  if(UI.cofOverlayRefresh)UI.cofOverlayRefresh();
   if(!UI.tonicBtns)return;
   var pendingTarget=null;
   if(TR.active&&TR.loop&&TR.keyChangeQueued&&TR._targetTonic&&!octOnlyQueue()){
@@ -4921,11 +4944,12 @@ function cofKeyName(sem,minor){
 function cofPick(sem,wantMinor){
   var row=TONICS.filter(function(t){return t.semitone===sem;})[0];
   if(!row||!UI.tonicBtns||!UI.tonicBtns[row.label])return;
-  var playing=(TR.active&&TR.loop)||(CP.active&&CP.loop);
-  if(!playing){ // while a loop is playing only the key changes (queued, as on the Key buttons)
-    var toMin={'Major':'Natural Minor','Major Pentatonic':'Minor Pentatonic','Major Arpeggio':'Minor Arpeggio'};
-    var toMaj={'Natural Minor':'Major','Harmonic Minor':'Major','Melodic Minor':'Major','Minor Pentatonic':'Major Pentatonic','Minor Arpeggio':'Major Arpeggio'};
-    var m=wantMinor?toMin:toMaj;
+  var toMin={'Major':'Natural Minor','Major Pentatonic':'Minor Pentatonic','Major Arpeggio':'Minor Arpeggio'};
+  var toMaj={'Natural Minor':'Major','Harmonic Minor':'Major','Melodic Minor':'Major','Minor Pentatonic':'Major Pentatonic','Minor Arpeggio':'Major Arpeggio'};
+  var m=wantMinor?toMin:toMaj;
+  if(TR.active&&TR.loop){ // looping: queue the key (and major/minor) for the end of the scale, like the Key and scale-type buttons
+    TR._pendingType=(m[S.scaleType]&&m[S.scaleType]!==S.scaleType)?m[S.scaleType]:null;
+  } else if(!(CP.active&&CP.loop)){
     if(m[S.scaleType])S.scaleType=m[S.scaleType];
   }
   UI.tonicBtns[row.label].click();
@@ -4943,6 +4967,9 @@ function mkCircle(size){
   var majSem=isMin?(curSem+3)%12:curSem, minSem=(majSem+9)%12;
   var color=(findTonic(S.tonic)||TONICS[0]).color;
   var selIdx=COF_POS.indexOf(majSem);
+  var pend=pendingKeyInfo(),pendIdx=-1,pendName='';
+  if(pend){pendIdx=COF_POS.indexOf(pend.minor?(pend.sem+3)%12:pend.sem);pendName=cofKeyName(pend.sem,pend.minor).split('/')[0].replace('m','')+(pend.minor?' minor':' major');}
+  var AMB='rgba(255,180,0,0.30)',AMBL='#e0a800';
   function pt(r,deg){var a=(deg-90)*Math.PI/180;return [cx+r*Math.cos(a),cy+r*Math.sin(a)];}
   function seg(r1,r2,a1,a2){
     var p1=pt(r2,a1),p2=pt(r2,a2),p3=pt(r1,a2),p4=pt(r1,a1);
@@ -4962,6 +4989,7 @@ function mkCircle(size){
     var selOuter=isSelMaj&&!isMin, tintOuter=isSelMaj&&isMin;
     p.setAttribute('fill',selOuter?color:(tintOuter?color+'33':'var(--faint)'));
     p.setAttribute('stroke','var(--border)');p.setAttribute('stroke-width','1');
+    if(pend&&i===pendIdx&&!pend.minor){p.setAttribute('fill',AMB);p.setAttribute('stroke',AMBL);p.setAttribute('stroke-width','2.5');}
     p.style.cursor='pointer';
     p.addEventListener('click',function(){cofPick(sem,false);});
     svg.appendChild(p);
@@ -4974,6 +5002,7 @@ function mkCircle(size){
     var selInner=isSelMaj&&isMin, tintInner=isSelMaj&&!isMin;
     q.setAttribute('fill',selInner?color:(tintInner?color+'33':'var(--ov-bg)'));
     q.setAttribute('stroke','var(--border)');q.setAttribute('stroke-width','1');q.style.cursor='pointer';
+    if(pend&&i===pendIdx&&pend.minor){q.setAttribute('fill',AMB);q.setAttribute('stroke',AMBL);q.setAttribute('stroke-width','2.5');}
     var mins=(sem+9)%12;
     q.addEventListener('click',function(){cofPick(mins,true);});
     svg.appendChild(q);
@@ -4988,6 +5017,7 @@ function mkCircle(size){
   svg.appendChild(txt(cx,cy-14,keyName,17,'var(--text)','700'));
   svg.appendChild(txt(cx,cy+6,cnt,9.5,'var(--sub)','400'));
   svg.appendChild(txt(cx,cy+22,(isMin?'relative: '+(majSem===6?'G'+FL:cofKeyName(majSem,false).split('/')[0])+' major':'relative: '+(minSem===3?'D'+SH+'m':cofKeyName(minSem,true))),9.5,'var(--sub)','400'));
+  if(pend)svg.appendChild(txt(cx,cy+38,'next: '+pendName,9.5,AMBL,'700'));
   return svg;
 }
 function mkHelpLink(path){
@@ -5020,6 +5050,8 @@ function showCircleOverlay(){
   var rhTitleDisp=UI.rhKb?UI.rhKb.title.style.display:'';
   // Only the right-hand keyboard is shown here, so playback is right hand only and the hand buttons are hidden.
   var prevHand=TR.handMode;
+  // The keyboard here shows a single octave, so play a single octave too (the Octaves setting is put back on close, never saved).
+  var prevOct=S.octaves;UI.cofSavedOct=prevOct;S.octaves=1;if(UI.updateOctBtnUI)UI.updateOctBtnUI();
   TR.handMode='rh';setTransportUI();
   if(UI.handStack)UI.handStack.style.display='none';
   if(UI.handSepAfter)UI.handSepAfter.style.display='none';
@@ -5033,7 +5065,8 @@ function showCircleOverlay(){
     if(UI.handStack)UI.handStack.style.display='';
     if(UI.handSepAfter)UI.handSepAfter.style.display='';
     TR.handMode=prevHand;setTransportUI();
-    if(origRhUpd)update(); // redraw the full scale on the main keyboard
+    S.octaves=prevOct;UI.cofSavedOct=null;if(UI.updateOctBtnUI)UI.updateOctBtnUI();
+    if(origRhUpd||prevOct!==1)update(); // redraw the full scale on the main keyboard
     if(UI.updateScaleKcBtn)UI.updateScaleKcBtn();
     overlay.style.transform='translateX(100%)';setTimeout(function(){overlay.remove();},290);
   };
@@ -5053,7 +5086,7 @@ function showCircleOverlay(){
     UI.rhKb.upd=function(sm,fa,hw,dk){
       if(sm&&sm.length){
         var lo=Math.min.apply(null,sm),sm2=[],fa2=[];
-        for(var i=0;i<sm.length;i++){if(sm[i]>=lo&&sm[i]<lo+12){sm2.push(sm[i]);if(fa&&fa[i]!=null)fa2[sm2.length-1]=fa[i];}}
+        for(var i=0;i<sm.length;i++){if(sm[i]>=lo&&sm[i]<=lo+12){sm2.push(sm[i]);if(fa&&fa[i]!=null)fa2[sm2.length-1]=fa[i];}}
         sm=sm2;fa=fa2;
       }
       return origRhUpd.call(this,sm,fa,hw,dk);
@@ -5099,9 +5132,8 @@ function buildChordPage(){
 
   // ── Scrollable list (portrait: height set by JS; landscape: flex:1) ──
   var listBody=el('div',{cls:'chord-list-body'});
-  var allChordsBtn=el('button',{style:{display:'block',margin:'-4px auto 6px 0',padding:'3px 4px',background:'transparent',
-    border:'none',fontFamily:JF,fontSize:'0.58rem',color:'var(--sub)',cursor:'pointer',letterSpacing:'0.04em',
-    textDecoration:'underline',textUnderlineOffset:'3px',opacity:'0.85'}},'');
+  var allChordsBtn=el('button',{style:{display:'block',margin:'-4px auto 8px 0',padding:'4px 11px',background:'var(--faint)',
+    border:'1px solid var(--border)',borderRadius:'999px',fontFamily:JF,fontSize:'0.58rem',color:'var(--sub)',cursor:'pointer',letterSpacing:'0.04em'}},'');
   allChordsBtn.textContent='\u229E All chords \u203A';
   allChordsBtn.addEventListener('click',showAllChordsOverlay);
   listBody.appendChild(allChordsBtn);
@@ -5995,8 +6027,8 @@ function buildUI(){
   var tw=el('div',{style:{padding:'12px 14px 0'}});
   var keyHdr=el('div',{style:{display:'flex',alignItems:'center',justifyContent:'space-between',marginBottom:'4px'}});
   keyHdr.appendChild(el('div',{style:{fontSize:'0.48rem',fontFamily:JF,letterSpacing:'0.14em',textTransform:'uppercase',color:'var(--sub)'}},'Key'));
-  var cofBtn=el('button',{style:{background:'transparent',border:'none',color:'var(--sub)',fontFamily:JF,fontSize:'0.52rem',
-    letterSpacing:'0.08em',cursor:'pointer',padding:'2px 0 2px 8px',textDecoration:'underline',textUnderlineOffset:'3px'}},'\u25D4 Circle of fifths');
+  var cofBtn=el('button',{style:{background:'var(--faint)',border:'1px solid var(--border)',color:'var(--sub)',fontFamily:JF,fontSize:'0.52rem',
+    letterSpacing:'0.08em',cursor:'pointer',padding:'3px 9px',borderRadius:'999px'}},'\u25D4 Circle of fifths \u203A');
   cofBtn.addEventListener('click',showCircleOverlay);
   UI.cofBtn=cofBtn; // only shown on the Scales page
   keyHdr.appendChild(cofBtn);
@@ -6092,7 +6124,9 @@ function buildUI(){
     scaleKcBtn.style.color=isQueued?"#ffcc44":"#b070e8";
     scaleKcBtn.style.borderColor=isQueued?"rgba(255,200,60,0.4)":"var(--kc-border)";
     scaleKcBtn.appendChild(el("div",{style:{fontSize:"0.42rem",letterSpacing:"0.08em",marginBottom:"1px",color:isQueued?"rgba(255,200,60,0.6)":"rgba(160,100,240,0.5)"}},"KEY"));
-    scaleKcBtn.appendChild(document.createTextNode(isQueued?"⏳ +3":"⬆+3"));
+    var _pk=isQueued?pendingKeyInfo():null;
+    scaleKcBtn.appendChild(document.createTextNode(isQueued?"⏳ "+((_pk&&!_pk.plus3)?cofKeyName(_pk.sem,_pk.minor).split('/')[0]:"+3"):"⬆+3"));
+    if(UI.cofOverlayRefresh)UI.cofOverlayRefresh();
   }
   updateScaleKcBtn();
   UI.updateScaleKcBtn=updateScaleKcBtn;
