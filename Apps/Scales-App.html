@@ -90,6 +90,14 @@ input{font-family:inherit;}
   .tab-bar-portrait{display:none !important;}
 }
 
+/* Portrait: scale-type pills as two tidy rows of five (scales on top, arpeggios + pentatonics below) */
+@media(orientation:portrait){
+  .stype-wrap{display:grid !important;grid-template-columns:repeat(5,minmax(0,1fr));gap:4px 5px !important;}
+  .stype-wrap .pill{padding:6px 0;text-align:center;white-space:nowrap;letter-spacing:0.02em;overflow:hidden;}
+}
+@media(orientation:portrait) and (max-width:380px){
+  .stype-wrap .pill{font-size:0.6rem;letter-spacing:0.01em;}
+}
 .pill{padding:6px 11px;border-radius:14px;font-family:'Josefin Sans',sans-serif;
   font-size:0.67rem;letter-spacing:0.04em;cursor:pointer;}
 .tg{display:grid;grid-template-columns:repeat(auto-fill,minmax(46px,1fr));gap:4px;}
@@ -5986,11 +5994,12 @@ function buildUI(){
   var pw=el('div',{style:{padding:'8px 14px 0'}});
   UI.scaleTypeLabel=el('div',{style:{fontSize:'0.48rem',fontFamily:JF,letterSpacing:'0.14em',textTransform:'uppercase',color:'var(--sub)',marginBottom:'4px'}},'Scale Type');
   pw.appendChild(UI.scaleTypeLabel);
-  var pp=el('div',{style:{display:'flex',flexWrap:'wrap',columnGap:'5px',rowGap:'3px'}});
+  var pp=el('div',{cls:'stype-wrap',style:{display:'flex',flexWrap:'wrap',columnGap:'5px',rowGap:'3px'}});
   UI.typeBtns={};
   STYPES.forEach(function(t){
     var a=S.scaleType===t;
-    var b=el('button',{cls:'pill',style:{fontWeight:'400',background:a?color:'var(--ov-bg)',color:a?'#fff':'#666',border:a?'none':'1px solid var(--ov-border)',boxShadow:a?'0 2px 10px '+color+'55':'none'},onclick:function(){
+    var stIdx=STYPES.indexOf(t);var stOrd=(t==='Chromatic')?4:(stIdx>=4?stIdx+1:stIdx); // Chromatic joins the scale row; arpeggios + pentatonics form row 2
+    var b=el('button',{cls:'pill',style:{order:String(stOrd),fontWeight:'400',background:a?color:'var(--ov-bg)',color:a?'#fff':'#666',border:a?'none':'1px solid var(--ov-border)',boxShadow:a?'0 2px 10px '+color+'55':'none'},onclick:function(){
       if(TR.active&&TR.loop){
         // Clicking the type that's already playing cancels any pending
         // change and resolves this pill back to solid — it's not staging
