@@ -538,8 +538,9 @@ var TONICS=[
   {label:'A'+SH+'/B'+FL, semitone:10,color:'#b09a20'},
   {label:'B',             semitone:11,color:'#4a7fa0'},
 ];
-var STYPES=['Major','Natural Minor','Harmonic Minor','Melodic Minor','Major Arpeggio','Minor Arpeggio','Major Pentatonic','Minor Pentatonic','Chromatic'];
-var SHORT={'Major':'Major','Natural Minor':'Nat Min','Harmonic Minor':'Harm Min','Melodic Minor':'Melodic','Major Arpeggio':'Maj Arp','Minor Arpeggio':'Min Arp','Chromatic':'Chromatic','Major Pentatonic':'Maj Pent','Minor Pentatonic':'Min Pent'};
+var DIM7='Dim 7 Arpeggio';
+var STYPES=['Major','Natural Minor','Harmonic Minor','Melodic Minor','Major Arpeggio','Minor Arpeggio',DIM7,'Major Pentatonic','Minor Pentatonic','Chromatic'];
+var SHORT={'Major':'Major','Natural Minor':'Nat Min','Harmonic Minor':'Harm Min','Melodic Minor':'Melodic','Major Arpeggio':'Maj Arp','Minor Arpeggio':'Min Arp','Dim 7 Arpeggio':'Dim 7 Arp','Chromatic':'Chromatic','Major Pentatonic':'Maj Pent','Minor Pentatonic':'Min Pent'};
 var PC=['C','C'+SH,'D','D'+SH,'E','F','F'+SH,'G','G'+SH,'A','A'+SH,'B'];
 var PC_FLAT=['C','D'+FL,'D','E'+FL,'E','F','G'+FL,'G','A'+FL,'A','B'+FL,'B'];
 // Standard key-signature convention for which of the two enharmonic
@@ -560,7 +561,7 @@ function pcName(pc,tonicSemitone,isMinor){
 var KEY_MAJ=['C','D'+FL,'D','E'+FL,'E','F','F'+SH,'G','A'+FL,'A','B'+FL,'B'];
 var KEY_MIN=['C','C'+SH,'D','E'+FL,'E','F','F'+SH,'G','G'+SH,'A','B'+FL,'B'];
 function isMinorKeyType(st){return st.indexOf('Minor')>=0||st==='min7'||st==='dim7'||st==='dim';}
-function keyRoot(sem,st){return (isMinorKeyType(st)?KEY_MIN:KEY_MAJ)[((sem%12)+12)%12];}
+function keyRoot(sem,st){return ((isMinorKeyType(st)||st===DIM7)?KEY_MIN:KEY_MAJ)[((sem%12)+12)%12];}
 function findTonic(n){
   return TONICS.find(function(r){return r.label===n||r.label.split('/').indexOf(n)>=0;});
 }
@@ -578,6 +579,9 @@ function spellScale(sem,st,dir){
     for(var c=0;c<12;c++)out.push(tbl[(sem+c)%12]);
     return out;
   }
+  if(st===DIM7){ // stacked minor thirds, spelt without double accidentals: B D F A♭, C E♭ G♭ A
+    var o7=[root];for(var q7=1;q7<4;q7++)o7.push(PC_FLAT[(sem+3*q7)%12]);return o7;
+  }
   var ivk=st==='Melodic Minor'?(dir==='DESC'?'Melodic Minor Desc':'Melodic Minor Asc'):st;
   var iv=IV[ivk]||IV['Major'];
   var offs=LETTER_OFFS[st];
@@ -591,7 +595,7 @@ function spellScale(sem,st,dir){
   }
   return res;
 }
-var IV={'Major':[2,2,1,2,2,2,1],'Natural Minor':[2,1,2,2,1,2,2],'Harmonic Minor':[2,1,2,2,1,3,1],'Melodic Minor Asc':[2,1,2,2,2,2,1],'Melodic Minor Desc':[2,1,2,2,1,2,2],'Major Arpeggio':[4,3,5],'Minor Arpeggio':[3,4,5],'Chromatic':[1,1,1,1,1,1,1,1,1,1,1,1],'Major Pentatonic':[2,2,3,2,3],'Minor Pentatonic':[3,2,2,3,2]};
+var IV={'Major':[2,2,1,2,2,2,1],'Natural Minor':[2,1,2,2,1,2,2],'Harmonic Minor':[2,1,2,2,1,3,1],'Melodic Minor Asc':[2,1,2,2,2,2,1],'Melodic Minor Desc':[2,1,2,2,1,2,2],'Major Arpeggio':[4,3,5],'Minor Arpeggio':[3,4,5],'Dim 7 Arpeggio':[3,3,3,3],'Chromatic':[1,1,1,1,1,1,1,1,1,1,1,1],'Major Pentatonic':[2,2,3,2,3],'Minor Pentatonic':[3,2,2,3,2]};
 
 // ── DEFAULT FINGERINGS ────────────────────────────────────────────────────────
 var DEF={
@@ -778,6 +782,8 @@ DEF['G'+SH+' Minor Arpeggio (2 oct.)'] = {lh:[2,1,4,2,1,4,2],rh:[2,1,2,4,1,2,4]}
   });
 })();
 
+// Diminished 7th arpeggio, two octaves. The pattern is from a teacher's sheet (B); the same pattern is the starting point for every key.
+KEY_MIN.forEach(function(nm){DEF[nm+' Dim 7 Arpeggio (2 oct.)']={lh:[5,4,3,2,1,4,3,2,1],rh:[1,2,3,4,1,2,3,4,5]};});
 var FING=JSON.parse(JSON.stringify(DEF));
 var FNAMES=Object.keys(DEF).sort();
 var FP={C:{M:'C',Nm:'C',Hm:'C',Mm:'C',MA:'C',mA:'C'},D:{M:'D',Nm:'D',Hm:'D',Mm:'D',MA:'D',mA:'D'},E:{M:'E',Nm:'E',Hm:'E',Mm:'E',MA:'E',mA:'E'},F:{M:'F',Nm:'F',Hm:'F',Mm:'F',MA:'F',mA:'F'},G:{M:'G',Nm:'G',Hm:'G',Mm:'G',MA:'G',mA:'G'},A:{M:'A',Nm:'A',Hm:'A',Mm:'A',MA:'A',mA:'A'},B:{M:'B',Nm:'B',Hm:'B',Mm:'B',MA:'B',mA:'B'}};
@@ -786,7 +792,8 @@ FP['D'+SH+'/E'+FL]={M:'E'+FL,Nm:'D'+SH+'/E'+FL,Hm:'D'+SH+'/E'+FL,Mm:'D'+SH+'/E'+
 FP['F'+SH+'/G'+FL]={M:'F'+SH+'/G'+FL,Nm:'F'+SH,Hm:'F'+SH+'/G'+FL,Mm:'F'+SH,MA:'F'+SH,mA:'F'+SH};
 FP['G'+SH+'/A'+FL]={M:'A'+FL,Nm:'G'+SH+'/A'+FL,Hm:'G'+SH+'/A'+FL,Mm:'G'+SH+'/A'+FL,MA:'A'+FL,mA:'G'+SH};
 FP['A'+SH+'/B'+FL]={M:'B'+FL,Nm:'A'+SH+'/B'+FL,Hm:'A'+SH+'/B'+FL,Mm:'A'+SH+'/B'+FL,MA:'B'+FL,mA:'A'+SH+'/B'+FL};
-var STC={Major:'M','Natural Minor':'Nm','Harmonic Minor':'Hm','Melodic Minor':'Mm','Major Arpeggio':'MA','Minor Arpeggio':'mA','Chromatic':'Ch','Major Pentatonic':'MP','Minor Pentatonic':'mP'};
+var STC={'Dim 7 Arpeggio':'d7',Major:'M','Natural Minor':'Nm','Harmonic Minor':'Hm','Melodic Minor':'Mm','Major Arpeggio':'MA','Minor Arpeggio':'mA','Chromatic':'Ch','Major Pentatonic':'MP','Minor Pentatonic':'mP'};
+TONICS.forEach(function(t){if(FP[t.label])FP[t.label].d7=KEY_MIN[t.semitone];});
 
 // ── FINGERING HELPERS ─────────────────────────────────────────────────────────
 function fkey(tl,st,dir){
@@ -797,6 +804,7 @@ function fkey(tl,st,dir){
   var p=m[STC[st]]; if(!p)return null;
   if(st==='Major Arpeggio') return p+' Major Arpeggio (2 oct.)';
   if(st==='Minor Arpeggio') return p+' Minor Arpeggio (2 oct.)';
+  if(st===DIM7) return p+' Dim 7 Arpeggio (2 oct.)';
   if(st==='Melodic Minor'){
     if(dir==='DESC'){var pn=m[STC['Natural Minor']];return pn+' Natural Minor';}
     return p+' Melodic Minor (Asc)';
@@ -812,6 +820,7 @@ function fkey(tl,st,dir){
 function oneOctaveFing(e,st){
   var rh=e.rh,lh=e.lh,r,l;
   if(st==='Chromatic'){return {rh:rh.slice(0,13),lh:lh.slice(0,13)};}
+  if(st===DIM7){return {rh:rh.slice(0,4).concat([rh[8]]),lh:lh.slice(0,5)};}
   if(st==='Major Arpeggio'||st==='Minor Arpeggio'){
     return {rh:rh.slice(0,3).concat([rh[6]]),lh:lh.slice(0,4)};
   }
@@ -856,6 +865,7 @@ function relScale(sem,st){
   return keyRoot(ns,m[1])+' '+m[1];
 }
 function parScale(tl,st){
+  if(st===DIM7)return '';
   var r=findTonic(tl)||TONICS[0];
   var t2={'Major Pentatonic':'Minor Pentatonic','Minor Pentatonic':'Major Pentatonic',
     'Major Arpeggio':'Minor Arpeggio','Minor Arpeggio':'Major Arpeggio',
@@ -3248,7 +3258,7 @@ function refreshScaleHeader(){
     b.style.border=a?(SETTINGS.theme==='light'?'2px solid rgba(0,0,0,0.35)':'none'):'1px solid var(--ov-border)';b.style.fontWeight='400';
     b.style.boxShadow=a?'0 2px 10px '+color+'55':'none';
   });
-  var _nrp=S.scaleType==='Chromatic';
+  var _nrp=S.scaleType==='Chromatic'||S.scaleType===DIM7;
   if(UI.relBtn){var rel=relScale(row.semitone,S.scaleType);UI.relTxt.nodeValue=_nrp?'\u2014':(rel||'');UI.relBtn._v=_nrp?'':(rel||'');UI.relBtn.style.display='';}
   if(UI.parBtn){var par=parScale(S.tonic,S.scaleType);UI.parTxt.nodeValue=_nrp?'\u2014':(par||'');UI.parBtn._v=_nrp?'':(par||'');UI.parBtn.style.display='';}
 }
@@ -3886,8 +3896,8 @@ function loadEditorScale(key,force){
   var _dispKey=keyRoot(tRow().semitone,key.slice(_sp+1))+key.slice(_sp);
   FE.title.textContent=_dispKey;
   updateFEStatus();
-  var isArp=key.indexOf('Arpeggio')>=0,isChrom=key.indexOf('Chromatic')>=0,isPent=key.indexOf('Pentatonic')>=0;
-  var len=isArp?7:isChrom?25:isPent?6:15;
+  var isDim7=key.indexOf('Dim 7')>=0,isArp=key.indexOf('Arpeggio')>=0,isChrom=key.indexOf('Chromatic')>=0,isPent=key.indexOf('Pentatonic')>=0;
+  var len=isDim7?9:isArp?7:isChrom?25:isPent?6:15;
   // For chromatic: editor shows 25 (ascending only), descending is mirrored automatically
   if(isChrom&&FE.draft){
     // Ensure full 49 entries exist — mirror ascending if needed
@@ -4283,7 +4293,7 @@ function buildSettingsSheet(){
   var stGrid=el('div',{style:{display:'flex',flexWrap:'wrap',gap:'5px'}});
   STYPES.forEach(function(st){
     var short={'Major':'Major','Natural Minor':'Nat Min','Harmonic Minor':'Harm Min','Melodic Minor':'Melodic',
-      'Major Arpeggio':'Maj Arp','Minor Arpeggio':'Min Arp'}[st]||st;
+      'Major Arpeggio':'Maj Arp','Minor Arpeggio':'Min Arp','Dim 7 Arpeggio':'Dim 7 Arp'}[st]||st;
     var btn=el('button',{style:{padding:'5px 8px',borderRadius:'8px',fontFamily:JF,fontSize:'0.55rem',
       cursor:'pointer',
       background:SETTINGS.defaultScaleType===st?'rgba(160,100,240,0.3)':'var(--ov-bg)',
@@ -4368,7 +4378,7 @@ function buildSettingsSheet(){
     aBox.appendChild(el('div',{style:{fontFamily:JF,fontSize:'0.9rem',fontWeight:'700',
       color:'var(--text)',letterSpacing:'0.06em',marginBottom:'4px'}},'Piano Scales Lab'));
     aBox.appendChild(el('div',{style:{fontFamily:JF,fontSize:'0.6rem',
-      color:'var(--sub)',marginBottom:'4px'}},'Version 1.1.6'));
+      color:'var(--sub)',marginBottom:'4px'}},'Version 1.1.7'));
     aBox.appendChild(el('div',{style:{fontFamily:JF,fontSize:'0.62rem',
       color:'var(--sub)',marginBottom:'20px',lineHeight:'1.5'}},'Piano scales, arpeggios and practice tools for every level'));
 
@@ -8035,7 +8045,7 @@ function update(){
   }
   syncOctaveBtn();
   if(UI.scaleTypeLabel)UI.scaleTypeLabel.textContent=S.tab==='chords'?'Chord Type':'Scale Type';
-  if(UI.cofBtn)UI.cofBtn.style.display=S.tab==='scales'?'':'none';
+  if(UI.cofBtn)UI.cofBtn.style.display=(S.tab==='scales'&&S.scaleType!==DIM7)?'':'none';
   var CHORD_STYPES=['Major','Natural Minor'];
   if(UI.typeBtns)STYPES.forEach(function(t){
     var b=UI.typeBtns[t],a=S.scaleType===t;
@@ -8073,7 +8083,7 @@ function update(){
     b.style.border=a?(SETTINGS.theme==='light'?'2px solid rgba(0,0,0,0.35)':'none'):'1px solid var(--ov-border)';b.style.fontWeight='400';
     b.style.boxShadow=a?'0 3px 12px '+r.color+'55':'none';
   });
-  var _noRelPar=S.scaleType==='Chromatic';
+  var _noRelPar=S.scaleType==='Chromatic'||S.scaleType===DIM7;
   if(UI.relTxt){UI.relTxt.textContent=_noRelPar?'\u2014':(rel||'\u2014');UI.relBtn._v=_noRelPar?'':rel;}
   if(UI.parTxt){UI.parTxt.textContent=_noRelPar?'\u2014':par;UI.parBtn._v=_noRelPar?'':par;}
   _updateWakeBtn(); // keep wake lock button state consistent across all tabs
@@ -8139,6 +8149,7 @@ function update(){
     'Melodic Minor':      'Ascending: W-H-W-W-W-W-H — raised 6th and 7th eliminate a large interval gap, making the melody flow more naturally. Descending: W-H-W-W-H-W-W — reverts to natural minor, as this is not needed coming back down.',
     'Major Arpeggio':     'Root, major 3rd, perfect 5th across two octaves.',
     'Minor Arpeggio':     'Root, minor 3rd, perfect 5th across two octaves.',
+    'Dim 7 Arpeggio':     'Four notes, each a minor 3rd apart (root, minor 3rd, diminished 5th, diminished 7th), across two octaves. The same four notes work from any of them. The fingering shown is the 1-2-3-4 pattern; change it in the Fingering tab if your teacher\'s differs.',
     'Major Pentatonic':   'W-W-A-W-A. Major scale with 4th and 7th removed. Bright and versatile.',
     'Minor Pentatonic':   'A-W-W-A-W. Natural minor with 2nd and 6th removed.',
     'Chromatic':          'All 12 semitones. Every note one semitone apart.'
@@ -8191,21 +8202,21 @@ function update(){
     } else {
       keySigText=KEY_SIG[majorSem]||'';
     }
-    if(S.scaleType==='Chromatic')keySigText='\u2014';
+    if(S.scaleType==='Chromatic'||S.scaleType===DIM7)keySigText='\u2014';
     UI.facts['Key Sig'].textContent=keySigText;
     if(UI.cofRefresh)UI.cofRefresh();
     // Draw key signature staff
     var isFlat6=S.scaleType.indexOf('Minor')>=0&&sem===3;
-    var isChromatic=S.scaleType==='Chromatic';
+    var isChromatic=S.scaleType==='Chromatic'||S.scaleType===DIM7;
     if(UI.keySigBox)UI.keySigBox.style.display='';
     if(isChromatic){
       if(UI.keySigSubtitle)UI.keySigSubtitle.textContent='Not applicable';
-      if(UI.keySigStaff)UI.keySigStaff.innerHTML='<div style="font-size:0.78rem;color:var(--sub);line-height:1.6;padding:4px 0">The chromatic scale uses all 12 notes, so no key signature applies.</div>';
+      if(UI.keySigStaff)UI.keySigStaff.innerHTML='<div style="font-size:0.78rem;color:var(--sub);line-height:1.6;padding:4px 0">'+(S.scaleType===DIM7?'A diminished 7th arpeggio belongs to no one key, so no key signature applies.':'The chromatic scale uses all 12 notes, so no key signature applies.')+'</div>';
     } else {
       buildKeySigStaff(majorSem,isFlat6);
     }
     UI.facts['Relative'].textContent=rel||'\u2014';
-    UI.facts['Parallel'].textContent=par;
+    UI.facts['Parallel'].textContent=par||'\u2014';
     UI.facts['LH range'].textContent=keyRoot(sem,S.scaleType)+ocOf(lm[0])+' \u2013 '+keyRoot(sem,S.scaleType)+ocOf(lm[lm.length-1]);
     UI.facts['RH range'].textContent=keyRoot(sem,S.scaleType)+ocOf(rm[0])+' \u2013 '+keyRoot(sem,S.scaleType)+ocOf(rm[rm.length-1]);
   }
@@ -8338,6 +8349,7 @@ IDB.load(function(saved){
     }
     if(fingValid){
       FING=saved.FING;
+      Object.keys(DEF).forEach(function(k){if(!FING[k])FING[k]=JSON.parse(JSON.stringify(DEF[k]));}); // fingering added in a newer version
       // One-off default corrections: bring a saved entry up to date only if it
       // still holds the OLD default (so anything the user edited is left alone).
       [{k:'C'+SH+' Minor Arpeggio (2 oct.)',hand:'lh',from:[4,2,1,4,2,1,4],to:[2,1,4,2,1,4,2]},
