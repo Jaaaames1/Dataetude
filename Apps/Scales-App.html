@@ -93,6 +93,7 @@ input{font-family:inherit;}
 /* Portrait: scale-type pills as two tidy rows of five (scales on top, arpeggios + pentatonics below) */
 @media(orientation:portrait){
   .stype-wrap{display:grid !important;grid-template-columns:repeat(5,minmax(0,1fr));gap:4px 5px !important;}
+  .stype-wrap.chordtype{grid-template-columns:repeat(4,minmax(0,1fr));}
   .stype-wrap .pill{padding:6px 0;text-align:center;white-space:nowrap;letter-spacing:0.02em;overflow:hidden;}
 }
 @media(orientation:portrait) and (max-width:380px){
@@ -896,15 +897,15 @@ var CHORD_DEFS={
   'dim7':         [{q:'dim7',n:'i\u00B07'},{q:'dim7',n:'ii\u00B07'},{q:'dim7',n:'iii\u00B07'},{q:'dim7',n:'iv\u00B07'},{q:'dim7',n:'v\u00B07'},{q:'dim7',n:'vi\u00B07'},{q:'dim7',n:'vii\u00B07'}],
 };
 // Chord mode buttons shown on the chords tab
-var CHORD_MODES=[
+var CHORD_MODES=[ // triads first, then the sevenths: two rows of four
   {id:'Major',    label:'Major'},
   {id:'Natural Minor',label:'Nat Min'},
+  {id:'dim',      label:'Dim'},
+  {id:'aug',      label:'Aug'},
   {id:'maj7',     label:'Maj 7'},
   {id:'min7',     label:'Min 7'},
   {id:'dom7',     label:'Dom 7'},
-  {id:'dim',      label:'Dim'},
   {id:'dim7',     label:'Dim 7'},
-  {id:'aug',      label:'Aug'},
 ];
 var SCALE_STEPS={'Major':[0,2,4,5,7,9,11],'Natural Minor':[0,2,3,5,7,8,10],'Harmonic Minor':[0,2,3,5,7,8,11],
   'maj7':[0,2,4,5,7,9,11],'min7':[0,2,3,5,7,8,10],'dom7':[0,2,4,5,7,9,11],'dim7':[0,2,3,5,7,8,10],'dim':[0,2,3,5,7,8,10],'aug':[0,2,4,5,7,9,11]};
@@ -4900,7 +4901,7 @@ function showAllChordsOverlay(){
 
   var inv=Math.min(ALLC_GINV,invLabels.length-1);
   // Chord-type pills (overlay-local: switching here does not change the Chords page selection)
-  var typeBar=el('div',{style:{flexShrink:'0',display:'flex',gap:'6px',flexWrap:'wrap',padding:'8px 14px 4px'}});
+  var typeBar=el('div',{style:{flexShrink:'0',display:'grid',gridTemplateColumns:'repeat(4,minmax(0,1fr))',gap:'6px',padding:'8px 14px 4px'}});
   var typeBtns={};
   CHORD_MODES.forEach(function(m){
     var b=el('button',{style:{padding:'5px 11px',borderRadius:'999px',fontFamily:JF,fontSize:'0.6rem',
@@ -6093,7 +6094,7 @@ function buildUI(){
   UI.scaleTypeLabel=el('div',{style:{fontSize:'0.48rem',fontFamily:JF,letterSpacing:'0.14em',textTransform:'uppercase',color:'var(--sub)',marginBottom:'4px'}},'Scale Type');
   pw.appendChild(UI.scaleTypeLabel);
   var pp=el('div',{cls:'stype-wrap',style:{display:'flex',flexWrap:'wrap',columnGap:'5px',rowGap:'3px'}});
-  UI.typeBtns={};
+  UI.typeBtns={};UI.stypeWrap=pp;
   STYPES.forEach(function(t){
     var a=S.scaleType===t;
     var stIdx=STYPES.indexOf(t);var stOrd=(t==='Chromatic')?4:(stIdx>=4?stIdx+1:stIdx); // Chromatic joins the scale row; arpeggios + pentatonics form row 2
@@ -8158,6 +8159,7 @@ function update(){
     b.style.boxShadow=a?'0 2px 10px '+color+'55':'none';
   });
   // On chords tab show chord mode buttons in the same pill row
+  if(UI.stypeWrap)UI.stypeWrap.classList.toggle('chordtype',S.tab==='chords'); // chord types sit four to a row
   if(UI.chordModeBtns){
     CHORD_MODES.forEach(function(m){
       var b=UI.chordModeBtns[m.id];if(!b)return;
