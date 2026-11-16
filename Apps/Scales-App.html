@@ -4640,15 +4640,15 @@ function showUpdatePopup(availableVersionCode){
 // Shown once, the first launch after an update (never on a fresh install), and
 // again any time from Settings > About. build must match versionCode in
 // android/app/build.gradle; bump it, and rewrite items, with every release that
-// should show the popup. SETTINGS.whatsNewSeen remembers the last build shown.
+// should show the popup. Order items New, then Improved, then Fixed, always. SETTINGS.whatsNewSeen remembers the last build shown.
 var WHATS_NEW={build:32,version:'1.1.7',items:[
   {tag:'New',text:'Dim 7 Arpeggio scale type: all 12 keys, one or two octaves, with fingering for both hands.'},
   {tag:'New',text:'Augmented chords on the Chords page and on the All chords screen.'},
-  {tag:'Fixed',text:'The ⬆+3 key button now always moves up exactly 3 semitones.'},
-  {tag:'Fixed',text:'B♭ and E♭ harmonic minor right-hand fingering now matches the other minor scales.'},
   {tag:'New',text:'Keys now visibly press down when you tap them, and when scales and chords play, on every keyboard.'},
   {tag:'Improved',text:'Scale type buttons are tidier, in two neat rows.'},
-  {tag:'Improved',text:'The Circle of fifths button now stays available for Dim 7.'}
+  {tag:'Improved',text:'The Circle of fifths button now stays available for Dim 7.'},
+  {tag:'Fixed',text:'The ⬆+3 key button now always moves up exactly 3 semitones.'},
+  {tag:'Fixed',text:'B♭ and E♭ harmonic minor right-hand fingering now matches the other minor scales.'}
 ]};
 function showWhatsNew(){
   if(window._whatsNewOpen)return; // already open (e.g. double tap)
