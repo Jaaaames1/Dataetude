@@ -6139,8 +6139,7 @@ function buildUI(){
     }});
   UI.parBtn.appendChild(el('div',{style:{fontSize:'0.48rem',color:'#304870',letterSpacing:'0.12em',marginBottom:'1px'}},'PARALLEL'));
   UI.parTxt=document.createTextNode('');UI.parBtn._v='';UI.parBtn.appendChild(UI.parTxt);
-  // Key change button — shifts tonic up +3 semitones (boy band style), resets on 4th press
-  UI.scaleKeyChangeSem=0;
+  // Key change button — shifts tonic up +3 semitones (boy band style); four presses come back to where you started
   var scaleKcBtn=el("button",{style:{flex:"1",padding:"7px 4px",borderRadius:"8px",background:"rgba(160,100,240,.07)",border:"1px solid var(--kc-border)",color:"#b070e8",fontFamily:JF,fontSize:"0.55rem",letterSpacing:"0.04em",textAlign:"center",lineHeight:"1.3"}});
   function updateScaleKcBtn(){
     scaleKcBtn.innerHTML="";
@@ -6176,16 +6175,12 @@ function buildUI(){
       CP.keyChangeQueued=!CP.keyChangeQueued;
       updateScaleKcBtn();
     } else {
-      UI.scaleKeyChangeSem=(UI.scaleKeyChangeSem+3)%12;
-      if(UI.scaleKeyChangeSem===3&&!UI.scaleKeyChangeOrig)UI.scaleKeyChangeOrig=S.tonic;
-      if(UI.scaleKeyChangeSem===0){
-        if(UI.scaleKeyChangeOrig){S.tonic=UI.scaleKeyChangeOrig;UI.scaleKeyChangeOrig=null;}
-      } else {
-        var baseSem=(TONICS.find(function(r){return r.label===(UI.scaleKeyChangeOrig||S.tonic);})||TONICS[0]).semitone;
-        var newSem=(baseSem+UI.scaleKeyChangeSem)%12;
-        var newTonic=TONICS.find(function(r){return r.semitone===newSem;});
-        if(newTonic)S.tonic=newTonic.label;
-      }
+      // Always +3 semitones from whatever key is showing now. (It used to keep a
+      // running count from the key where the first press happened, which went
+      // stale as soon as a key was picked by hand and sent +3 to the wrong place.)
+      var baseSem=(TONICS.find(function(r){return r.label===S.tonic;})||TONICS[0]).semitone;
+      var newTonic=TONICS.find(function(r){return r.semitone===(baseSem+3)%12;});
+      if(newTonic)S.tonic=newTonic.label;
       update();
     }
   };
