@@ -3694,7 +3694,7 @@ function mkKb(label,sM,eM){
       var isFlash=(_flashMidi===b.midi);
       var isHC=SETTINGS.theme==='hc';
       var isP=!!_pressed[b.midi]||isFlash;
-      b.n.style.transform=isP?'translateY(1px)':''; // black keys: a gentler press than the white ones
+      // Black keys stay put when pressed (moving one down opened a gap above it that showed the white key behind); they dim/tighten instead.
       if(inS){
         if(isHC){
           b.n.style.background=(isFlash||isP)?'#ffaa00':'#ffff00';
@@ -3704,13 +3704,13 @@ function mkKb(label,sM,eM){
         } else {
           var bHiShade=shade(_dk,0.9);
           b.n.style.background='linear-gradient(180deg,'+_dk+' 0%,'+_dk+' 55%,'+bHiShade+' 100%)';
-          b.n.style.boxShadow=isP?'0 2px 7px '+_dk+'88':'0 3px 10px '+_dk+'88';
+          b.n.style.boxShadow=isP?'0 1px 4px '+_dk+'88, inset 0 -3px 5px rgba(0,0,0,.28)':'0 3px 10px '+_dk+'88';
           b.n.style.outline='';
           b.n.style.filter=isP?'brightness(1.18)':'';
         }
       } else {
         b.n.style.background=isP?'linear-gradient(rgba(130,150,220,.26),rgba(130,150,220,.26)),var(--bkey)':'var(--bkey)';
-        b.n.style.boxShadow=isP?'0 2px 5px rgba(0,0,0,.7), inset 0 1px 3px rgba(255,255,255,.08)':'0 3px 7px rgba(0,0,0,.7)';
+        b.n.style.boxShadow=isP?'0 1px 3px rgba(0,0,0,.7), inset 0 -3px 5px rgba(255,255,255,.07)':'0 3px 7px rgba(0,0,0,.7)';
         b.n.style.outline='';
         b.n.style.filter='';
       }
