@@ -2103,6 +2103,7 @@ function playNoteHeld(midi,when,vol){
   return retNodes;
 }
 function playChordNow(mids){
+  if(window.UI&&UI.chKb&&UI.chKb.pulse)UI.chKb.pulse(mids); // keys press down on the Chords keyboard
   var ac=getAC();
   if(ac.state==='suspended'){
     ac.resume().then(function(){
@@ -3517,6 +3518,16 @@ function mkKb(label,sM,eM){
   var _hw='#f8c0d0',_dk='#a03050',_flashMidi=null;
   var _lastSM=[],_lastFA=[];
   var _pressed={}; // midi -> true while a key is being tapped by hand (drawn by upd, so it layers on top of the scale colours)
+  var _pulseSet=[],_pulseTok=0;
+  // Chord played: its keys go down together, then spring back (same look as a hand tap)
+  function pulse(mids,ms){
+    _pulseSet.forEach(function(m){_pressed[m]=false;});
+    _pulseSet=(mids||[]).slice();
+    _pulseSet.forEach(function(m){_pressed[m]=true;});
+    var tok=++_pulseTok;
+    upd([],[]);
+    setTimeout(function(){if(_pulseTok===tok){_pulseSet.forEach(function(m){_pressed[m]=false;});_pulseSet=[];upd([],[]);}},ms||380);
+  }
   var _pt={}; // per-key token so a quick second tap isn't released early by the first tap's spring-back timer
   function press(midi,on){_pressed[midi]=on?true:false;upd([],[]);}
 
@@ -3656,7 +3667,7 @@ function mkKb(label,sM,eM){
       var inS=!!ss[w.midi],f=mf[w.midi];
       var isFlash=(_flashMidi===w.midi);
       var isHC=SETTINGS.theme==='hc';
-      var isP=!!_pressed[w.midi];
+      var isP=!!_pressed[w.midi]||isFlash; // a note playing back looks the same as a key tapped by hand
       w.n.style.transform=isP?'translateY(1.5px)':'';
       if(inS){
         if(isHC){
@@ -3682,8 +3693,8 @@ function mkKb(label,sM,eM){
       var inS=!!ss[b.midi],f=mf[b.midi];
       var isFlash=(_flashMidi===b.midi);
       var isHC=SETTINGS.theme==='hc';
-      var isP=!!_pressed[b.midi];
-      b.n.style.transform=isP?'translateY(1.5px)':'';
+      var isP=!!_pressed[b.midi]||isFlash;
+      b.n.style.transform=isP?'translateY(1px)':''; // black keys: a gentler press than the white ones
       if(inS){
         if(isHC){
           b.n.style.background=(isFlash||isP)?'#ffaa00':'#ffff00';
@@ -3693,13 +3704,13 @@ function mkKb(label,sM,eM){
         } else {
           var bHiShade=shade(_dk,0.9);
           b.n.style.background='linear-gradient(180deg,'+_dk+' 0%,'+_dk+' 55%,'+bHiShade+' 100%)';
-          b.n.style.boxShadow=isP?'0 1px 4px '+_dk+'88':'0 3px 10px '+_dk+'88';
+          b.n.style.boxShadow=isP?'0 2px 7px '+_dk+'88':'0 3px 10px '+_dk+'88';
           b.n.style.outline='';
-          b.n.style.filter=(isFlash||isP)?'brightness(1.35)':'';
+          b.n.style.filter=isP?'brightness(1.18)':'';
         }
       } else {
-        b.n.style.background=isP?'linear-gradient(rgba(130,150,220,.40),rgba(130,150,220,.40)),var(--bkey)':'var(--bkey)';
-        b.n.style.boxShadow=isP?'0 1px 3px rgba(0,0,0,.7), inset 0 2px 4px rgba(255,255,255,.10)':'0 3px 7px rgba(0,0,0,.7)';
+        b.n.style.background=isP?'linear-gradient(rgba(130,150,220,.26),rgba(130,150,220,.26)),var(--bkey)':'var(--bkey)';
+        b.n.style.boxShadow=isP?'0 2px 5px rgba(0,0,0,.7), inset 0 1px 3px rgba(255,255,255,.08)':'0 3px 7px rgba(0,0,0,.7)';
         b.n.style.outline='';
         b.n.style.filter='';
       }
@@ -3726,7 +3737,7 @@ function mkKb(label,sM,eM){
     _flashMidi=null;
     upd([],[]);
   }
-  return{wrap:wrap,upd:upd,flash:flash,restoreScale:restoreScale,title:titleDiv,cv:cv,setEditorTap:setEditorTap,sM:sM,eM:eM};
+  return{wrap:wrap,upd:upd,flash:flash,pulse:pulse,restoreScale:restoreScale,title:titleDiv,cv:cv,setEditorTap:setEditorTap,sM:sM,eM:eM};
 }
 
 // ── FINGERING EDITOR ──────────────────────────────────────────────────────────
@@ -4631,7 +4642,7 @@ var WHATS_NEW={build:32,version:'1.1.7',items:[
   {tag:'New',text:'Augmented chords on the Chords page and on the All chords screen.'},
   {tag:'Fixed',text:'The ⬆+3 key button now always moves up exactly 3 semitones.'},
   {tag:'Fixed',text:'B♭ and E♭ harmonic minor right-hand fingering now matches the other minor scales.'},
-  {tag:'Improved',text:'Keys now visibly press down when you tap them yourself, on every keyboard.'},
+  {tag:'Improved',text:'Keys now visibly press down when you tap them, and when scales and chords play, on every keyboard.'},
   {tag:'Improved',text:'Scale type buttons are tidier, in two neat rows.'},
   {tag:'Improved',text:'The Circle of fifths button now stays available for Dim 7.'}
 ]};
