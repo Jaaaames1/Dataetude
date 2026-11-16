@@ -3694,7 +3694,9 @@ function mkKb(label,sM,eM){
       var isFlash=(_flashMidi===b.midi);
       var isHC=SETTINGS.theme==='hc';
       var isP=!!_pressed[b.midi]||isFlash;
-      // Black keys don't move when pressed: moving one down opened a gap above it that showed the white key behind. Tint/shadow only.
+      // Black keys dip 1px like the white ones. The gap that opens above a pressed black key is filled black (see the '0 -2px 0' shadows
+      // below) so the white keys' dividing line never shows through, as it never would on a real keyboard.
+      b.n.style.transform=isP?'translateY(1px)':'';
       if(inS){
         if(isHC){
           b.n.style.background=(isFlash||isP)?'#ffaa00':'#ffff00';
@@ -3704,13 +3706,13 @@ function mkKb(label,sM,eM){
         } else {
           var bHiShade=shade(_dk,0.9);
           b.n.style.background='linear-gradient(180deg,'+_dk+' 0%,'+_dk+' 55%,'+bHiShade+' 100%)';
-          b.n.style.boxShadow=isP?'0 1px 4px '+_dk+'88':'0 3px 10px '+_dk+'88';
+          b.n.style.boxShadow=isP?'0 -2px 0 #0b0b10, 0 1px 4px '+_dk+'88':'0 3px 10px '+_dk+'88';
           b.n.style.outline='';
           b.n.style.filter=isP?'brightness(1.35)':'';
         }
       } else {
-        b.n.style.background=isP?'linear-gradient(rgba(130,150,220,.40),rgba(130,150,220,.40)),var(--bkey)':'var(--bkey)';
-        b.n.style.boxShadow=isP?'0 1px 3px rgba(0,0,0,.7), inset 0 2px 4px rgba(255,255,255,.10)':'0 3px 7px rgba(0,0,0,.7)';
+        b.n.style.background=isP?'linear-gradient(rgba(130,150,220,.15),rgba(130,150,220,.15)),var(--bkey)':'var(--bkey)';
+        b.n.style.boxShadow=isP?'0 -2px 0 #0b0b10, 0 1px 3px rgba(0,0,0,.7), inset 0 2px 4px rgba(255,255,255,.05)':'0 3px 7px rgba(0,0,0,.7)';
         b.n.style.outline='';
         b.n.style.filter='';
       }
