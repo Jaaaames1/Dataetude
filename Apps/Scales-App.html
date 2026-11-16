@@ -101,7 +101,7 @@ input{font-family:inherit;}
 .pill{padding:6px 11px;border-radius:14px;font-family:'Josefin Sans',sans-serif;
   font-size:0.67rem;letter-spacing:0.04em;cursor:pointer;}
 .tg{display:grid;grid-template-columns:repeat(auto-fill,minmax(46px,1fr));gap:4px;}
-.wkey,.bkey{transition:background .12s,box-shadow .12s,border-color .12s;}
+.wkey,.bkey{transition:background .12s,box-shadow .12s,border-color .12s,transform .06s;}
 
 /* Fingering editor */
 .fe-hl{font-size:0.58rem;color:#666;font-family:'Josefin Sans',sans-serif;
@@ -3515,6 +3515,9 @@ function mkKb(label,sM,eM){
   var wn=[],bn=[],ln=[];
   var _hw='#f8c0d0',_dk='#a03050',_flashMidi=null;
   var _lastSM=[],_lastFA=[];
+  var _pressed={}; // midi -> true while a key is being tapped by hand (drawn by upd, so it layers on top of the scale colours)
+  var _pt={}; // per-key token so a quick second tap isn't released early by the first tap's spring-back timer
+  function press(midi,on){_pressed[midi]=on?true:false;upd([],[]);}
 
   // Gesture handler: touchAction:none so we control everything.
   // Direction locked after 6px movement. Vertical releases pointer capture so
@@ -3538,7 +3541,10 @@ function mkKb(label,sM,eM){
     k.addEventListener('pointerdown',function(ev){
       ev.preventDefault();
       ptrs[ev.pointerId]={x:ev.clientX,y:ev.clientY,startX:ev.clientX,startY:ev.clientY,
-                          moved:false,dir:null,played:false};
+                          moved:false,dir:null,played:false,vis:false,tm:null};
+      var pp=ptrs[ev.pointerId];_pt[midi]=(_pt[midi]||0)+1;
+      // show the key going down a moment after touch (not instantly, so starting a swipe to scroll doesn't flicker keys)
+      pp.tm=setTimeout(function(){if(ptrs[ev.pointerId]===pp&&!pp.moved){pp.vis=true;press(midi,true);}},45);
       k.setPointerCapture(ev.pointerId);
     });
     k.addEventListener('pointermove',function(ev){
@@ -3548,7 +3554,7 @@ function mkKb(label,sM,eM){
       var totalDx=Math.abs(ev.clientX-p.startX);
       var totalDy=Math.abs(ev.clientY-p.startY);
       if(!p.dir&&(totalDx>6||totalDy>6)){
-        p.moved=true;
+        p.moved=true;clearTimeout(p.tm);if(p.vis){p.vis=false;press(midi,false);} // it was a drag, not a tap
         p.dir=totalDx>=totalDy?'h':'v';
         if(p.dir==='v'){try{k.releasePointerCapture(ev.pointerId);}catch(e){}}
         if(p.played){k.style.filter='';}
@@ -3578,23 +3584,26 @@ function mkKb(label,sM,eM){
           _editorTap(midi);
           haptic();
           playNoteNow(midi);
-          k.style.filter=isBlack?'brightness(1.4)':'brightness(0.85)';
-          setTimeout(function(){k.style.filter='';},100);
         } else {
           // Normal mode: play note
           haptic();
           playNoteNow(midi);
-          k.style.filter=isBlack?'brightness(1.3)':'brightness(0.88)';
-          setTimeout(function(){k.style.filter='';},120);
           p.played=true;
         }
       }
-      if(p&&p.played){k.style.filter='';}
+      if(p){
+        clearTimeout(p.tm);
+        if(!p.moved){ // a tap: make sure the key is shown down, then let it spring back
+          press(midi,true);
+          var tok=(_pt[midi]=(_pt[midi]||0)+1);
+          setTimeout(function(){if(_pt[midi]===tok)press(midi,false);},150);
+        } else if(p.vis){press(midi,false);}
+      }
       delete ptrs[ev.pointerId];
     });
     k.addEventListener('pointercancel',function(ev){
       var p=ptrs[ev.pointerId];
-      if(p&&p.played)k.style.filter='';
+      if(p){clearTimeout(p.tm);if(p.vis)press(midi,false);}
       delete ptrs[ev.pointerId];
     });
   }
@@ -3646,21 +3655,23 @@ function mkKb(label,sM,eM){
       var inS=!!ss[w.midi],f=mf[w.midi];
       var isFlash=(_flashMidi===w.midi);
       var isHC=SETTINGS.theme==='hc';
+      var isP=!!_pressed[w.midi];
+      w.n.style.transform=isP?'translateY(1.5px)':'';
       if(inS){
         if(isHC){
-          w.n.style.background=isFlash?'#ffaa00':'#ffff00';
+          w.n.style.background=(isFlash||isP)?'#ffaa00':'#ffff00';
           w.n.style.border='2px solid #000000';
           w.n.style.boxShadow='none';
         } else {
           w.n.style.background='linear-gradient(180deg,'+_hw+' 0%,'+_hw+' 65%,'+_dk+'55 100%)';
           w.n.style.border='1px solid '+_dk+'88';
-          w.n.style.boxShadow='inset 0 -4px 0 '+_dk;
+          w.n.style.boxShadow=isP?'inset 0 3px 7px rgba(0,0,0,.4), inset 0 -2px 0 '+_dk:'inset 0 -4px 0 '+_dk; // pressed: shadow moves to the top edge, bar shrinks
         }
-        w.n.style.filter=isFlash?'brightness(0.80)':'';
+        w.n.style.filter=(isFlash||isP)?'brightness(0.80)':'';
       } else {
-        w.n.style.background='var(--wkey)';
+        w.n.style.background=isP?(isHC?'#bbbbbb':'linear-gradient(rgba(110,130,190,.34),rgba(110,130,190,.34)),var(--wkey)'):'var(--wkey)';
         w.n.style.border='1px solid var(--wborder)';
-        w.n.style.boxShadow='inset 0 -2px 4px rgba(0,0,0,.1)';
+        w.n.style.boxShadow=isP?'inset 0 3px 7px rgba(0,0,0,.4), inset 0 -1px 0 rgba(0,0,0,.15)':'inset 0 -2px 4px rgba(0,0,0,.1)';
         w.n.style.filter='';
       }
       if(inS&&f!=null){w.lb.textContent=''+f;w.lb.style.color=isHC?'#000000':shade(_dk,0.5);w.lb.style.display='';}
@@ -3670,22 +3681,24 @@ function mkKb(label,sM,eM){
       var inS=!!ss[b.midi],f=mf[b.midi];
       var isFlash=(_flashMidi===b.midi);
       var isHC=SETTINGS.theme==='hc';
+      var isP=!!_pressed[b.midi];
+      b.n.style.transform=isP?'translateY(1.5px)':'';
       if(inS){
         if(isHC){
-          b.n.style.background=isFlash?'#ffaa00':'#ffff00';
+          b.n.style.background=(isFlash||isP)?'#ffaa00':'#ffff00';
           b.n.style.boxShadow='0 0 0 2px #000000';
           b.n.style.outline='2px solid #000000';
           b.n.style.filter='';
         } else {
           var bHiShade=shade(_dk,0.9);
           b.n.style.background='linear-gradient(180deg,'+_dk+' 0%,'+_dk+' 55%,'+bHiShade+' 100%)';
-          b.n.style.boxShadow='0 3px 10px '+_dk+'88';
+          b.n.style.boxShadow=isP?'0 1px 4px '+_dk+'88':'0 3px 10px '+_dk+'88';
           b.n.style.outline='';
-          b.n.style.filter=isFlash?'brightness(1.35)':'';
+          b.n.style.filter=(isFlash||isP)?'brightness(1.35)':'';
         }
       } else {
-        b.n.style.background='var(--bkey)';
-        b.n.style.boxShadow='0 3px 7px rgba(0,0,0,.7)';
+        b.n.style.background=isP?'linear-gradient(rgba(130,150,220,.40),rgba(130,150,220,.40)),var(--bkey)':'var(--bkey)';
+        b.n.style.boxShadow=isP?'0 1px 3px rgba(0,0,0,.7), inset 0 2px 4px rgba(255,255,255,.10)':'0 3px 7px rgba(0,0,0,.7)';
         b.n.style.outline='';
         b.n.style.filter='';
       }
@@ -4617,6 +4630,7 @@ var WHATS_NEW={build:32,version:'1.1.7',items:[
   {tag:'New',text:'Augmented chords on the Chords page and on the All chords screen.'},
   {tag:'Fixed',text:'The ⬆+3 key button now always moves up exactly 3 semitones.'},
   {tag:'Fixed',text:'B♭ and E♭ harmonic minor right-hand fingering now matches the other minor scales.'},
+  {tag:'Improved',text:'Keys now visibly press down when you tap them yourself, on every keyboard.'},
   {tag:'Improved',text:'Scale type buttons are tidier, in two neat rows.'},
   {tag:'Improved',text:'The Circle of fifths button now stays available for Dim 7.'}
 ]};
