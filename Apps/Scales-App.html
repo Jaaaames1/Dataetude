@@ -892,6 +892,7 @@ var CHORD_DEFS={
   'min7':         [{q:'min7',n:'im7'},{q:'hdim7',n:'ii\u00F87'},{q:'maj7',n:'IIImaj7'},{q:'min7',n:'ivm7'},{q:'min7',n:'vm7'},{q:'maj7',n:'VImaj7'},{q:'dom7',n:'VII7'}],
   'dom7':         [{q:'dom7',n:'I7'},{q:'dom7',n:'II7'},{q:'dom7',n:'III7'},{q:'dom7',n:'IV7'},{q:'dom7',n:'V7'},{q:'dom7',n:'VI7'},{q:'dom7',n:'VII7'}],
   'dim':          [{q:'dim',n:'i\u00B0'},{q:'dim',n:'ii\u00B0'},{q:'dim',n:'iii\u00B0'},{q:'dim',n:'iv\u00B0'},{q:'dim',n:'v\u00B0'},{q:'dim',n:'vi\u00B0'},{q:'dim',n:'vii\u00B0'}],
+  'aug':          [{q:'aug',n:'I+'},{q:'aug',n:'II+'},{q:'aug',n:'III+'},{q:'aug',n:'IV+'},{q:'aug',n:'V+'},{q:'aug',n:'VI+'},{q:'aug',n:'VII+'}],
   'dim7':         [{q:'dim7',n:'i\u00B07'},{q:'dim7',n:'ii\u00B07'},{q:'dim7',n:'iii\u00B07'},{q:'dim7',n:'iv\u00B07'},{q:'dim7',n:'v\u00B07'},{q:'dim7',n:'vi\u00B07'},{q:'dim7',n:'vii\u00B07'}],
 };
 // Chord mode buttons shown on the chords tab
@@ -903,9 +904,10 @@ var CHORD_MODES=[
   {id:'dom7',     label:'Dom 7'},
   {id:'dim',      label:'Dim'},
   {id:'dim7',     label:'Dim 7'},
+  {id:'aug',      label:'Aug'},
 ];
 var SCALE_STEPS={'Major':[0,2,4,5,7,9,11],'Natural Minor':[0,2,3,5,7,8,10],'Harmonic Minor':[0,2,3,5,7,8,11],
-  'maj7':[0,2,4,5,7,9,11],'min7':[0,2,3,5,7,8,10],'dom7':[0,2,4,5,7,9,11],'dim7':[0,2,3,5,7,8,10],'dim':[0,2,3,5,7,8,10]};
+  'maj7':[0,2,4,5,7,9,11],'min7':[0,2,3,5,7,8,10],'dom7':[0,2,4,5,7,9,11],'dim7':[0,2,3,5,7,8,10],'dim':[0,2,3,5,7,8,10],'aug':[0,2,4,5,7,9,11]};
 var TRIAD_SEMI={maj:[0,4,7],min:[0,3,7],dim:[0,3,6],aug:[0,4,8],maj7:[0,4,7,11],dom7:[0,4,7,10],min7:[0,3,7,10],dim7:[0,3,6,9],hdim7:[0,3,6,10]};
 var TRIAD_LABEL={maj:'',min:'m',dim:'\u00B0',aug:'+',maj7:'maj7',dom7:'7',min7:'m7',dim7:'\u00B07',hdim7:'\u00F87'};
 
@@ -1049,7 +1051,7 @@ function persist(){var _pS=(window.UI&&UI.cofSavedOct!=null)?Object.assign({},S,
 // Palettes: [name, lhHighlight, lhDark, rhHighlight, rhDark]
 // Colours inspired by original reference — soft, pastel washes
 var SETTINGS={theme:'dark',palette:0,tempo:120,haptic:false,playOnLock:false,trainerWakeLock:true,defaultMetroSound:'loud',playCountIn:false,playCountInBars:1,
-  defaultKey:'C',defaultScaleType:'Major',showNoteNames:true,darkKeys:false,dismissedUpdateVersion:null};
+  defaultKey:'C',defaultScaleType:'Major',showNoteNames:true,darkKeys:false,dismissedUpdateVersion:null,whatsNewSeen:0};
 var PALETTES=[
   // name, LH hi, LH dk, RH hi, RH dk
   ['Rose & Gold', '#f8c0d0','#a03050','#dfd090','#7a6010'],
@@ -3131,7 +3133,9 @@ function octOnlyQueue(){
 function pendingKeyInfo(){
   var cur=findTonic(S.tonic)||TONICS[0],minorNow=isMinorKeyType(S.scaleType)&&S.scaleType!=='Chromatic';
   if(TR.active&&TR.loop&&TR.keyChangeQueued&&!octOnlyQueue()){
-    if(TR._targetTonic){var t=findTonic(TR._targetTonic);if(t)return {sem:t.semitone,minor:minorNow,plus3:false};}
+    if(TR._targetTonic){var t=findTonic(TR._targetTonic);if(t){
+      if(S.scaleType===DIM7)minorNow=!!(UI.cofDim&&UI.cofDim.minor&&UI.cofDim.sem===t.semitone); // Dim 7: the ring that was tapped
+      return {sem:t.semitone,minor:minorNow,plus3:false};}}
     return {sem:(cur.semitone+3)%12,minor:minorNow,plus3:true};
   }
   if(CP.active&&CP.loop&&CP.keyChangeQueued){
@@ -4407,6 +4411,10 @@ function buildSettingsSheet(){
     guidesA.href='https://dataetude.co.uk/piano-scales-lab/guide';guidesA.target='_blank';
     guidesRow.appendChild(guidesA);
     aBox.appendChild(guidesRow);
+    var wnLink=el('a',{style:{display:'block',fontFamily:JF,fontSize:'0.65rem',color:'#60a5fa',
+      textDecoration:'none',marginBottom:'10px',letterSpacing:'0.04em',cursor:'pointer'}},"What's New in "+WHATS_NEW.version);
+    wnLink.addEventListener('click',function(){showWhatsNew();});
+    aBox.appendChild(wnLink);
     aBox.appendChild(mkLink('Privacy Policy','https://dataetude.co.uk/privacy.html'));
     aBox.appendChild(mkLink('Contact Us','mailto:support@dataetude.co.uk?subject=Piano Scales Lab',true));
 
@@ -4599,6 +4607,74 @@ function showUpdatePopup(availableVersionCode){
   pushModalHistory(closeFn);
 }
 
+// ── WHAT'S NEW ────────────────────────────────────────────────────────────
+// Shown once, the first launch after an update (never on a fresh install), and
+// again any time from Settings > About. build must match versionCode in
+// android/app/build.gradle; bump it, and rewrite items, with every release that
+// should show the popup. SETTINGS.whatsNewSeen remembers the last build shown.
+var WHATS_NEW={build:32,version:'1.1.7',items:[
+  {tag:'New',text:'Dim 7 Arpeggio scale type: all 12 keys, one or two octaves, with fingering for both hands.'},
+  {tag:'New',text:'Augmented chords on the Chords page and on the All chords screen.'},
+  {tag:'Fixed',text:'The ⬆+3 key button now always moves up exactly 3 semitones.'},
+  {tag:'Fixed',text:'B♭ and E♭ harmonic minor right-hand fingering now matches the other minor scales.'},
+  {tag:'Improved',text:'Scale type buttons are tidier, in two neat rows.'},
+  {tag:'Improved',text:'The Circle of fifths button now stays available for Dim 7.'}
+]};
+function showWhatsNew(){
+  if(window._whatsNewOpen)return; // already open (e.g. double tap)
+  window._whatsNewOpen=true;
+  var light=SETTINGS.theme==='light';
+  var overlay=el('div',{style:{position:'fixed',inset:'0',zIndex:'10000',
+    background:'rgba(0,0,0,0.75)',display:'flex',alignItems:'center',justifyContent:'center',
+    padding:'calc(20px + env(safe-area-inset-top)) 20px calc(20px + env(safe-area-inset-bottom))'}});
+  var box=el('div',{style:{background:'var(--sb-bg)',border:'1px solid var(--border)',
+    borderRadius:'16px',padding:'22px 20px 18px',width:'100%',maxWidth:'340px',maxHeight:'100%',
+    display:'flex',flexDirection:'column',gap:'14px',boxSizing:'border-box'}});
+  var closed=false;
+  var closeFn=function(){
+    if(closed)return;closed=true;window._whatsNewOpen=false;
+    overlay.remove();popModalHistory(closeFn);
+  };
+  overlay.addEventListener('click',function(e){if(e.target===overlay)closeFn();}); // tap outside the box
+
+  var head=el('div',{style:{textAlign:'center',flexShrink:'0'}});
+  head.appendChild(el('div',{style:{fontFamily:JF,fontSize:'0.9rem',fontWeight:'700',color:'var(--text)'}},"What's New"));
+  head.appendChild(el('div',{style:{fontFamily:JF,fontSize:'0.58rem',letterSpacing:'0.12em',color:'var(--sub)',marginTop:'3px',textTransform:'uppercase'}},'Version '+WHATS_NEW.version));
+  box.appendChild(head);
+
+  var list=el('div',{style:{display:'flex',flexDirection:'column',gap:'11px',overflowY:'auto',minHeight:'0',flex:'1 1 auto',
+    textAlign:'left',paddingRight:'2px',overscrollBehavior:'contain',WebkitOverflowScrolling:'touch'}});
+  var tagCol={New:light?'#2f5fd0':'#7aa2f7',Fixed:light?'#8a5f00':'#e0a800',Improved:light?'#7a3fc0':'#b070e8'};
+  WHATS_NEW.items.forEach(function(it){
+    var row=el('div',{style:{fontFamily:JF,fontSize:'0.66rem',color:'var(--text)',lineHeight:'1.55'}});
+    row.appendChild(el('span',{style:{fontSize:'0.52rem',fontWeight:'700',letterSpacing:'0.1em',textTransform:'uppercase',
+      color:tagCol[it.tag]||'var(--sub)',marginRight:'7px'}},it.tag));
+    row.appendChild(document.createTextNode(it.text));
+    list.appendChild(row);
+  });
+  box.appendChild(list);
+
+  var okBtn=el('button',{style:{width:'100%',padding:'10px',borderRadius:'10px',flexShrink:'0',
+    fontFamily:JF,fontSize:'0.7rem',fontWeight:'700',cursor:'pointer',
+    background:'rgba(122,162,247,0.18)',color:light?'#2f5fd0':'#7aa2f7',
+    border:'1px solid rgba(122,162,247,0.4)'}},'Got It');
+  okBtn.addEventListener('click',closeFn);
+  box.appendChild(okBtn);
+
+  overlay.appendChild(box);
+  document.body.appendChild(overlay);
+  pushModalHistory(closeFn); // so the Android back button / gesture closes this first, instead of leaving the app
+}
+// First launch after an update: wait for the app to settle, and never stack on top of another open panel.
+function scheduleWhatsNew(tries){
+  setTimeout(function(){
+    if(window._whatsNewOpen)return;
+    if(_modalCloseStack.length>0){if(tries<8)scheduleWhatsNew(tries+1);return;}
+    SETTINGS.whatsNewSeen=WHATS_NEW.build;persist(); // marked as seen as soon as it is shown, so it can never repeat
+    showWhatsNew();
+  },tries===0?900:1500);
+}
+
 function openSettings(){
   buildSettingsSheet();
   var panel=document.getElementById('settPanel');
@@ -4782,7 +4858,7 @@ function showAllChordsOverlay(){
     invLabels=si.length===4?['Root','1st','2nd','3rd']:['Root','1st','2nd'];
   }
   setModeVars();
-  var MODE_TITLE={'Major':'Major','Natural Minor':'Minor','maj7':'Major 7th','min7':'Minor 7th','dom7':'Dominant 7th','dim':'Diminished','dim7':'Diminished 7th'};
+  var MODE_TITLE={'Major':'Major','Natural Minor':'Minor','maj7':'Major 7th','min7':'Minor 7th','dom7':'Dominant 7th','dim':'Diminished','dim7':'Diminished 7th','aug':'Augmented'};
   var WIN_LO=48,WIN_HI=72; // C3 .. C5 : two octaves, same pitch scheme as the Chords keyboard
   var lay=mkLayout(WIN_LO,WIN_HI);
   var nW=lay.whites.length;
@@ -4964,6 +5040,7 @@ function cofKeyName(sem,minor){
 function cofPick(sem,wantMinor){
   var row=TONICS.filter(function(t){return t.semitone===sem;})[0];
   if(!row||!UI.tonicBtns||!UI.tonicBtns[row.label])return;
+  UI.cofDim={sem:sem,minor:!!wantMinor}; // which ring was tapped (a Dim 7 arpeggio has no major/minor, so the circle remembers the tap)
   var toMin={'Major':'Natural Minor','Major Pentatonic':'Minor Pentatonic','Major Arpeggio':'Minor Arpeggio'};
   var toMaj={'Natural Minor':'Major','Harmonic Minor':'Major','Melodic Minor':'Major','Minor Pentatonic':'Major Pentatonic','Minor Arpeggio':'Major Arpeggio'};
   var m=wantMinor?toMin:toMaj;
@@ -4986,11 +5063,12 @@ function mkCircle(size){
   // While a key change is waiting, S.scaleType already holds the target's type; the circle must keep showing what is still playing.
   var shownType=(TR.active&&TR.loop&&TR.keyChangeQueued&&TR.keyChangeOrigScaleType!=null)?TR.keyChangeOrigScaleType:S.scaleType;
   var isMin=isMinorKeyType(shownType)&&shownType!=='Chromatic';
+  if(shownType===DIM7)isMin=!!(UI.cofDim&&UI.cofDim.minor&&UI.cofDim.sem===curSem); // highlight the segment that was tapped
   var majSem=isMin?(curSem+3)%12:curSem, minSem=(majSem+9)%12;
   var color=(findTonic(S.tonic)||TONICS[0]).color;
   var selIdx=COF_POS.indexOf(majSem);
   var pend=pendingKeyInfo(),pendIdx=-1,pendName='';
-  if(pend){pendIdx=COF_POS.indexOf(pend.minor?(pend.sem+3)%12:pend.sem);pendName=cofKeyName(pend.sem,pend.minor).split('/')[0].replace('m','')+(pend.minor?' minor':' major');}
+  if(pend){pendIdx=COF_POS.indexOf(pend.minor?(pend.sem+3)%12:pend.sem);pendName=cofKeyName(pend.sem,pend.minor).split('/')[0].replace('m','')+(shownType===DIM7?'':(pend.minor?' minor':' major'));}
   var AMB='rgba(255,180,0,0.30)',AMBL='#e0a800';
   function pt(r,deg){var a=(deg-90)*Math.PI/180;return [cx+r*Math.cos(a),cy+r*Math.sin(a)];}
   function seg(r1,r2,a1,a2){
@@ -5036,9 +5114,15 @@ function mkCircle(size){
   var keyName=isMin?cofKeyName(minSem,true).replace('m','')+' minor':cofKeyName(majSem,false).split('/')[0]+' major';
   var sigTxt=COF_SIG[selIdx>=0?selIdx:0];
   var cnt=sigTxt==='0'?'no sharps or flats':(sigTxt.indexOf('/')>=0?'6 sharps or flats':sigTxt.replace('♯',' sharp'+(sigTxt[0]==='1'?'':'s')).replace('♭',' flat'+(sigTxt[0]==='1'?'':'s')));
+  if(shownType===DIM7){ // an arpeggio of stacked minor thirds belongs to no key: show the root, not a key signature
+    svg.appendChild(txt(cx,cy-14,keyRoot(curSem,DIM7)+' Dim 7',17,'var(--text)','700'));
+    svg.appendChild(txt(cx,cy+6,'no key signature',9.5,'var(--sub)','400'));
+    svg.appendChild(txt(cx,cy+22,'tap to pick the root',9.5,'var(--sub)','400'));
+  } else {
   svg.appendChild(txt(cx,cy-14,keyName,17,'var(--text)','700'));
   svg.appendChild(txt(cx,cy+6,cnt,9.5,'var(--sub)','400'));
   svg.appendChild(txt(cx,cy+22,(isMin?'relative: '+(majSem===6?'G'+FL:cofKeyName(majSem,false).split('/')[0])+' major':'relative: '+(minSem===3?'D'+SH+'m':cofKeyName(minSem,true))),9.5,'var(--sub)','400'));
+  }
   if(pend)svg.appendChild(txt(cx,cy+38,'next: '+pendName,9.5,AMBL,'700'));
   return svg;
 }
@@ -5916,7 +6000,7 @@ function refreshChordPage(){
     (keyRoot(tRow().semitone,CS.chordMode)+' '+CS.chordMode):sName();
   UI.chKb.title.textContent=chordHeadingName+' \u2014 Chords';
   // Hide progressions for Dom7 and Dim7 — they don't have meaningful diatonic progressions
-  var hideProgs=CS.chordMode==='dom7'||CS.chordMode==='dim7'||CS.chordMode==='dim';
+  var hideProgs=CS.chordMode==='dom7'||CS.chordMode==='dim7'||CS.chordMode==='dim'||CS.chordMode==='aug';
   if(UI.progSection)UI.progSection.style.display=hideProgs?'none':'';
   if(hideProgs&&CP.active)cpStop();
   // Render everything fresh
@@ -8025,13 +8109,13 @@ function update(){
   // to it for the 7th-chord modes, which was still wrong — those aren't
   // "no override", they're their own distinct thing worth naming).
   var CHORD_MODE_DISPLAY={'Major':'Major','Natural Minor':'Natural Minor',
-    'maj7':'Major 7th','min7':'Minor 7th','dom7':'Dominant 7th','dim':'Diminished','dim7':'Diminished 7th'};
+    'maj7':'Major 7th','min7':'Minor 7th','dom7':'Dominant 7th','dim':'Diminished','dim7':'Diminished 7th','aug':'Augmented'};
   // maj7/dom7 share Major's exact diatonic step pattern, min7/dim7 share
   // Natural Minor's (per SCALE_STEPS) — mapped here purely so the note
   // spelling below uses the correct flat/sharp rules for each; the title
   // text uses CHORD_MODE_DISPLAY's own proper name regardless.
   var CHORD_MODE_SPELLING_BASE={'Major':'Major','Natural Minor':'Natural Minor',
-    'maj7':'Major','dom7':'Major','min7':'Natural Minor','dim7':'Natural Minor','dim':'Natural Minor'};
+    'maj7':'Major','dom7':'Major','min7':'Natural Minor','dim7':'Natural Minor','dim':'Natural Minor','aug':'Major'};
   var _hdrOnChords=(S.tab==='chords'&&CHORD_MODE_DISPLAY.hasOwnProperty(CS.chordMode));
   var _hdrScaleType=_hdrOnChords?CHORD_MODE_SPELLING_BASE[CS.chordMode]:S.scaleType;
   var _hdrSem=sem;
@@ -8049,7 +8133,7 @@ function update(){
   }
   syncOctaveBtn();
   if(UI.scaleTypeLabel)UI.scaleTypeLabel.textContent=S.tab==='chords'?'Chord Type':'Scale Type';
-  if(UI.cofBtn)UI.cofBtn.style.display=(S.tab==='scales'&&S.scaleType!==DIM7)?'':'none';
+  if(UI.cofBtn)UI.cofBtn.style.display=(S.tab==='scales')?'':'none';
   var CHORD_STYPES=['Major','Natural Minor'];
   if(UI.typeBtns)STYPES.forEach(function(t){
     var b=UI.typeBtns[t],a=S.scaleType===t;
@@ -8350,6 +8434,7 @@ IDB.load(function(saved){
       if(typeof sv.darkKeys==='boolean')SETTINGS.darkKeys=sv.darkKeys;
       if(typeof sv.btDelay==='number')SETTINGS.btDelay=sv.btDelay;
       if(typeof sv.dismissedUpdateVersion==='number')SETTINGS.dismissedUpdateVersion=sv.dismissedUpdateVersion;
+      if(typeof sv.whatsNewSeen==='number')SETTINGS.whatsNewSeen=sv.whatsNewSeen;
     }
     if(fingValid){
       FING=saved.FING;
@@ -8464,6 +8549,9 @@ IDB.load(function(saved){
   // Pre-populate fingering editor keyboards without switching to editor tab
   var _ekey=fkey(S.tonic,S.scaleType,S.melodicDir);
   if(_ekey){var _savedTab=S.tab;loadEditorScale(_ekey,true);S.tab=_savedTab;}
+  // What's New: a fresh install starts "up to date" (nothing to announce); an existing user sees it once per update.
+  if(!saved){if(SETTINGS.whatsNewSeen!==WHATS_NEW.build){SETTINGS.whatsNewSeen=WHATS_NEW.build;persist();}}
+  else if((SETTINGS.whatsNewSeen||0)<WHATS_NEW.build){scheduleWhatsNew(0);}
 });
 </script>
 </body>
