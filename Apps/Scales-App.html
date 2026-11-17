@@ -4419,7 +4419,7 @@ function buildSettingsSheet(){
     aBox.appendChild(el('div',{style:{fontFamily:JF,fontSize:'0.9rem',fontWeight:'700',
       color:'var(--text)',letterSpacing:'0.06em',marginBottom:'4px'}},'Piano Scales Lab'));
     aBox.appendChild(el('div',{style:{fontFamily:JF,fontSize:'0.6rem',
-      color:'var(--sub)',marginBottom:'4px'}},'Version 1.1.7'));
+      color:'var(--sub)',marginBottom:'4px'}},'Version 1.1.8'));
     aBox.appendChild(el('div',{style:{fontFamily:JF,fontSize:'0.62rem',
       color:'var(--sub)',marginBottom:'20px',lineHeight:'1.5'}},'Piano scales, arpeggios and practice tools for every level'));
 
@@ -4641,7 +4641,7 @@ function showUpdatePopup(availableVersionCode){
 // again any time from Settings > About. build must match versionCode in
 // android/app/build.gradle; bump it, and rewrite items, with every release that
 // should show the popup. Order items New, then Improved, then Fixed, always. SETTINGS.whatsNewSeen remembers the last build shown.
-var WHATS_NEW={build:32,version:'1.1.7',items:[
+var WHATS_NEW={build:33,version:'1.1.8',items:[
   {tag:'New',text:'Dim 7 Arpeggio scale type: all 12 keys, one or two octaves, with fingering for both hands.'},
   {tag:'New',text:'Augmented chords on the Chords page and on the All chords screen.'},
   {tag:'New',text:'Keys now visibly press down when you tap them, and when scales and chords play, on every keyboard.'},
@@ -8010,7 +8010,8 @@ function buildUI(){
 
   // ── CHORDS TAB ──
   UI.cP.appendChild(buildChordPage());
-  UI.cP.appendChild(mkGuideLink('chords'));
+  // Help link sits at the end of the scrolling chord list (as on the Scales page), not in a fixed strip under it.
+  UI.cP.querySelector('.chord-list-body').appendChild(mkGuideLink('chords'));
   main.appendChild(UI.cP);
 
   // ── INFO TAB ──
